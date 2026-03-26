@@ -64,7 +64,7 @@ O Claude vai te fazer algumas perguntas e configurar o sistema pro seu negócio.
 **Pastas geradas pelo `/setup`:**
 - `_contexto/` — contexto do seu negócio e preferências
 - `marca/` — guia de identidade visual da sua marca
-- `_configurar-mcps.md` — MCPs recomendados pro seu perfil com comandos prontos
+- `templates/ferramentas/catalogo.md` — APIs, CLIs e MCPs disponíveis pra usar em skills
 
 **Pasta `dados/`:**
 - Drop zone pra arquivos que você quer analisar (CSV, XLSX, TXT, PDF)

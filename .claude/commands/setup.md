@@ -198,6 +198,7 @@ Com todas as respostas, detecte o perfil principal:
 - `freelancer` — trabalha solo, atende clientes, vende serviço próprio
 - `solopreneur` — negócio próprio sem foco em clientes, mais em audiência/produto
 - `criador` — foco em conteúdo, canal, audiência
+- `empresa` — pequena/média empresa com equipe organizada por setores (marketing, comercial, RH, etc.)
 - `profissional-clt` — usa pra produtividade pessoal e carreira
 
 *(Um perfil pode ter características de outro — use o que melhor descreve o uso principal)*
@@ -218,6 +219,8 @@ Substitua o conteúdo placeholder pelo CLAUDE.md real do usuário:
 
 **Estrutura de pastas:**
 [lista das pastas criadas e o que vai em cada uma — gerada conforme o perfil detectado]
+- `templates/skills/` — templates de skills prontos pra personalizar com /mapear
+- `templates/ferramentas/catalogo.md` — APIs e ferramentas disponíveis pra usar em skills
 
 ## Sobre o negócio
 [descrição em 2-4 linhas com o que foi dito]
@@ -289,11 +292,12 @@ Não perguntar se a correção for óbvia de contexto imediato (ex: "na verdade 
 
 Quando o usuário pedir pra criar uma nova skill:
 
-1. Perguntar: "Essa skill é específica pra esse projeto ou vai ser útil em qualquer projeto?"
+1. Verificar se existe um template relevante em `templates/skills/`. Se existir, usar como base e adaptar pro contexto do usuário
+2. Perguntar: "Essa skill é específica pra esse projeto ou vai ser útil em qualquer projeto?"
    - Específica desse negócio → salvar em `.claude/commands/` (local)
    - Útil em qualquer projeto → salvar em `~/.claude/skills/` (global)
-2. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` pra calibrar o conteúdo da skill ao contexto do negócio
-3. Seguir o fluxo da skill-creator nativa do Claude Code
+3. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` pra calibrar o conteúdo da skill ao contexto do negócio
+4. Seguir o fluxo da skill-creator nativa do Claude Code
 ```
 
 ### 2. Criar `_contexto/empresa.md`
@@ -358,9 +362,42 @@ Quando o usuário pedir pra criar uma nova skill:
 Se o usuário descreveu cores e estilo, preencha com o que foi dito.
 Se não tem identidade definida, preencha com campos em branco e um comentário orientando como preencher depois.
 
-### 6. Criar estrutura de pastas conforme o perfil
+Em ambos os casos, manter este aviso no topo do arquivo (logo abaixo do título):
 
-**Perfil agência / freelancer (atende clientes):**
+```
+> Você pode editar esse arquivo a qualquer momento.
+> As skills de carrossel, proposta e slide leem este arquivo antes de criar qualquer visual.
+```
+
+### 6. Escolher estrutura de pastas
+
+Antes de criar qualquer pasta, **mostrar ao usuário o que você pensou** e deixar ele ajustar.
+
+Ler os templates de perfil disponíveis em `templates/perfis/` pra saber quais opções existem. Depois apresentar:
+
+> "Com base no que você me contou, acho que a estrutura de **[perfil detectado]** faz mais sentido pra você. Ficaria assim:
+>
+> ```
+> [lista de pastas do perfil detectado]
+> ```
+>
+> Mas também tenho outros modelos se preferir:
+> - **Por cliente** (agência/freelancer) — uma pasta por cliente com briefing e proposta
+> - **Por tipo de conteúdo** (solopreneur/criador) — organizado por o que você produz
+> - **Por setor** (empresa) — uma pasta por área (marketing, comercial, financeiro, RH)
+> - **Por projeto** (profissional) — organizado por projetos e reuniões
+>
+> Quer usar esse que sugeri, trocar por outro, ou montar uma estrutura personalizada?"
+
+**Se aceitar a sugestão:** criar as pastas do perfil detectado.
+
+**Se quiser outro template:** mostrar a estrutura daquele template e confirmar.
+
+**Se quiser personalizar:** perguntar quais pastas faz sentido ter e criar conforme ele descrever.
+
+Estruturas padrão por perfil (referência):
+
+**Agência / freelancer:**
 ```
 clientes/
   _modelo-cliente/
@@ -372,7 +409,7 @@ conteudo/
 tarefas.md
 ```
 
-**Perfil solopreneur / criador:**
+**Solopreneur / criador:**
 ```
 conteudo/
   carrosseis/
@@ -384,7 +421,21 @@ publicacoes/
 tarefas.md
 ```
 
-**Perfil profissional / carreira:**
+**Empresa (por setor):**
+```
+marketing/
+comercial/
+  propostas/
+financeiro/
+  relatorios/
+rh/
+operacoes/
+projetos/
+dados/
+tarefas.md
+```
+
+**Profissional / carreira:**
 ```
 trabalho/
   projetos/
@@ -394,37 +445,30 @@ curriculo/
 tarefas.md
 ```
 
-### 7. Criar `_configurar-mcps.md`
+### 7. Recomendar MCPs e ferramentas
 
-Gere uma lista personalizada baseada no perfil e nas ferramentas que o usuário citou. Use os dados de `mcps/por-perfil.md` como referência, mas personalize pra o que foi dito.
+Ler `templates/ferramentas/catalogo.md` e cruzar com as ferramentas que o usuário citou na Pergunta 5.
 
-Formato do arquivo:
+Para cada ferramenta que o usuário usa e que tem um MCP ou conector disponível no catálogo:
+- Mostrar o que o conector faz
+- Mostrar o comando de instalação
+- Perguntar se quer instalar agora
 
-```markdown
-# MCPs recomendados pro seu perfil
+Exemplo:
 
-Esses são os conectores que vão dar mais poder pro seu setup.
-Instale na ordem sugerida — os primeiros da lista têm mais impacto imediato.
+> "Vi que você usa Notion. Tem um conector que deixa o Claude acessar suas páginas e bases direto. Quer que eu instale?"
 
-## Instalar agora (prioridade alta)
+Se o usuário aceitar, rodar o comando de instalação do MCP.
+Se preferir depois, anotar em `tarefas.md`:
 
-### [Nome do MCP]
-**Por que instalar:** [motivo específico pro perfil desse usuário]
-**Como instalar:**
-\`\`\`bash
-[comando exato]
-\`\`\`
-
-[repetir para cada MCP recomendado]
-
-## Instalar depois (quando quiser expandir)
-
-[MCPs de segundo nível]
-
----
-
-Depois de instalar, atualize a seção "Ferramentas conectadas" no CLAUDE.md.
 ```
+## MCPs pra instalar depois
+- [ ] Notion — `claude mcp add notion -- npx -y @notionhq/notion-mcp-server`
+```
+
+Se o usuário mencionar uma ferramenta que não está no catálogo, informar:
+
+> "Não tenho um conector pronto pra [ferramenta], mas você pode pesquisar se existe um MCP pra ela em mcp.so. Se encontrar, me passa que eu instalo."
 
 ---
 
@@ -439,7 +483,7 @@ Após gerar todos os arquivos, envie uma mensagem de encerramento:
 > - _contexto/ — negócio, preferências e foco atual salvos
 > - marca/design-guide.md — identidade visual [preenchida / pronta pra preencher]
 > - Estrutura de pastas pro seu perfil de [perfil detectado]
-> - _configurar-mcps.md — [N] MCPs recomendados pro que você faz
+> - [N] MCPs instalados / [N] anotados pra instalar depois
 >
 > **Duas coisas importantes antes de continuar:**
 >
@@ -447,9 +491,7 @@ Após gerar todos os arquivos, envie uma mensagem de encerramento:
 >
 > 2. Para não perder seu trabalho, conecte esse workspace ao GitHub rodando `/syncar`. Leva 2 minutos e depois o sistema salva automaticamente.
 >
-> **Próximo passo:** instala pelo menos o primeiro MCP do arquivo _configurar-mcps.md.
-> Depois volta aqui e chama `/carrossel` pra criar seu primeiro carrossel,
-> ou `/proposta-comercial` se tiver um cliente esperando."
+> **Próximo passo:** rode `/mapear` pra eu entender seus processos do dia a dia e criar skills personalizadas pra você."
 
 ---
 
