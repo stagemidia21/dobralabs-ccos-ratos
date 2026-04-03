@@ -17,6 +17,7 @@ description: >
 - **Tom de voz:** `_contexto/preferencias.md`
 - **Playwright CLI:** `npx playwright screenshot` para renderizar HTMLs em PNG.
   Se nunca usou, rodar uma vez: `npx playwright install chromium`
+- **Post for Me (opcional):** `POSTFORME_API_KEY` no `.env` para publicar direto no Instagram
 
 ## Input
 
@@ -126,6 +127,29 @@ conteudo/carrosseis/[tema]/
     slide-01.html → slide-01.png
     ...
 ```
+
+---
+
+### Fase 4 — Publicação no Instagram (opcional)
+
+Após finalizar os PNGs, perguntar:
+> "Quer publicar direto no Instagram agora?"
+
+Se sim, verificar se `POSTFORME_API_KEY` existe no `.env`. Se não existir:
+> "Você precisa da chave do Post for Me no .env. Cria conta em postforme.dev, pega a API key e salva assim no .env: `POSTFORME_API_KEY=sua_chave`"
+
+Se existir, usar a legenda de `carousel-text.md` e rodar:
+```bash
+node --env-file=.env scripts/publish-postforme.js \
+  --pasta conteudo/carrosseis/[tema]/instagram \
+  --legenda "[legenda do carousel-text.md]" \
+  --conta instagram
+```
+
+Confirmar após publicar:
+> "Publicado no Instagram."
+
+---
 
 ## Regras
 
