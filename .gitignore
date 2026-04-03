@@ -31,6 +31,10 @@ anotacoes/
 curriculo/
 tarefas.md
 
+# Incluir skills e scripts no repositório
+!.claude/
+!scripts/
+
 # Sistema
 .DS_Store
 node_modules/
