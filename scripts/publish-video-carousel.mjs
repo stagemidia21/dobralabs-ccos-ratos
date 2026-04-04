@@ -6,7 +6,13 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const API_KEY = 'pfm_live_MphZsYgdwKGBKhBCfP3m6r';
 const BASE_URL = 'https://api.postforme.dev';
-const CONTA_INSTAGRAM = 'spc_OLQYtgi2qkckhJPbA56y6';
+const CONTAS = [
+  'spc_OLQYtgi2qkckhJPbA56y6', // instagram homero.ads
+  'spc_suZlmVRdsUuK7uoKZ2sp',  // threads homero.ads
+  'spc_ICb28Y2xx1WbjQDLcXVmN', // facebook homero.ads
+  'spc_tvTRNzPUZtWkxx7yzGwW',  // linkedin Stage Mídia
+  'spc_e80YbEcrp7zDHltQlBCl',  // linkedin Homero Zanichelli
+];
 
 const SLIDES_DIR = path.join(__dirname, '../projetos/carrossel-remotion/out/slides');
 
@@ -76,7 +82,7 @@ async function main() {
     headers: authHeaders,
     body: JSON.stringify({
       caption: LEGENDA,
-      social_accounts: [CONTA_INSTAGRAM],
+      social_accounts: CONTAS,
       media: mediaUrls,
       platform_configurations: {
         instagram: { placement: 'timeline' }
