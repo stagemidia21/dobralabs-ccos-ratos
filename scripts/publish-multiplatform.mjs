@@ -18,15 +18,15 @@ const CONTAS = {
 const SLIDES_MP4 = path.join(__dirname, '../projetos/carrossel-remotion/out/slides');
 const SLIDES_PNG = path.join(__dirname, '../projetos/carrossel-remotion/out/png');
 
-const LEGENDA = `Pesquisa. Escrita. Design. Exportação. Publicação. Tudo automático.
+const LEGENDA = `A maioria instala o Claude Code e começa a pedir tarefa. Funciona mal e desiste em dois dias.
 
-Montei um sistema que produz carrossel completo do terminal até o Instagram, sem abrir o Canva uma vez.
+O problema não é a ferramenta. É o setup.
 
-Claude Code + Playwright + Post for Me. Um comando. Dez plataformas.
+Claude Code não é chatbot. É um sistema que executa contexto. Sem contexto configurado, você tem um assistente genérico. Com contexto, você tem um sistema.
 
-Se você ainda faz isso na mão, esse vídeo é pra você.
+No carrossel: CLAUDE.md, estrutura de pastas, skills e MCPs. O que cada um faz e por que muda tudo.
 
-#IA #Automacao #ClaudeCode #MarketingDigital #ContentCreator #TrafegoPago`;
+#ClaudeCode #IA #Automacao #MarketingDigital #ContentCreator`;
 
 const authHeaders = {
   'Authorization': `Bearer ${API_KEY}`,
@@ -98,13 +98,12 @@ async function main() {
   }
   await publish([CONTAS.threads], pngUrls, 'Threads carrossel PNG');
 
-  // 3. Facebook + LinkedIn — só a capa
-  console.log('\n── Facebook + LinkedIn (capa) ──');
-  const capaUrl = await uploadFile(path.join(SLIDES_PNG, 'slide-01.png'), 'image/png');
+  // 3. Facebook + LinkedIn — carrossel PNG
+  console.log('\n── Facebook + LinkedIn (carrossel PNG) ──');
   await publish(
     [CONTAS.facebook, CONTAS.linkedin_page, CONTAS.linkedin_pessoal],
-    [{ url: capaUrl }],
-    'Facebook + LinkedIn capa'
+    pngUrls,
+    'Facebook + LinkedIn carrossel PNG'
   );
 
   console.log('\n✓ Publicação completa em todas as plataformas!');
