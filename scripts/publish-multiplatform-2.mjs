@@ -35,27 +35,38 @@ const authHeaders = {
   'Content-Type': 'application/json',
 };
 
+async function fetchWithRetry(fn, retries = 3) {
+  for (let i = 0; i < retries; i++) {
+    try { return await fn(); }
+    catch (e) {
+      if (i === retries - 1) throw e;
+      process.stdout.write(` retry${i + 1}...`);
+      await new Promise(r => setTimeout(r, 2000 * (i + 1)));
+    }
+  }
+}
+
 async function uploadFile(filePath, contentType) {
   const filename = path.basename(filePath);
   process.stdout.write(`  Uploading ${filename}... `);
 
-  const uploadRes = await fetch(`${BASE_URL}/v1/media/create-upload-url`, {
-    method: 'POST',
-    headers: authHeaders,
-    body: JSON.stringify({ file_name: filename, content_type: contentType }),
+  const { upload_url, media_url } = await fetchWithRetry(async () => {
+    const r = await fetch(`${BASE_URL}/v1/media/create-upload-url`, {
+      method: 'POST', headers: authHeaders,
+      body: JSON.stringify({ file_name: filename, content_type: contentType }),
+    });
+    if (!r.ok) throw new Error(`Upload URL failed: ${await r.text()}`);
+    return r.json();
   });
-
-  if (!uploadRes.ok) throw new Error(`Upload URL failed: ${await uploadRes.text()}`);
-  const { upload_url, media_url } = await uploadRes.json();
 
   const fileBuffer = fs.readFileSync(filePath);
-  const putRes = await fetch(upload_url, {
-    method: 'PUT',
-    headers: { 'Content-Type': contentType },
-    body: fileBuffer,
+  await fetchWithRetry(async () => {
+    const r = await fetch(upload_url, {
+      method: 'PUT', headers: { 'Content-Type': contentType }, body: fileBuffer,
+    });
+    if (!r.ok) throw new Error(`PUT failed: ${r.status}`);
   });
 
-  if (!putRes.ok) throw new Error(`PUT failed: ${putRes.status}`);
   console.log('OK');
   return media_url;
 }
