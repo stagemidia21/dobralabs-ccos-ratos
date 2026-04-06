@@ -18,15 +18,19 @@ const CONTAS = {
 const SLIDES_MP4 = path.join(__dirname, '../projetos/carrossel-remotion/out/slides');
 const SLIDES_PNG = path.join(__dirname, '../projetos/carrossel-remotion/out/png');
 
-const LEGENDA = `A maioria instala o Claude Code e começa a pedir tarefa. Funciona mal e desiste em dois dias.
+const LEGENDA = `O Google lançou o Gemma 4 em 2 de abril.
 
-O problema não é a ferramenta. É o setup.
+Open source, Apache 2.0, multimodal, roda local. O 31B bate o Qwen 3.5 32B em raciocínio e código no benchmark oficial.
 
-Claude Code não é chatbot. É um sistema que executa contexto. Sem contexto configurado, você tem um assistente genérico. Com contexto, você tem um sistema.
+Baixa no Hugging Face, Kaggle ou Ollama. Testa no browser pelo Google AI Studio sem instalar nada.
 
-No carrossel: CLAUDE.md, estrutura de pastas, skills e MCPs. O que cada um faz e por que muda tudo.
+A base técnica é a mesma do Gemini 3. De graça. Sem royalty em produto comercial.
 
-#ClaudeCode #IA #Automacao #MarketingDigital #ContentCreator`;
+O Google não fez isso por bondade. Mas quem constrói em cima enquanto todo mundo discute se vale a pena já está na frente.
+
+Fonte: Google DeepMind, blog.google
+
+#IA #Gemma4 #Google #OpenSource #MarketingDigital`;
 
 const authHeaders = {
   'Authorization': `Bearer ${API_KEY}`,
