@@ -1,0 +1,26 @@
+{
+  "name": "ccos-ratos",
+  "version": "1.0.0",
+  "description": "Feito pelo [Ratos de IA](https://ratosdeia.com.br) pra alunos do curso **Claude Code OS**.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stagemidia21/dobralabs-ccos-ratos.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/stagemidia21/dobralabs-ccos-ratos/issues"
+  },
+  "homepage": "https://github.com/stagemidia21/dobralabs-ccos-ratos#readme",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.82.0",
+    "dotenv": "^17.4.1",
+    "telegraf": "^4.16.3"
+  }
+}
