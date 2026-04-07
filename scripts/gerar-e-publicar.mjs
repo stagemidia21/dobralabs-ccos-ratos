@@ -240,9 +240,11 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     const num = String(i + 1).padStart(2, '0');
     const outFile = path.join(slidesDir, `slide-${num}.mp4`);
     process.stdout.write(`    Slide ${num}... `);
+    const outFileWin = outFile.replace(/\//g, '\\');
+    const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
     execSync(
-      `node_modules/.bin/remotion render ${compId} "${outFile}" --frames=${start}-${end} --log=error`,
-      { cwd: REMOTION_DIR, stdio: 'pipe' }
+      `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --log=error`,
+      { cwd: REMOTION_DIR, stdio: 'pipe', shell: true }
     );
     console.log('OK');
   }
