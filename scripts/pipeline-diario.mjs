@@ -132,33 +132,64 @@ Regras: pelo menos 1 post de Claude Code, pelo menos 1 baseado em notícia do di
   return callClaude(prompt);
 }
 
+// ─── HUMANIZER ───────────────────────────────────────────────────────────────
+
+function humanizar(texto, contexto = '') {
+  const prompt = `Você é um editor de conteúdo para Instagram do @homero.ads (Homero Zanichelli — Stage Mídia).
+Tom do canal: técnico, direto, sem enrolação. Como se fosse um profissional experiente explicando pro amigo — sem papo de coach.
+Posicionamento: "Sou o cara que entra quando a agência diz que já fez de tudo."
+
+${contexto ? `Contexto: ${contexto}\n` : ''}
+Texto para humanizar:
+---
+${texto}
+---
+
+Reescreva eliminando todos os padrões de IA:
+- Sem palavras infladas: "crucial", "vital", "pivotal", "landscape", "underscore", "testament", "enhance", "foster", "showcase"
+- Sem frases de IA: "não é só X, é Y", "let's dive in", "delve into", "in today's world"
+- Sem headers em bold seguidos de frase genérica
+- Sem mais de 5 hashtags no total (use apenas as mais relevantes)
+- Sem emojis em excesso (no máximo 2-3 por post, só se fizer sentido)
+- Frases curtas e diretas. Varie o ritmo: curta, longa, curta.
+- Primeira pessoa quando couber. Opinião real, não neutralidade.
+- Se for carrossel, mantenha a estrutura de slides, só melhore o texto.
+- Se for feed, copy fluida sem bullets desnecessários.
+
+Entregue APENAS o conteúdo reescrito, sem explicações.`;
+
+  return callClaude(prompt, 180000);
+}
+
 // ─── GERAÇÃO DE CONTEÚDO ─────────────────────────────────────────────────────
 
 function gerarConteudo(tema, angulo, formato) {
   const desc = {
-    feed: 'post de feed Instagram: copy de 200-350 palavras, técnica e direta, com CTA específico e hashtags relevantes',
-    carrossel: `10 slides de carrossel imagem. Formato de cada slide:
-SLIDE N — [Label curta]
-Título: [CAPS, máx 4 linhas, impactante]
-Body: [2-3 frases densas, sem enrolação]
-Incluir legenda completa ao final.`,
-    carrossel_video: `10 slides de carrossel vídeo. Formato de cada slide:
-SLIDE N — [Label curta]
-Título: [CAPS, máx 4 linhas, usa \\n pra quebrar linha]
-Body: [3-5 frases, mais denso que imagem]
-Incluir legenda completa ao final.`,
+    feed: `post de feed Instagram: copy de 200-350 palavras, primeira pessoa, técnica e direta.
+CTA específico ao final. Exatamente 5 hashtags, as mais relevantes pro nicho.`,
+    carrossel: `10 slides de carrossel imagem. Formato:
+SLIDE N — [Label curta, máx 3 palavras]
+Título: [CAPS, máx 4 linhas, direto e impactante]
+Body: [2-3 frases densas, sem enrolação, sem bullet]
+Ao final: LEGENDA (150-250 palavras, primeira pessoa) + exatamente 5 hashtags.`,
+    carrossel_video: `10 slides de carrossel vídeo. Formato:
+SLIDE N — [Label curta, máx 3 palavras]
+Título: [CAPS, máx 4 linhas, usa \\n pra quebrar linha entre ideias]
+Body: [3-5 frases diretas, mais denso que imagem, primeira pessoa quando couber]
+Ao final: LEGENDA (150-250 palavras, primeira pessoa) + exatamente 5 hashtags.`,
   }[formato];
 
   const prompt = `Você é o assistente de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
 Tom: técnico, direto, premium. Sem enrolação. Português BR com acentuação correta.
-Evitar: padrões de IA, bullets desnecessários, frases genéricas, experiência não confirmada pelo usuário.
+Evitar: padrões de IA, bullets desnecessários, frases genéricas.
 Posicionamento: "Sou o cara que entra quando a agência diz que já fez de tudo."
+Primeira pessoa quando couber. Nunca fabricar experiência não confirmada.
 
 Tema: ${tema}
 Ângulo: ${angulo}
 Formato: ${desc}
 
-Gere o conteúdo completo, direto ao ponto.`;
+Gere o conteúdo completo, direto ao ponto. Sem preâmbulo.`;
 
   return callClaude(prompt, 180000);
 }
@@ -244,9 +275,11 @@ async function main() {
     console.log(`  Post ${n} (${formato}): ${tema}`);
 
     try {
-      const conteudo = gerarConteudo(tema, angulo, formato);
+      const rascunho = gerarConteudo(tema, angulo, formato);
+      console.log(`  ↻ Humanizando post ${n}...`);
+      const conteudo = humanizar(rascunho, `Post ${formato} sobre: ${tema}`);
       posts.push({ n, tema, angulo, formato, conteudo });
-      console.log(`  ✓ Post ${n} gerado`);
+      console.log(`  ✓ Post ${n} pronto`);
 
       // Envia pro Telegram imediatamente
       await sendTelegram(`📝 POST ${n} — ${formato.toUpperCase()}\nTema: ${tema}\n\n${conteudo}`);
