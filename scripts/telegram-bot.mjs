@@ -1,27 +1,33 @@
 import 'dotenv/config';
 import { Telegraf, Markup } from 'telegraf';
-import Anthropic from '@anthropic-ai/sdk';
-import { execSync, exec } from 'child_process';
-import { promisify } from 'util';
+import OpenAI from 'openai';
+import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const execAsync = promisify(exec);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const MY_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-if (!BOT_TOKEN || !ANTHROPIC_API_KEY) {
-  console.error('Faltam variáveis de ambiente. Verifique .env');
+if (!BOT_TOKEN || !OPENROUTER_API_KEY) {
+  console.error('Faltam variáveis de ambiente. Verifique .env (TELEGRAM_BOT_TOKEN, OPENROUTER_API_KEY)');
   process.exit(1);
 }
 
+const ai = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: OPENROUTER_API_KEY,
+  defaultHeaders: {
+    'HTTP-Referer': 'https://stage-midia.com.br',
+    'X-Title': 'Homero Squad Bot',
+  },
+});
+
 const bot = new Telegraf(BOT_TOKEN);
-const anthropic = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
 
 // Estado por chat
 const state = {};
@@ -43,6 +49,20 @@ async function sendLong(ctx, text, extra = {}) {
   }
 }
 
+async function callAI(system, user, maxTokens = 1500) {
+  const messages = [];
+  if (system) messages.push({ role: 'system', content: system });
+  messages.push({ role: 'user', content: user });
+
+  const resp = await ai.chat.completions.create({
+    model: 'anthropic/claude-opus-4',
+    max_tokens: maxTokens,
+    messages,
+  });
+
+  return resp.choices[0].message.content;
+}
+
 // ─── GERAÇÃO DE CONTEÚDO ────────────────────────────────────────────────────
 
 async function gerarPauta(referencias) {
@@ -61,32 +81,32 @@ Tom: técnico, direto, sem enrolação. Linha editorial: Claude Code, IA aplicad
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere a PAUTA DO DIA com 6 posts no formato:
+Gere a PAUTA DO DIA com 6 posts no formato exato:
 
 📅 PAUTA — ${hoje}
 
-POST 1 | 08h | 📸 FEED
+POST 1 | 📸 FEED
 Tema: [tema direto]
 Ângulo: [como abordar — diferente dos concorrentes]
 Fonte: [notícia/série Claude Code/viral adaptado]
 
-POST 2 | 10h | 🖼 CARROSSEL IMAGEM
+POST 2 | 🖼 CARROSSEL IMAGEM
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 3 | 12h | 📱 CARROSSEL VÍDEO
+POST 3 | 📱 CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 4 | 15h | 📸 FEED
+POST 4 | 📸 FEED
 ...
 
-POST 5 | 18h | 🖼 CARROSSEL IMAGEM
+POST 5 | 🖼 CARROSSEL IMAGEM
 ...
 
-POST 6 | 20h | 📱 CARROSSEL VÍDEO
+POST 6 | 📱 CARROSSEL VÍDEO
 ...
 
 Regras:
@@ -95,13 +115,7 @@ Regras:
 - Ângulos diferentes dos concorrentes
 - Nunca repetir formato consecutivo no mesmo tema`;
 
-  const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-6',
-    max_tokens: 1500,
-    messages: [{ role: 'user', content: prompt }],
-  });
-
-  return msg.content[0].text;
+  return callAI(null, prompt, 1500);
 }
 
 async function gerarConteudoPost(tema, angulo, formato) {
@@ -111,16 +125,11 @@ async function gerarConteudoPost(tema, angulo, formato) {
     carrossel_video: '10 slides de carrossel vídeo: label + título em CAPS (máx 4 linhas, use \\n pra quebrar) + body (3-5 frases) por slide + legenda completa',
   }[formato] || 'post completo';
 
-  const msg = await anthropic.messages.create({
-    model: 'claude-opus-4-6',
-    max_tokens: 2500,
-    system: `Você é o assistente de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
+  const system = `Você é o assistente de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
 Tom: técnico, direto, premium. Sem enrolação. Português BR. Sem padrões de IA. Textos densos e específicos.
-Nunca fabricar experiência pessoal não confirmada pelo usuário.`,
-    messages: [{ role: 'user', content: `Tema: ${tema}\nÂngulo: ${angulo}\nFormato: ${formatoDesc}\n\nGere o conteúdo completo.` }],
-  });
+Nunca fabricar experiência pessoal não confirmada pelo usuário.`;
 
-  return msg.content[0].text;
+  return callAI(system, `Tema: ${tema}\nÂngulo: ${angulo}\nFormato: ${formatoDesc}\n\nGere o conteúdo completo.`, 2500);
 }
 
 // ─── HANDLERS ───────────────────────────────────────────────────────────────
@@ -134,10 +143,7 @@ bot.start(async (ctx) => {
     console.log(`Chat ID registrado: ${ctx.chat.id}`);
   }
 
-  await ctx.reply(
-    `🤖 *Homero Squad Bot* — Online\n\nComandos disponíveis:`,
-    { parse_mode: 'Markdown' }
-  );
+  await ctx.reply(`🤖 *Homero Squad Bot* — Online`, { parse_mode: 'Markdown' });
   await ctx.reply(
     `/pauta — Pesquisa do dia + 6 posts pra aprovar\n` +
     `/gerar — Gera um post avulso\n` +
@@ -151,25 +157,23 @@ bot.start(async (ctx) => {
   );
 });
 
-// /help
 bot.command('help', async (ctx) => {
   await ctx.reply(
     `*Comandos do bot:*\n\n` +
-    `📅 /pauta — Busca notícias + referências e gera 6 posts do dia pra aprovar\n` +
-    `✍️ /gerar — Gera um post avulso (você escolhe tema e formato)\n` +
-    `✅ /aprovar N — Aprova o post N da pauta e gera o conteúdo completo\n` +
-    `❌ /recusar N — Recusa o post N e pede substituição\n` +
-    `📊 /status — Estado atual da sessão\n` +
-    `🔄 /refazer — Refaz o último conteúdo gerado`,
+    `📅 /pauta — Busca notícias + referências e gera 6 posts do dia\n` +
+    `✍️ /gerar — Gera um post avulso\n` +
+    `✅ /aprovar N — Gera conteúdo do post N\n` +
+    `❌ /recusar N — Recusa e pede substituição\n` +
+    `📊 /status — Estado atual\n` +
+    `🔄 /refazer — Refaz o último post`,
     { parse_mode: 'Markdown' }
   );
 });
 
-// /status
 bot.command('status', (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
-  ctx.reply(`Fase: ${s.fase}\nFormato atual: ${s.formato || '—'}\nPost atual: ${s.postAtual || '—'}`);
+  ctx.reply(`Fase: ${s.fase}\nFormato: ${s.formato || '—'}\nPost atual: ${s.postAtual || '—'}`);
 });
 
 // /pauta — fluxo principal
@@ -180,7 +184,6 @@ bot.command('pauta', async (ctx) => {
 
   await ctx.reply('🔍 Buscando notícias e posts de referência...');
 
-  // Tentar ler cache do dia
   let referencias = null;
   const cacheFile = path.join(ROOT, '_contexto', 'referencias-do-dia.json');
   if (fs.existsSync(cacheFile)) {
@@ -194,10 +197,9 @@ bot.command('pauta', async (ctx) => {
     } catch {}
   }
 
-  // Se não tem cache, busca agora
   if (!referencias) {
     try {
-      await ctx.reply('⏳ Coletando dados via Apify (pode demorar ~2min)...');
+      await ctx.reply('⏳ Coletando dados via Apify (~2min)...');
       execSync(`node ${path.join(ROOT, 'scripts/buscar-referencias.mjs')}`, { cwd: ROOT, stdio: 'ignore' });
       referencias = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
     } catch (err) {
@@ -205,7 +207,6 @@ bot.command('pauta', async (ctx) => {
     }
   }
 
-  // Envia resumo da pesquisa
   if (referencias) {
     let resumo = `📊 *PESQUISA DO DIA*\n\n`;
 
@@ -227,17 +228,18 @@ bot.command('pauta', async (ctx) => {
     await sendLong(ctx, resumo, { parse_mode: 'Markdown' });
   }
 
-  // Gera pauta
   await ctx.reply('📋 Gerando pauta do dia...');
   try {
     const pauta = await gerarPauta(referencias);
     s.pauta = pauta;
+    s.referencias = referencias;
     s.fase = 'revisando_pauta';
 
     await sendLong(ctx, pauta);
     await ctx.reply(
-      'Aprova a pauta ou quer trocar algum post?\n\n' +
-      'Use /aprovar 1 pra gerar o conteúdo do post 1, ou manda feedback.',
+      'Aprova a pauta ou quer trocar algum?\n\n' +
+      '• /aprovar 1 — gera post 1\n' +
+      '• "✅ Aprovar tudo" — gera e manda todos os 6 em sequência',
       Markup.keyboard([
         ['✅ Aprovar tudo', '🔄 Refazer pauta'],
         ['📅 /pauta — Nova busca'],
@@ -259,15 +261,17 @@ bot.command('aprovar', async (ctx) => {
   const n = parseInt(ctx.message.text.split(' ')[1]);
   if (!n || n < 1 || n > 6) return ctx.reply('Use: /aprovar 1 a 6');
 
+  await gerarPost(ctx, s, n);
+});
+
+async function gerarPost(ctx, s, n) {
   s.postAtual = n;
   s.fase = 'gerando';
 
-  // Extrai o post N da pauta
   const linhas = s.pauta.split('\n');
-  const postIdx = linhas.findIndex(l => l.includes(`POST ${n} |`));
-  const postLines = linhas.slice(postIdx, postIdx + 5).join('\n');
+  const postIdx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
+  const postLines = linhas.slice(postIdx, postIdx + 6).join('\n');
 
-  // Detecta formato
   let formato = 'feed';
   if (postLines.includes('CARROSSEL VÍDEO') || postLines.includes('📱')) formato = 'carrossel_video';
   else if (postLines.includes('CARROSSEL IMAGEM') || postLines.includes('🖼')) formato = 'carrossel';
@@ -286,7 +290,7 @@ bot.command('aprovar', async (ctx) => {
 
     await sendLong(ctx, `📝 *Post ${n} — ${formato.toUpperCase()}*\n\n${conteudo}`, { parse_mode: 'Markdown' });
     await ctx.reply(
-      'Aprova esse conteúdo?',
+      'Aprova?',
       Markup.keyboard([
         ['✅ Publica', '🔄 Refazer'],
         [`⬅️ Post ${n > 1 ? n - 1 : 1}`, `➡️ Post ${n < 6 ? n + 1 : 6}`],
@@ -296,13 +300,13 @@ bot.command('aprovar', async (ctx) => {
     s.fase = 'revisando_pauta';
     await ctx.reply(`❌ Erro: ${err.message}`);
   }
-});
+}
 
 // /gerar — post avulso
 bot.command('gerar', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
-  s.fase = 'aguardando_tema';
+  s.fase = 'aguardando_formato';
 
   await ctx.reply(
     'Qual o formato?',
@@ -313,7 +317,7 @@ bot.command('gerar', async (ctx) => {
   );
 });
 
-// Seleção de formato via teclado
+// Seleção de formato
 bot.hears(['📱 Carrossel Vídeo', '🖼 Carrossel Imagem', '📸 Feed'], (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
@@ -327,25 +331,87 @@ bot.hears(['📱 Carrossel Vídeo', '🖼 Carrossel Imagem', '📸 Feed'], (ctx)
   ctx.reply(`Formato: *${ctx.message.text}*\nManda o tema ou notícia:`, { parse_mode: 'Markdown' });
 });
 
-// Aprovar tudo
+// Aprovar tudo — gera todos os 6 em sequência
 bot.hears('✅ Aprovar tudo', async (ctx) => {
   if (!isAuthorized(ctx)) return;
-  ctx.reply('Ótimo! Use /aprovar 1 pra começar a gerar os posts em ordem.');
+  const s = getState(ctx.chat.id);
+  if (!s.pauta) return ctx.reply('Rode /pauta primeiro.');
+
+  await ctx.reply('🚀 Gerando todos os 6 posts em sequência... (pode demorar alguns minutos)');
+
+  const drafts = [];
+  for (let n = 1; n <= 6; n++) {
+    const linhas = s.pauta.split('\n');
+    const postIdx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
+    const postLines = linhas.slice(postIdx, postIdx + 6).join('\n');
+
+    let formato = 'feed';
+    if (postLines.includes('CARROSSEL VÍDEO') || postLines.includes('📱')) formato = 'carrossel_video';
+    else if (postLines.includes('CARROSSEL IMAGEM') || postLines.includes('🖼')) formato = 'carrossel';
+
+    const tema = (postLines.match(/Tema:\s*(.+)/) || [])[1] || 'tema';
+    const angulo = (postLines.match(/Ângulo:\s*(.+)/) || [])[1] || '';
+
+    await ctx.reply(`⏳ Post ${n}/6 — ${tema}`);
+
+    try {
+      const conteudo = await gerarConteudoPost(tema, angulo, formato);
+      drafts.push({ n, tema, formato, conteudo });
+      await sendLong(ctx, `📝 *Post ${n} — ${formato.toUpperCase()}*\n\n${conteudo}`, { parse_mode: 'Markdown' });
+    } catch (err) {
+      await ctx.reply(`❌ Post ${n} falhou: ${err.message}`);
+      drafts.push({ n, tema, formato, conteudo: null, erro: err.message });
+    }
+  }
+
+  s.todos_drafts = drafts;
+  s.fase = 'revisando_pauta';
+
+  const ok = drafts.filter(d => d.conteudo).length;
+  await ctx.reply(
+    `✅ ${ok}/6 posts gerados!\n\n` +
+    `Os conteúdos estão acima. Revise e use /aprovar N pra ajustar algum individualmente.`,
+    Markup.keyboard([
+      ['📅 /pauta — Nova busca'],
+      ['✍️ /gerar — Post avulso'],
+    ]).resize()
+  );
 });
 
 // Refazer pauta
 bot.hears('🔄 Refazer pauta', async (ctx) => {
   if (!isAuthorized(ctx)) return;
-  ctx.reply('Rodando /pauta novamente...');
-  ctx.message.text = '/pauta';
-  bot.handleUpdate({ ...ctx.update, message: { ...ctx.message, text: '/pauta' } });
+  await ctx.reply('♻️ Refazendo pauta...');
+  const s = getState(ctx.chat.id);
+  s.pauta = null;
+  s.fase = 'idle';
+  // Re-trigger /pauta
+  await gerarEEnviarPauta(ctx, s);
 });
+
+async function gerarEEnviarPauta(ctx, s) {
+  s.fase = 'revisando_pauta';
+  try {
+    const pauta = await gerarPauta(s.referencias || null);
+    s.pauta = pauta;
+    await sendLong(ctx, pauta);
+    await ctx.reply(
+      'Aprova ou quer trocar algum?',
+      Markup.keyboard([
+        ['✅ Aprovar tudo', '🔄 Refazer pauta'],
+      ]).resize()
+    );
+  } catch (err) {
+    s.fase = 'idle';
+    await ctx.reply(`❌ Erro: ${err.message}`);
+  }
+}
 
 // Publica
 bot.hears('✅ Publica', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
-  if (s.fase !== 'revisando_post') return ctx.reply('Nenhum draft pra publicar.');
+  if (s.fase !== 'revisando_post') return ctx.reply('Nenhum draft pra publicar. Use /aprovar N primeiro.');
 
   s.fase = 'publicando';
   await ctx.reply('📤 Publicando...');
@@ -356,14 +422,37 @@ bot.hears('✅ Publica', async (ctx) => {
     }
     await ctx.reply('✅ Publicado em Instagram, Threads, Facebook e LinkedIn!');
   } catch (err) {
-    await ctx.reply(`❌ Erro: ${err.message}`);
+    await ctx.reply(`❌ Erro na publicação: ${err.message}`);
   }
 
   s.fase = 'revisando_pauta';
   const prox = (s.postAtual || 0) + 1;
   if (prox <= 6) {
-    await ctx.reply(`Próximo: /aprovar ${prox}`);
+    await ctx.reply(
+      `Próximo: Post ${prox}`,
+      Markup.keyboard([
+        [`✅ Gerar Post ${prox}`, '⏭ Pular'],
+        ['📅 /pauta — Nova busca'],
+      ]).resize()
+    );
+  } else {
+    await ctx.reply('🎉 Todos os 6 posts do dia concluídos!');
   }
+});
+
+// Navegar entre posts
+bot.hears(/^[➡️⬅️] Post (\d)$/, async (ctx) => {
+  if (!isAuthorized(ctx)) return;
+  const s = getState(ctx.chat.id);
+  const match = ctx.message.text.match(/Post (\d)/);
+  if (match) await gerarPost(ctx, s, parseInt(match[1]));
+});
+
+bot.hears(/^✅ Gerar Post (\d)$/, async (ctx) => {
+  if (!isAuthorized(ctx)) return;
+  const s = getState(ctx.chat.id);
+  const match = ctx.message.text.match(/Post (\d)/);
+  if (match) await gerarPost(ctx, s, parseInt(match[1]));
 });
 
 // Refazer post
@@ -371,18 +460,31 @@ bot.hears('🔄 Refazer', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
   if (!s.postAtual) return ctx.reply('Nenhum post em andamento.');
-  ctx.reply(`Refazendo post ${s.postAtual}... Manda um feedback ou deixa em branco:`);
   s.fase = 'aguardando_feedback';
+  ctx.reply(`Manda o feedback pro Post ${s.postAtual} (ou deixa em branco pra refazer igual):`);
 });
 
-// Texto livre — tema ou feedback
+// Pular
+bot.hears('⏭ Pular', async (ctx) => {
+  if (!isAuthorized(ctx)) return;
+  const s = getState(ctx.chat.id);
+  const prox = (s.postAtual || 0) + 1;
+  if (prox <= 6) {
+    await gerarPost(ctx, s, prox);
+  } else {
+    await ctx.reply('🎉 Todos os posts do dia concluídos!');
+  }
+});
+
+// Texto livre
 bot.on('text', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
   const texto = ctx.message.text;
 
-  // Ignora comandos e botões
-  if (texto.startsWith('/') || ['✅ Publica', '🔄 Refazer', '✅ Aprovar tudo', '🔄 Refazer pauta', '📅 /pauta — Nova busca'].includes(texto)) return;
+  const botoes = ['✅ Publica', '🔄 Refazer', '✅ Aprovar tudo', '🔄 Refazer pauta',
+    '📅 /pauta — Nova busca', '⏭ Pular', '📊 /status'];
+  if (texto.startsWith('/') || botoes.includes(texto) || texto.match(/^[➡️⬅️✅] Post \d$/)) return;
 
   if (s.fase === 'aguardando_tema' && s.formato) {
     s.fase = 'gerando';
@@ -402,16 +504,14 @@ bot.on('text', async (ctx) => {
 
   if (s.fase === 'aguardando_feedback' && s.postAtual) {
     s.fase = 'gerando';
-    const pauta = s.pauta || '';
-    const linhas = pauta.split('\n');
-    const postIdx = linhas.findIndex(l => l.includes(`POST ${s.postAtual} |`));
-    const postLines = linhas.slice(postIdx, postIdx + 5).join('\n');
+    const linhas = (s.pauta || '').split('\n');
+    const postIdx = linhas.findIndex(l => l.match(new RegExp(`POST ${s.postAtual}\\s*\\|`)));
+    const postLines = linhas.slice(postIdx, postIdx + 6).join('\n');
     const tema = (postLines.match(/Tema:\s*(.+)/) || [])[1] || 'tema';
-    const angulo = texto; // feedback vira o novo ângulo
 
     await ctx.reply('⏳ Refazendo...');
     try {
-      const conteudo = await gerarConteudoPost(tema, angulo, s.formato);
+      const conteudo = await gerarConteudoPost(tema, texto, s.formato);
       s.draft = conteudo;
       s.fase = 'revisando_post';
       await sendLong(ctx, conteudo);
@@ -423,7 +523,6 @@ bot.on('text', async (ctx) => {
     return;
   }
 
-  // Estado idle — sugerir o que fazer
   if (s.fase === 'idle' || !s.fase) {
     await ctx.reply(
       'Use /pauta pra ver a pauta do dia ou /gerar pra criar um post avulso.',
@@ -436,7 +535,7 @@ bot.on('text', async (ctx) => {
 });
 
 bot.launch();
-console.log('🤖 Homero Squad Bot — Online');
+console.log('🤖 Homero Squad Bot — Online (OpenRouter)');
 console.log(`Chat autorizado: ${MY_CHAT_ID || 'qualquer (configure TELEGRAM_CHAT_ID)'}`);
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
