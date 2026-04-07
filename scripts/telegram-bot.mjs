@@ -1,7 +1,6 @@
 import 'dotenv/config';
 import { Telegraf, Markup } from 'telegraf';
-import OpenAI from 'openai';
-import { execSync } from 'child_process';
+import { execSync, execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -11,21 +10,11 @@ const ROOT = path.join(__dirname, '..');
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const MY_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 
-if (!BOT_TOKEN || !OPENROUTER_API_KEY) {
-  console.error('Faltam variáveis de ambiente. Verifique .env (TELEGRAM_BOT_TOKEN, OPENROUTER_API_KEY)');
+if (!BOT_TOKEN) {
+  console.error('Falta TELEGRAM_BOT_TOKEN no .env');
   process.exit(1);
 }
-
-const ai = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: OPENROUTER_API_KEY,
-  defaultHeaders: {
-    'HTTP-Referer': 'https://stage-midia.com.br',
-    'X-Title': 'Homero Squad Bot',
-  },
-});
 
 const bot = new Telegraf(BOT_TOKEN);
 
