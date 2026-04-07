@@ -536,7 +536,7 @@ bot.on('text', async (ctx) => {
 });
 
 bot.launch();
-console.log('🤖 Homero Squad Bot — Online (OpenRouter)');
+console.log('🤖 Homero Squad Bot — Online (Claude CLI)');
 console.log(`Chat autorizado: ${MY_CHAT_ID || 'qualquer (configure TELEGRAM_CHAT_ID)'}`);
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
