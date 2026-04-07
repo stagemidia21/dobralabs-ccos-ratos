@@ -38,87 +38,99 @@ async function sendLong(ctx, text, extra = {}) {
   }
 }
 
-async function callAI(system, user, maxTokens = 1500) {
-  const messages = [];
-  if (system) messages.push({ role: 'system', content: system });
-  messages.push({ role: 'user', content: user });
+// ─── CLAUDE CLI (OAuth — sem custo de API) ──────────────────────────────────
 
-  const resp = await ai.chat.completions.create({
-    model: 'anthropic/claude-opus-4',
-    max_tokens: maxTokens,
-    messages,
-  });
+function callClaude(prompt, timeout = 120000) {
+  return execFileSync('claude', ['-p', prompt], {
+    cwd: ROOT,
+    timeout,
+    encoding: 'utf8',
+    maxBuffer: 1024 * 1024 * 5,
+  }).trim();
+}
 
-  return resp.choices[0].message.content;
+function humanizar(texto, contexto = '') {
+  const prompt = `Editor de conteúdo do @homero.ads. Tom: técnico, direto, sem coach, sem papo motivacional.
+${contexto ? `Contexto: ${contexto}\n` : ''}
+Texto:
+---
+${texto}
+---
+Reescreva eliminando padrões de IA: sem "crucial/vital/pivotal/landscape/underscore/testament/enhance/foster/showcase", sem "não é só X é Y", sem rule of three forçado, sem em-dash em excesso, sem bullets desnecessários. Máximo 5 hashtags. Frases curtas e diretas. Varie o ritmo. Primeira pessoa quando couber. Entregue APENAS o texto reescrito.`;
+  return callClaude(prompt, 180000);
 }
 
 // ─── GERAÇÃO DE CONTEÚDO ────────────────────────────────────────────────────
 
-async function gerarPauta(referencias) {
+function gerarPauta(referencias) {
   const hoje = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit' });
 
   const refsTexto = referencias
-    ? `\nPOSTS EM ALTA NOS PERFIS DE REFERÊNCIA:\n${referencias.posts_referencia.map(p =>
-        `@${p.perfil} (${p.likes} likes): ${p.caption.slice(0, 150)}`
-      ).join('\n')}\n\nNOTÍCIAS COLETADAS:\n${referencias.noticias.map(n =>
+    ? `\nPOSTS EM ALTA:\n${referencias.posts_referencia.map(p =>
+        `@${p.perfil}: ${p.caption.slice(0, 150)}`
+      ).join('\n')}\n\nNOTÍCIAS:\n${referencias.noticias.map(n =>
         `• ${n.titulo}`
       ).join('\n')}`
     : '';
 
-  const prompt = `Você é o assistente de pauta do @homero.ads (Homero Zanichelli — Stage Mídia, Head Tech & IA).
-Tom: técnico, direto, sem enrolação. Linha editorial: Claude Code, IA aplicada a negócios, tráfego pago.
+  const prompt = `Assistente de pauta do @homero.ads (Stage Mídia). Linha editorial: Claude Code OS — IA aplicada a negócios e tráfego pago. Tom: técnico, direto.
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere a PAUTA DO DIA com 6 posts no formato exato:
+Gere APENAS a pauta com 6 posts (sem texto antes ou depois):
 
-📅 PAUTA — ${hoje}
-
-POST 1 | 📸 FEED
-Tema: [tema direto]
-Ângulo: [como abordar — diferente dos concorrentes]
-Fonte: [notícia/série Claude Code/viral adaptado]
-
-POST 2 | 🖼 CARROSSEL IMAGEM
+POST 1 | FEED
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 3 | 📱 CARROSSEL VÍDEO
+POST 2 | CARROSSEL IMAGEM
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 4 | 📸 FEED
-...
+POST 3 | CARROSSEL VÍDEO
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-POST 5 | 🖼 CARROSSEL IMAGEM
-...
+POST 4 | FEED
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-POST 6 | 📱 CARROSSEL VÍDEO
-...
+POST 5 | CARROSSEL IMAGEM
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-Regras:
-- Pelo menos 1 post sobre Claude Code/IA aplicada
-- Pelo menos 1 post baseado em notícia do dia
-- Ângulos diferentes dos concorrentes
-- Nunca repetir formato consecutivo no mesmo tema`;
+POST 6 | CARROSSEL VÍDEO
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-  return callAI(null, prompt, 1500);
+Regras: pelo menos 1 Claude Code, pelo menos 1 notícia do dia, ângulos diferentes dos concorrentes.`;
+
+  return callClaude(prompt);
 }
 
-async function gerarConteudoPost(tema, angulo, formato) {
+function gerarConteudoPost(tema, angulo, formato) {
   const formatoDesc = {
-    feed: 'post de feed: 1 imagem estática + legenda completa (150-300 palavras) com CTA e hashtags',
-    carrossel: '10 slides de carrossel imagem: label + título em CAPS (máx 4 linhas) + body (2-3 frases densas) por slide + legenda',
-    carrossel_video: '10 slides de carrossel vídeo: label + título em CAPS (máx 4 linhas, use \\n pra quebrar) + body (3-5 frases) por slide + legenda completa',
+    feed: 'post de feed Instagram: 200-300 palavras, primeira pessoa, CTA direto, exatamente 5 hashtags',
+    carrossel: '10 slides de carrossel imagem: SLIDE N — Label + Título CAPS (máx 4 linhas) + Body (2-3 frases). Ao final: LEGENDA + 5 hashtags.',
+    carrossel_video: '10 slides de carrossel vídeo: SLIDE N — Label + Título CAPS (\\n pra quebrar) + Body (3-5 frases). Ao final: LEGENDA + 5 hashtags.',
   }[formato] || 'post completo';
 
-  const system = `Você é o assistente de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
-Tom: técnico, direto, premium. Sem enrolação. Português BR. Sem padrões de IA. Textos densos e específicos.
-Nunca fabricar experiência pessoal não confirmada pelo usuário.`;
+  const prompt = `Conteúdo do @homero.ads (Stage Mídia). Tom: técnico, direto, sem enrolação. Português BR. Sem padrões de IA. Primeira pessoa. Nunca fabricar experiência não confirmada.
 
-  return callAI(system, `Tema: ${tema}\nÂngulo: ${angulo}\nFormato: ${formatoDesc}\n\nGere o conteúdo completo.`, 2500);
+Tema: ${tema}
+Ângulo: ${angulo}
+Formato: ${formatoDesc}
+
+Gere o conteúdo completo. Sem preâmbulo.`;
+
+  const rascunho = callClaude(prompt, 180000);
+  return humanizar(rascunho, `Post ${formato}: ${tema}`);
 }
 
 // ─── HANDLERS ───────────────────────────────────────────────────────────────
