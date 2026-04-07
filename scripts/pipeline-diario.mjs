@@ -1,48 +1,29 @@
 /**
  * pipeline-diario.mjs
- * Roda todo dia automaticamente:
- * 1. Busca referências (Apify) — usa cache se já rodou hoje
- * 2. Gera pauta com 6 posts via OpenRouter
+ * Pipeline automático de conteúdo — @homero.ads
+ * Usa Claude Code CLI (OAuth) como LLM — sem custo de API
+ *
+ * 1. Busca referências via Apify (cache diário)
+ * 2. Gera pauta com 6 posts
  * 3. Gera conteúdo completo de cada post
- * 4. Salva tudo na vault do Obsidian
- * 5. Envia resumo pro Telegram com opção de aprovar
+ * 4. Salva na vault do Obsidian
+ * 5. Envia tudo pro Telegram
  */
 
 import 'dotenv/config';
-import OpenAI from 'openai';
+import { execSync, execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
 const CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 const VAULT = 'C:\\Users\\homer\\OneDrive\\Documentos\\Backup\\Homero Note\\@homero.ads';
 
-const ai = new OpenAI({
-  baseURL: 'https://openrouter.ai/api/v1',
-  apiKey: OPENROUTER_API_KEY,
-  defaultHeaders: {
-    'HTTP-Referer': 'https://stage-midia.com.br',
-    'X-Title': 'Pipeline Diário Stage Mídia',
-  },
-});
-
-async function callAI(system, user, maxTokens = 1500) {
-  const messages = [];
-  if (system) messages.push({ role: 'system', content: system });
-  messages.push({ role: 'user', content: user });
-  const resp = await ai.chat.completions.create({
-    model: 'anthropic/claude-opus-4',
-    max_tokens: maxTokens,
-    messages,
-  });
-  return resp.choices[0].message.content;
-}
+// ─── TELEGRAM ───────────────────────────────────────────────────────────────
 
 async function sendTelegram(text) {
   if (!BOT_TOKEN || !CHAT_ID) return;
@@ -56,104 +37,162 @@ async function sendTelegram(text) {
   }
 }
 
+// ─── CLAUDE CLI ──────────────────────────────────────────────────────────────
+
+function callClaude(prompt, maxWait = 120000) {
+  try {
+    const result = execFileSync('claude', ['-p', prompt], {
+      cwd: ROOT,
+      timeout: maxWait,
+      encoding: 'utf8',
+      maxBuffer: 1024 * 1024 * 5, // 5MB
+    });
+    return result.trim();
+  } catch (err) {
+    throw new Error(`Claude CLI falhou: ${err.message}`);
+  }
+}
+
+// ─── REFERÊNCIAS ─────────────────────────────────────────────────────────────
+
 async function buscarReferencias() {
   const cacheFile = path.join(ROOT, '_contexto', 'referencias-do-dia.json');
   if (fs.existsSync(cacheFile)) {
     const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
     if (new Date(cache.gerado_em).toDateString() === new Date().toDateString()) {
-      console.log('✓ Usando cache de referências de hoje');
+      console.log('✓ Cache de referências de hoje disponível');
       return cache;
     }
   }
   console.log('📡 Buscando referências via Apify...');
-  execSync(`node ${path.join(ROOT, 'scripts/buscar-referencias.mjs')}`, { cwd: ROOT, stdio: 'inherit' });
+  execSync(`node ${path.join(ROOT, 'scripts/buscar-referencias.mjs')}`, {
+    cwd: ROOT,
+    stdio: 'inherit',
+    timeout: 180000,
+  });
   return JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
 }
 
-async function gerarPauta(refs) {
-  const hoje = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric' });
+// ─── GERAÇÃO DE PAUTA ────────────────────────────────────────────────────────
+
+function gerarPauta(refs) {
+  const hoje = new Date().toLocaleDateString('pt-BR', {
+    weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric',
+  });
+
   const refsTexto = refs
-    ? `POSTS EM ALTA:\n${refs.posts_referencia.map(p => `@${p.perfil}: ${p.caption.slice(0, 150)}`).join('\n')}\n\nNOTÍCIAS:\n${refs.noticias.map(n => `• ${n.titulo}`).join('\n')}`
+    ? `\nPOSTS EM ALTA (últimas 48h):\n${refs.posts_referencia.map(p =>
+        `@${p.perfil}: ${p.caption.slice(0, 150)}`
+      ).join('\n')}\n\nNOTÍCIAS DO DIA:\n${refs.noticias.map(n =>
+        `• ${n.titulo}`
+      ).join('\n')}`
     : '';
 
-  return callAI(null, `Você é o assistente de pauta do @homero.ads (Stage Mídia). Linha editorial: Claude Code OS — IA aplicada a negócios e tráfego pago. Tom: técnico, direto, sem enrolação.
-
+  const prompt = `Você é o assistente de pauta do @homero.ads (Homero Zanichelli — Stage Mídia).
+Linha editorial: Claude Code OS — IA aplicada a negócios, tráfego pago e automação.
+Tom: técnico, direto, sem enrolação, sem teoria. Português BR.
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere pauta com 6 posts:
+Gere APENAS a pauta com 6 posts no formato exato abaixo (sem texto antes ou depois):
 
-POST 1 | 📸 FEED
+POST 1 | FEED
+Tema: [tema direto]
+Ângulo: [como abordar — diferente dos concorrentes]
+Fonte: [notícia/série Claude Code/viral]
+
+POST 2 | CARROSSEL IMAGEM
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 2 | 🖼 CARROSSEL IMAGEM
+POST 3 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 3 | 📱 CARROSSEL VÍDEO
+POST 4 | FEED
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 4 | 📸 FEED
-...
+POST 5 | CARROSSEL IMAGEM
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-POST 5 | 🖼 CARROSSEL IMAGEM
-...
+POST 6 | CARROSSEL VÍDEO
+Tema: ...
+Ângulo: ...
+Fonte: ...
 
-POST 6 | 📱 CARROSSEL VÍDEO
-...
+Regras: pelo menos 1 post de Claude Code, pelo menos 1 baseado em notícia do dia, ângulos diferentes dos concorrentes, nunca repetir ângulo no mesmo dia.`;
 
-Regras: pelo menos 1 Claude Code, pelo menos 1 notícia do dia, ângulos diferentes dos concorrentes.`, 1200);
+  console.log('📋 Gerando pauta...');
+  return callClaude(prompt);
 }
 
-async function gerarConteudo(tema, angulo, formato) {
+// ─── GERAÇÃO DE CONTEÚDO ─────────────────────────────────────────────────────
+
+function gerarConteudo(tema, angulo, formato) {
   const desc = {
-    feed: 'post de feed Instagram: copy de 150-300 palavras + CTA + hashtags',
-    carrossel: '10 slides de carrossel imagem: SLIDE N — Label + Título em CAPS + Body (2-3 frases)',
-    carrossel_video: '10 slides de carrossel vídeo: SLIDE N — Label + Título em CAPS com \\n pra quebrar + Body (3-5 frases)',
+    feed: 'post de feed Instagram: copy de 200-350 palavras, técnica e direta, com CTA específico e hashtags relevantes',
+    carrossel: `10 slides de carrossel imagem. Formato de cada slide:
+SLIDE N — [Label curta]
+Título: [CAPS, máx 4 linhas, impactante]
+Body: [2-3 frases densas, sem enrolação]
+Incluir legenda completa ao final.`,
+    carrossel_video: `10 slides de carrossel vídeo. Formato de cada slide:
+SLIDE N — [Label curta]
+Título: [CAPS, máx 4 linhas, usa \\n pra quebrar linha]
+Body: [3-5 frases, mais denso que imagem]
+Incluir legenda completa ao final.`,
   }[formato];
 
-  return callAI(
-    'Você é o assistente de conteúdo do @homero.ads. Tom: técnico, direto, premium. Português BR. Sem padrões de IA. Nunca fabricar experiência não confirmada.',
-    `Tema: ${tema}\nÂngulo: ${angulo}\nFormato: ${desc}\n\nGere o conteúdo completo.`,
-    2500
-  );
+  const prompt = `Você é o assistente de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
+Tom: técnico, direto, premium. Sem enrolação. Português BR com acentuação correta.
+Evitar: padrões de IA, bullets desnecessários, frases genéricas, experiência não confirmada pelo usuário.
+Posicionamento: "Sou o cara que entra quando a agência diz que já fez de tudo."
+
+Tema: ${tema}
+Ângulo: ${angulo}
+Formato: ${desc}
+
+Gere o conteúdo completo, direto ao ponto.`;
+
+  return callClaude(prompt, 180000);
 }
 
-function detectarFormato(linhaPost) {
-  if (linhaPost.includes('CARROSSEL VÍDEO') || linhaPost.includes('📱')) return 'carrossel_video';
-  if (linhaPost.includes('CARROSSEL IMAGEM') || linhaPost.includes('🖼')) return 'carrossel';
-  return 'feed';
-}
+// ─── VAULT ──────────────────────────────────────────────────────────────────
 
-async function salvarVault(data, posts) {
+function salvarVault(pauta, posts) {
   const dataStr = new Date().toISOString().slice(0, 10);
   const pastaVault = path.join(VAULT, 'pautas');
-  if (!fs.existsSync(pastaVault)) fs.mkdirSync(pastaVault, { recursive: true });
+  fs.mkdirSync(pastaVault, { recursive: true });
 
-  let md = `# Pauta ${dataStr}\n\n`;
-  md += `## Pauta\n\n${data.pauta}\n\n`;
-  md += `---\n\n## Conteúdos Gerados\n\n`;
-  posts.forEach((p, i) => {
-    md += `### Post ${i + 1} — ${p.formato.toUpperCase()}\n\n`;
+  let md = `# Pauta ${dataStr}\n\nGerado automaticamente pelo pipeline-diario.mjs\n\n`;
+  md += `## Pauta do Dia\n\n${pauta}\n\n---\n\n## Conteúdos Gerados\n\n`;
+  posts.forEach(p => {
+    md += `### Post ${p.n} — ${p.formato.toUpperCase()}\n\n`;
     md += `**Tema:** ${p.tema}\n**Ângulo:** ${p.angulo}\n\n`;
-    md += `${p.conteudo}\n\n---\n\n`;
+    md += p.conteudo ? `${p.conteudo}\n\n` : `❌ Falhou: ${p.erro}\n\n`;
+    md += '---\n\n';
   });
 
   const dest = path.join(pastaVault, `pauta-${dataStr}.md`);
   fs.writeFileSync(dest, md);
-  console.log(`✓ Salvo em ${dest}`);
+  console.log(`✓ Salvo em vault: pauta-${dataStr}.md`);
 }
 
+// ─── MAIN ────────────────────────────────────────────────────────────────────
+
 async function main() {
-  const dataStr = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  const dataStr = new Date().toLocaleDateString('pt-BR', {
+    day: '2-digit', month: '2-digit', year: 'numeric',
+  });
   console.log(`\n🚀 Pipeline Diário — ${dataStr}\n`);
 
-  await sendTelegram(`🚀 Pipeline iniciado — ${dataStr}\n\n⏳ Buscando referências e gerando pauta...`);
+  await sendTelegram(`🚀 Pipeline iniciado — ${dataStr}\n⏳ Buscando referências...`);
 
   // 1. Referências
   let refs = null;
@@ -161,68 +200,81 @@ async function main() {
     refs = await buscarReferencias();
     console.log(`✓ ${refs.posts_referencia.length} posts, ${refs.noticias.length} notícias`);
   } catch (err) {
-    console.warn('⚠ Sem referências:', err.message);
+    console.warn('⚠ Sem referências externas:', err.message);
+    await sendTelegram(`⚠️ Apify falhou, continuando sem referências: ${err.message}`);
   }
 
   // 2. Pauta
-  console.log('\n📋 Gerando pauta...');
-  const pauta = await gerarPauta(refs);
-  console.log('✓ Pauta gerada');
+  let pauta;
+  try {
+    pauta = gerarPauta(refs);
+    console.log('✓ Pauta gerada');
+    await sendTelegram(`📋 PAUTA DO DIA — ${dataStr}\n\n${pauta}`);
+  } catch (err) {
+    const msg = `❌ Falha ao gerar pauta: ${err.message}`;
+    console.error(msg);
+    await sendTelegram(msg);
+    process.exit(1);
+  }
 
   // 3. Posts
   const linhas = pauta.split('\n');
   const posts = [];
 
   console.log('\n📝 Gerando conteúdo dos 6 posts...');
+  await sendTelegram('📝 Gerando conteúdo dos 6 posts...');
+
   for (let n = 1; n <= 6; n++) {
-    const idx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
+    const idx = linhas.findIndex(l => l.match(new RegExp(`^POST ${n}\\s*\\|`)));
     if (idx === -1) {
-      console.warn(`⚠ Post ${n} não encontrado na pauta`);
+      console.warn(`⚠ POST ${n} não encontrado`);
+      posts.push({ n, tema: '?', angulo: '', formato: 'feed', conteudo: null, erro: 'não encontrado na pauta' });
       continue;
     }
+
     const bloco = linhas.slice(idx, idx + 6).join('\n');
-    const formato = detectarFormato(bloco);
-    const tema = (bloco.match(/Tema:\s*(.+)/) || [])[1] || 'tema';
-    const angulo = (bloco.match(/Ângulo:\s*(.+)/) || [])[1] || '';
+    const linhaPost = linhas[idx];
+    let formato = 'feed';
+    if (linhaPost.includes('CARROSSEL VÍDEO') || linhaPost.includes('CARROSSEL VIDEO')) formato = 'carrossel_video';
+    else if (linhaPost.includes('CARROSSEL IMAGEM')) formato = 'carrossel';
+
+    const tema = (bloco.match(/Tema:\s*(.+)/) || [])[1]?.trim() || 'tema';
+    const angulo = (bloco.match(/Ângulo:\s*(.+)/) || [])[1]?.trim() || '';
 
     console.log(`  Post ${n} (${formato}): ${tema}`);
+
     try {
-      const conteudo = await gerarConteudo(tema, angulo, formato);
+      const conteudo = gerarConteudo(tema, angulo, formato);
       posts.push({ n, tema, angulo, formato, conteudo });
       console.log(`  ✓ Post ${n} gerado`);
+
+      // Envia pro Telegram imediatamente
+      await sendTelegram(`📝 POST ${n} — ${formato.toUpperCase()}\nTema: ${tema}\n\n${conteudo}`);
     } catch (err) {
       console.error(`  ✗ Post ${n} falhou: ${err.message}`);
       posts.push({ n, tema, angulo, formato, conteudo: null, erro: err.message });
+      await sendTelegram(`❌ Post ${n} falhou: ${err.message}`);
     }
   }
 
-  // 4. Salvar na vault
+  // 4. Vault
   try {
-    await salvarVault({ pauta }, posts);
+    salvarVault(pauta, posts);
   } catch (err) {
     console.warn('⚠ Erro ao salvar vault:', err.message);
   }
 
-  // 5. Enviar pro Telegram
+  // 5. Resumo final
   const ok = posts.filter(p => p.conteudo).length;
-  await sendTelegram(`✅ Pipeline concluído!\n\n${ok}/6 posts gerados.\n\nPauta:\n${pauta}`);
+  const resumo = `✅ Pipeline concluído — ${ok}/6 posts gerados\n\n` +
+    posts.map(p => `${p.conteudo ? '✓' : '✗'} Post ${p.n} (${p.formato}): ${p.tema}`).join('\n');
 
-  for (const p of posts) {
-    if (!p.conteudo) {
-      await sendTelegram(`❌ Post ${p.n} falhou: ${p.erro}`);
-      continue;
-    }
-    const header = `📝 POST ${p.n} — ${p.formato.toUpperCase()}\nTema: ${p.tema}\n\n`;
-    await sendTelegram(header + p.conteudo);
-  }
-
-  await sendTelegram(`🎯 Todos os ${ok} posts enviados acima. Revise e use o bot pra publicar individualmente com /aprovar N, ou publique direto pelo script.`);
-
-  console.log(`\n✅ Pipeline concluído — ${ok}/6 posts gerados\n`);
+  console.log(`\n${resumo}`);
+  await sendTelegram(resumo);
 }
 
-main().catch(err => {
+main().catch(async err => {
   console.error('Erro fatal:', err);
-  sendTelegram(`💥 Erro no pipeline: ${err.message}`).catch(() => {});
+  await sendTelegram(`💥 Pipeline falhou: ${err.message}`).catch(() => {});
   process.exit(1);
 });
