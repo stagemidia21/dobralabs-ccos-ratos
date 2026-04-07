@@ -20,6 +20,7 @@
   "homepage": "https://github.com/stagemidia21/dobralabs-ccos-ratos#readme",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
+    "apify-client": "^2.22.3",
     "dotenv": "^17.4.1",
     "telegraf": "^4.16.3"
   }
