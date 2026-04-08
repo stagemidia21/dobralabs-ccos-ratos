@@ -19,14 +19,30 @@ Toda vez que o Homero descrever qualquer intenção de conteúdo. Exemplos que d
 
 ## Passo 1 — Carregar contexto completo
 
-Antes de qualquer coisa, ler:
+Antes de qualquer coisa, carregar em paralelo:
 
-1. `scripts/obsidian.mjs` → chamar `lerHistorico(14)` para ver o que foi publicado nos últimos 14 dias
-2. `_contexto/estrategia.md` → foco atual e projetos em andamento
-3. `_contexto/preferencias.md` → tom, o que evitar
-4. `projetos/carrossel-remotion/public/` → listar fotos disponíveis para capa
+1. **Histórico próprio** — `lerHistorico(14)` via `scripts/obsidian.mjs` → o que já foi publicado nos últimos 14 dias
+2. **Posts virais dos concorrentes** — ler `_contexto/referencias-do-dia.json` → posts recentes dos 9 perfis de referência com engajamento. Se o arquivo tiver mais de 8 horas, rodar `node scripts/buscar-referencias.mjs` antes de continuar
+3. **Notícias do dia** — usar WebSearch para buscar novidades de IA, tráfego pago e marketing digital das últimas 48h. Sempre buscar antes de sugerir pauta
+4. **Estratégia atual** — `_contexto/estrategia.md`
+5. **Fotos disponíveis** — `projetos/carrossel-remotion/public/`
 
-Usar esse contexto para tomar todas as decisões abaixo. Não listar o que foi lido — apenas usar.
+### Perfis de referência a monitorar
+`@viverdeia`, `@bruno.ai1`, `@bubows.ai`, `@thaleslaray`, `@kaique.editor`, `@eusouier`, `@castilho.ia`, `@rafa.grandi`, `@gabreiss_`
+
+### Como usar os posts virais
+Para cada post de alto engajamento encontrado:
+- Identificar o gancho (primeira linha ou CTA)
+- Identificar o ângulo (o que eles argumentam)
+- Criar a versão do Homero: **mesmo gancho, ângulo diferente** — mais aplicado a negócio, tráfego pago ou operação de agência
+- Nunca copiar o conteúdo — usar o tema/formato como referência e reescrever com posicionamento Stage Mídia
+
+### Como usar as notícias
+- Ancorar sempre em fato real (lançamento, dado, mudança de plataforma)
+- Nunca gerar post sobre tendência genérica sem ter um fato específico na base
+- Citar a fonte no slide de capa (ex: "Fonte: The Decoder, 08/04/2026")
+
+Usar todo esse contexto para tomar as decisões abaixo. Não listar o que foi lido — apenas usar.
 
 ## Passo 2 — Analisar a intenção
 
