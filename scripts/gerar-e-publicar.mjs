@@ -82,8 +82,8 @@ function gerarJSX(compId, foto, slides) {
       <Sequence from={0} durationInFrames={${D}}>
         <SlideCapaFoto
           imageSrc="${foto}"
-          title={"${s.title.replace(/"/g, '\\"')}"}
-          fonte="${s.fonte || 'Fonte: @homero.ads'}"
+          title={"${s.title.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '')}"}
+          fonte="${(s.fonte || 'Fonte: @homero.ads').replace(/"/g, '\\"')}"
           slideNum={1} total={${slides.length}}
         />
       </Sequence>`;
