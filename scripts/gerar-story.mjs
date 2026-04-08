@@ -182,32 +182,42 @@ async function executar(tema) {
   console.log(`  ✓ Dados salvos: stories/${storyId}.json`);
 
   // 3. Cria JSX
-  const compId = `Story_${storyId.replace(/[^a-zA-Z0-9]/g, '_')}`;
+  // compName: identificador JS válido (PascalCase, sem hífens)
+  // compositionId: ID do Remotion (só letras, números e hífen)
+  const compName = 'Story' + storyId
+    .replace(/[^a-zA-Z0-9]+/g, ' ')
+    .trim()
+    .split(' ')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('');
+  const compositionId = storyId; // já é slug com hífens
+
   const jsxContent = `import { StoryDinamico } from './StoryDinamico.jsx';
 
 const SLIDES = ${JSON.stringify(data.slides, null, 2)};
 
-export function ${compId}() {
+export function ${compName}() {
   return <StoryDinamico slides={SLIDES} foto={${JSON.stringify(foto)}} />;
 }
 `;
-  fs.writeFileSync(path.join(SRC_DIR, `${compId}.jsx`), jsxContent);
-  console.log(`  ✓ JSX criado: ${compId}.jsx`);
+  fs.writeFileSync(path.join(SRC_DIR, `${compName}.jsx`), jsxContent);
+  console.log(`  ✓ JSX criado: ${compName}.jsx`);
 
   // 4. Registra no Root.jsx
   let root = fs.readFileSync(path.join(SRC_DIR, 'Root.jsx'), 'utf8');
-  if (!root.includes(compId)) {
+  if (!root.includes(compName)) {
     root = root.replace(
       "import { StoryDinamico } from './StoryDinamico.jsx';",
-      `import { StoryDinamico } from './StoryDinamico.jsx';\nimport { ${compId} } from './${compId}.jsx';`
+      `import { StoryDinamico } from './StoryDinamico.jsx';\nimport { ${compName} } from './${compName}.jsx';`
     );
     root = root.replace(
       "      {/* Story 9:16 — dinâmico */}",
-      `      <Composition id="${compId}" component={${compId}} durationInFrames={${FRAMES_PER_SLIDE * data.slides.length}} fps={30} width={1080} height={1920} />\n\n      {/* Story 9:16 — dinâmico */}`
+      `      <Composition id="${compositionId}" component={${compName}} durationInFrames={${FRAMES_PER_SLIDE * data.slides.length}} fps={30} width={1080} height={1920} />\n\n      {/* Story 9:16 — dinâmico */}`
     );
     fs.writeFileSync(path.join(SRC_DIR, 'Root.jsx'), root);
     console.log(`  ✓ Registrado no Root.jsx`);
   }
+  const compId = compositionId; // usado no render abaixo
 
   // 5. Renderiza PNGs
   const outDir = path.join(OUT_DIR, 'stories', storyId);

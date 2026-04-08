@@ -1,0 +1,35 @@
+{
+  "slides": [
+    {
+      "tipo": "capa",
+      "title": "MENTORIA 1:1\nIA PRA SEU\nNEGÓCIO",
+      "subtitulo": "6 encontros. Resultado real. Sem enrolação.",
+      "tag": "MENTORIA"
+    },
+    {
+      "tipo": "corpo",
+      "label": "O PROBLEMA",
+      "titulo": "IA EXISTE.\nVOCÊ NÃO APLICA.",
+      "corpo": "Todo mundo fala de IA, mas poucos sabem onde ela entra no dia a dia do negócio. Ferramenta não falta. O que falta é saber onde aplicar. A mentoria resolve isso."
+    },
+    {
+      "tipo": "corpo",
+      "label": "COMO FUNCIONA",
+      "titulo": "6 ENCONTROS\nSÓ PRA VOCÊ",
+      "corpo": "Cada sessão é construída em cima da sua realidade: seu mercado, seu processo, sua equipe. Sem curso genérico. Sem conteúdo gravado. Trabalho aplicado, encontro por encontro."
+    },
+    {
+      "tipo": "corpo",
+      "label": "O QUE VOCÊ SAI",
+      "titulo": "COM IA RODANDO\nNO SEU NEGÓCIO",
+      "corpo": "Ao final você sai com fluxos funcionando, prompts testados e processo documentado. Tudo aplicado durante os encontros, sem relatório final de sugestões."
+    },
+    {
+      "tipo": "cta",
+      "cta": "LINK NA BIO\nPRA RESERVAR SUA VAGA",
+      "sub": "Vagas limitadas. Atendimento individual."
+    }
+  ],
+  "legenda": "Abri vagas pra mentoria 1:1 de IA aplicada ao seu negócio.\n\nSão 6 encontros personalizados, construídos em cima da sua operação. A gente trabalha junto pra identificar onde a IA entra de verdade: no processo comercial, no atendimento, na produção de conteúdo, no que fizer mais sentido pra você.\n\nNo final você sai com IA funcionando. Fluxo montado, prompts testados, resultado mensurável.\n\nAtendo um número fechado de pessoas por ciclo. Se quer entrar, o caminho é pelo link na bio.",
+  "foto": "opt1.jpg"
+}
