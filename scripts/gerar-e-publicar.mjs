@@ -10,6 +10,7 @@ import { execFileSync, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { humanizarJSON } from './humanizer-rules.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -329,6 +330,11 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     throw new Error(`Geração falhou: ${err.message}`);
   }
   console.log(`  ✓ ${dados.slides.length} slides gerados`);
+
+  // 1b. Humaniza textos
+  console.log('  Humanizando textos...');
+  dados = humanizarJSON(dados);
+  console.log(`  ✓ Humanizado`);
 
   // 2. Cria JSX
   const foto = escolherFoto(tema, numPost);

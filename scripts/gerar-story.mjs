@@ -22,6 +22,7 @@ import { execFileSync, execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { humanizarJSON } from './humanizer-rules.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -163,8 +164,13 @@ async function executar(tema) {
 
   // 1. Gera conteúdo via Claude
   console.log('  Gerando conteúdo...');
-  const data = gerarConteudo(tema);
+  let data = gerarConteudo(tema);
   console.log(`  ✓ ${data.slides.length} slides gerados`);
+
+  // 1b. Humaniza textos
+  console.log('  Humanizando textos...');
+  data = humanizarJSON(data);
+  console.log(`  ✓ Humanizado`);
 
   // 2. Salva JSON dos dados
   fs.mkdirSync(STORIES_DIR, { recursive: true });
