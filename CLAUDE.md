@@ -94,6 +94,14 @@ Não é necessário listar o que foi lido nem confirmar a leitura. Apenas usar o
 
 ---
 
+## Orquestrador de conteúdo
+
+Qualquer intenção de conteúdo — tema solto, ideia, "quero falar sobre X", pedido de post/story/carrossel — ativa automaticamente a skill `/orq`.
+
+O orquestrador: lê histórico do Obsidian → verifica repetição → escolhe imagem → briefa → gera → humaniza → revisa → publica → salva.
+
+Nunca gerar conteúdo sem passar pelo orquestrador. Nunca publicar sem revisar primeiro.
+
 ## Fluxo de trabalho
 
 Antes de executar qualquer tarefa, verificar se existe uma skill relevante em `.claude/skills/` ou `.claude/commands/`.
