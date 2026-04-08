@@ -191,7 +191,15 @@ async function publicarThreads(tokens, mediaUrls, legenda) {
   const cd = await cr.json();
   if (cd.error) throw new Error(`Threads carrossel falhou: ${JSON.stringify(cd.error)}`);
 
-  await new Promise(r => setTimeout(r, 5000));
+  // Aguarda carrossel container ficar FINISHED
+  const carStart = Date.now();
+  while (Date.now() - carStart < 60000) {
+    await new Promise(r => setTimeout(r, 5000));
+    const sr = await fetch(`${API}/${cd.id}?fields=status&access_token=${token}`);
+    const sd = await sr.json();
+    if (sd.status === 'FINISHED') break;
+    if (sd.status === 'ERROR') throw new Error(`Threads carrossel container falhou`);
+  }
 
   // Publica
   const pr = await fetch(`${API}/${userId}/threads_publish`, {
