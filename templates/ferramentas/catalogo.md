@@ -39,14 +39,20 @@ npx playwright screenshot --viewport-size=1080,1350 --full-page "file:///caminho
 ## Publicar em redes sociais
 
 ### Post for Me API
-**O que faz:** Publica posts no Instagram e TikTok direto do Claude Code
+**O que faz:** CDN para upload de arquivos (video/imagem) com URL publica. NAO usar pra publicacao — quebrado desde 2026-04-06
 **Precisa de conta:** Sim, postforme.dev
 **Configurar:** Salvar `POSTFORME_API_KEY` no `.env`
-**Como usar numa skill:**
-```bash
-node --env-file=.env scripts/publish-postforme.js
-```
-**Quando usar:** Skills de carrossel, conteudo visual, publicacao automatica
+**Como usar:** Apenas para `create-upload-url` e PUT do arquivo. Publicacao direto via API de cada rede.
+**Quando usar:** Upload de MP4/PNG antes de publicar em Instagram, Threads, Facebook
+
+### APIs diretas de redes sociais
+**O que faz:** Publicacao direta em Instagram, Threads, Facebook, LinkedIn sem intermediario
+**Implementado em:** `scripts/gerar-e-publicar.mjs` e `scripts/gerar-story.mjs`
+**Instagram:** `https://graph.instagram.com` — USER_ID: `26285906407703501`
+**Threads:** `https://graph.threads.net` — carrossel e imagem story
+**Facebook:** `https://graph.facebook.com/v19.0` — video unico (sem carrossel)
+**LinkedIn:** `https://api.linkedin.com/v2/ugcPosts` — texto (sem midia nativa)
+**Quando usar:** Sempre que precisar publicar conteudo — nunca usar Post for Me pra isso
 
 ---
 
@@ -99,6 +105,22 @@ brew install yt-dlp
 
 ---
 
+## Obsidian (vault local)
+
+### obsidian.mjs (modulo interno)
+**O que faz:** Le e escreve notas no vault do Obsidian automaticamente apos cada publicacao
+**Vault:** `C:/Users/homer/OneDrive/Documentos/Backup/Homero Note`
+**MCP instalado:** `mcp-obsidian` — scope global, conectado
+**Modulo:** `scripts/obsidian.mjs`
+**Funcoes disponiveis:**
+- `salvarCarrossel(dados, meta)` — salva post de feed em `@homero.ads/carrosseis/`
+- `salvarStory(dados, meta)` — salva story em `@homero.ads/stories/`
+- `lerHistorico(dias)` — le posts recentes pra evitar repeticao de tema no prompt do Claude
+- `lerPautas()` — le pautas do vault pra usar como contexto
+**Quando usar:** Sempre que gerar ou publicar conteudo — ja integrado nos pipelines principais
+
+---
+
 ## Conectar com plataformas (MCPs)
 
 MCPs sao conectores que dao acesso direto a plataformas dentro do Claude Code.
@@ -106,6 +128,11 @@ O Claude passa a usar esses conectores automaticamente quando fizer sentido.
 
 Pra verificar quais MCPs ja estao instalados: `claude mcp list`
 Pra remover um MCP: `claude mcp remove nome-do-mcp`
+
+### Obsidian (MCP)
+**Status: INSTALADO E CONECTADO**
+**Vault:** `C:/Users/homer/OneDrive/Documentos/Backup/Homero Note`
+**Instalado com:** `mcp-obsidian` (scope user — disponivel em todos os projetos)
 
 ### Notion
 **O que faz:** Acessa projetos, bases de dados, briefings e tarefas do Notion

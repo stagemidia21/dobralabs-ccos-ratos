@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { humanizarJSON } from './humanizer-rules.mjs';
+import { salvarCarrossel, lerHistorico } from './obsidian.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -93,8 +94,9 @@ export function ${compId}() {
 
 // Gera os dados dos slides via Claude
 function gerarSlides(tema, angulo, fonte, legenda) {
+  const historico = lerHistorico(14);
   const prompt = `Você é o assistente de conteúdo do @homero.ads (Stage Mídia). Tom: técnico, direto, sem coach. Português BR. Sem padrões de IA.
-
+${historico}
 Tema: ${tema}
 Ângulo: ${angulo}
 
@@ -424,6 +426,11 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     await publicarLinkedIn(tokens.liS, tokens.liStageUrn, mediaUrls, dados.legenda);
     console.log('OK');
   } catch(e) { console.log(`ERRO: ${e.message}`); }
+
+  // Salva no Obsidian
+  try {
+    salvarCarrossel(dados, { tema, foto: escolherFoto(tema, numPost), numPost, igId, plataformas: ['instagram', 'threads', 'facebook', 'linkedin'] });
+  } catch(e) { console.log(`  ⚠ Obsidian: ${e.message}`); }
 
   console.log(`  ✅ Post ${numPost} concluído!`);
   await sendTelegram(`✅ Post ${numPost}/6 publicado em todas as redes!\n\nLegenda:\n${dados.legenda}`);

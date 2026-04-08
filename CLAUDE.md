@@ -56,14 +56,25 @@ Evitar: textos repetitivos, genéricos ou com cara de IA; bullets desnecessário
 
 ## Ferramentas conectadas
 
-- [ ] Notion
-- [ ] Gmail
-- [ ] Google Calendar
-- [ ] Canva
+- [x] Obsidian — vault: `C:/Users/homer/OneDrive/Documentos/Backup/Homero Note` | MCP: `mcp-obsidian` (global) | módulo: `scripts/obsidian.mjs`
+- [x] Notion — MCP instalado (claude.ai)
+- [x] Gmail — MCP instalado (claude.ai)
+- [x] Google Calendar — MCP instalado (claude.ai)
+- [x] Canva — MCP instalado (claude.ai)
+- [x] Figma — MCP instalado (claude.ai)
 - [ ] n8n
 - [ ] Supabase
 
-*(Marcar conforme for instalando os MCPs)*
+## Obsidian — inteligência de conteúdo
+
+O vault funciona como memória histórica do pipeline de conteúdo. Regras:
+
+- Todo carrossel publicado → salvo automaticamente em `@homero.ads/carrosseis/`
+- Todo story publicado → salvo automaticamente em `@homero.ads/stories/`
+- Antes de gerar conteúdo novo → `lerHistorico(14)` informa o Claude dos temas já publicados nos últimos 14 dias
+- Pautas do vault (`@homero.ads/pautas/`) podem ser lidas com `lerPautas()` antes de gerar
+
+Ao criar skills de conteúdo, sempre importar `scripts/obsidian.mjs` e chamar `salvarCarrossel` ou `salvarStory` ao final.
 
 ---
 

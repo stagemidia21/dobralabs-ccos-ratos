@@ -23,6 +23,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { humanizarJSON } from './humanizer-rules.mjs';
+import { salvarStory, lerHistorico } from './obsidian.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -128,8 +129,9 @@ async function publicarStoryInstagram(token, imageUrl) {
 }
 
 function gerarConteudo(tema) {
+  const historico = lerHistorico(14);
   const prompt = `Você é o assistente de conteúdo do @homero.ads (Stage Mídia). Tom: direto, comercial, sem coach. Português BR. Sem padrões de IA.
-
+${historico}
 Tema do story: ${tema}
 
 O story tem objetivo de venda ou apresentação de serviço. Gere de 3 a 6 slides.
@@ -252,6 +254,11 @@ export function ${compId}() {
     console.log(`OK (${id})`);
     if (i < imageUrls.length - 1) await new Promise(r => setTimeout(r, 2000));
   }
+
+  // Salva no Obsidian
+  try {
+    salvarStory(data, { tema, foto, storyId, igIds });
+  } catch(e) { console.log(`  ⚠ Obsidian: ${e.message}`); }
 
   console.log(`\n✅ ${igIds.length} stories publicados!`);
   await sendTelegram(`✅ Story publicado!\n${igIds.length} slides\n\n${tema}`);
