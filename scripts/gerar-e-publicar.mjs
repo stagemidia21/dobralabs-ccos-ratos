@@ -133,14 +133,111 @@ async function uploadSlide(filePath, filename) {
   return media_url;
 }
 
-async function getIGToken() {
+async function getTokens() {
   const r = await fetch(`${BASE_URL}/v1/social-accounts`, { headers: authHeaders });
   const d = await r.json();
-  return (d.data || d).find(a => a.platform === 'instagram').access_token;
+  const accs = d.data || d;
+  return {
+    ig:    accs.find(a => a.platform === 'instagram').access_token,
+    th:    accs.find(a => a.platform === 'threads').access_token,
+    thId:  accs.find(a => a.platform === 'threads').user_id,
+    fb:    accs.find(a => a.platform === 'facebook').access_token,
+    fbId:  accs.find(a => a.platform === 'facebook').user_id,
+    liS:   accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).access_token,
+    liH:   accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).access_token,
+    liStageId: accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).user_id,
+    liHomeroId: accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).user_id,
+  };
+}
+
+async function publicarThreads(tokens, mediaUrls, legenda) {
+  const { th: token, thId: userId } = tokens;
+  const API = 'https://graph.threads.net';
+
+  // Cria containers de vídeo
+  const containerIds = [];
+  for (const url of mediaUrls) {
+    const r = await fetch(`${API}/${userId}/threads`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ media_type: 'VIDEO', video_url: url, is_carousel_item: 'true', access_token: token }),
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(`Threads container falhou: ${JSON.stringify(d.error)}`);
+    containerIds.push(d.id);
+  }
+
+  // Aguarda containers
+  for (const id of containerIds) {
+    const start = Date.now();
+    while (Date.now() - start < 120000) {
+      await new Promise(r => setTimeout(r, 5000));
+      const r = await fetch(`${API}/${id}?fields=status&access_token=${token}`);
+      const d = await r.json();
+      if (d.status === 'FINISHED') break;
+      if (d.status === 'ERROR') throw new Error(`Threads container ${id} falhou`);
+    }
+  }
+
+  // Carrossel container
+  const cr = await fetch(`${API}/${userId}/threads`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), text: legenda, access_token: token }),
+  });
+  const cd = await cr.json();
+  if (cd.error) throw new Error(`Threads carrossel falhou: ${JSON.stringify(cd.error)}`);
+
+  await new Promise(r => setTimeout(r, 5000));
+
+  // Publica
+  const pr = await fetch(`${API}/${userId}/threads_publish`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ creation_id: cd.id, access_token: token }),
+  });
+  const pd = await pr.json();
+  if (pd.error) throw new Error(`Threads publish falhou: ${JSON.stringify(pd.error)}`);
+  return pd.id;
+}
+
+async function publicarFacebook(tokens, mediaUrls, legenda) {
+  const { fb: token, fbId: pageId } = tokens;
+  const API = 'https://graph.facebook.com/v19.0';
+
+  // Facebook: envia como reel/video (carousel de vídeo não é suportado da mesma forma)
+  // Usa o primeiro slide como vídeo principal
+  const r = await fetch(`${API}/${pageId}/videos`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ file_url: mediaUrls[0], description: legenda, access_token: token }),
+  });
+  const d = await r.json();
+  if (d.error) throw new Error(`Facebook video falhou: ${JSON.stringify(d.error)}`);
+  return d.id;
+}
+
+async function publicarLinkedIn(token, authorUrn, mediaUrls, legenda) {
+  // LinkedIn: posta como texto (carrossel de vídeo nativo requer upload complexo)
+  const r = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'X-Restli-Protocol-Version': '2.0.0' },
+    body: JSON.stringify({
+      author: `urn:li:person:${authorUrn}`,
+      lifecycleState: 'PUBLISHED',
+      specificContent: {
+        'com.linkedin.ugc.ShareContent': {
+          shareCommentary: { text: legenda },
+          shareMediaCategory: 'NONE',
+        },
+      },
+      visibility: { 'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC' },
+    }),
+  });
+  const d = await r.json();
+  if (d.status && d.status !== 201) throw new Error(`LinkedIn falhou: ${JSON.stringify(d)}`);
+  return d.id || 'ok';
 }
 
 async function publicarInstagramDireto(mediaUrls, legenda) {
-  const token = await getIGToken();
+  const tokens = await getTokens();
+  const token = tokens.ig;
   const IG_USER_ID = '26285906407703501';
   const IG_API = 'https://graph.instagram.com';
 
@@ -272,9 +369,45 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     console.log('OK');
   }
 
-  const postId = await publicarInstagramDireto(mediaUrls, dados.legenda);
-  console.log(`  ✅ Post ${numPost} publicado! ID: ${postId}`);
-  await sendTelegram(`✅ Post ${numPost}/6 publicado!\n\nLegenda:\n${dados.legenda}`);
+  // Instagram
+  process.stdout.write('  Instagram... ');
+  const igId = await publicarInstagramDireto(mediaUrls, dados.legenda);
+  console.log(`OK (${igId})`);
+
+  // Threads
+  try {
+    const tokens = await getTokens();
+    process.stdout.write('  Threads... ');
+    const thId = await publicarThreads(tokens, mediaUrls, dados.legenda);
+    console.log(`OK (${thId})`);
+  } catch(e) { console.log(`ERRO: ${e.message}`); }
+
+  // Facebook
+  try {
+    const tokens = await getTokens();
+    process.stdout.write('  Facebook... ');
+    const fbId = await publicarFacebook(tokens, mediaUrls, dados.legenda);
+    console.log(`OK (${fbId})`);
+  } catch(e) { console.log(`ERRO: ${e.message}`); }
+
+  // LinkedIn Homero
+  try {
+    const tokens = await getTokens();
+    process.stdout.write('  LinkedIn Homero... ');
+    await publicarLinkedIn(tokens.liH, tokens.liHomeroId, mediaUrls, dados.legenda);
+    console.log('OK');
+  } catch(e) { console.log(`ERRO: ${e.message}`); }
+
+  // LinkedIn Stage
+  try {
+    const tokens = await getTokens();
+    process.stdout.write('  LinkedIn Stage... ');
+    await publicarLinkedIn(tokens.liS, tokens.liStageId, mediaUrls, dados.legenda);
+    console.log('OK');
+  } catch(e) { console.log(`ERRO: ${e.message}`); }
+
+  console.log(`  ✅ Post ${numPost} concluído!`);
+  await sendTelegram(`✅ Post ${numPost}/6 publicado em todas as redes!\n\nLegenda:\n${dados.legenda}`);
 
   return postId;
 }
