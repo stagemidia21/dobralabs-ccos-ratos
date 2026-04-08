@@ -181,8 +181,16 @@ async function publicarInstagramDireto(mediaUrls, legenda) {
   const cd = await cr.json();
   if (cd.error) throw new Error(`Carrossel container falhou: ${JSON.stringify(cd.error)}`);
 
-  // 4. Aguarda carrossel container
-  await new Promise(r => setTimeout(r, 5000));
+  // 4. Aguarda carrossel container ficar FINISHED
+  const carWait = Date.now();
+  while (Date.now() - carWait < 60000) {
+    await new Promise(r => setTimeout(r, 5000));
+    const sr = await fetch(`${IG_API}/${cd.id}?fields=status_code&access_token=${token}`);
+    const sd = await sr.json();
+    if (sd.status_code === 'FINISHED') break;
+    if (sd.status_code === 'ERROR') throw new Error(`Carrossel container falhou`);
+    process.stdout.write('.');
+  }
 
   // 5. Publica
   const pr = await fetch(`${IG_API}/${IG_USER_ID}/media_publish`, {
