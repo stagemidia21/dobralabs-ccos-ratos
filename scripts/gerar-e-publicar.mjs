@@ -148,10 +148,10 @@ async function getTokens() {
     thId:  accs.find(a => a.platform === 'threads').user_id,
     fb:    accs.find(a => a.platform === 'facebook').access_token,
     fbId:  accs.find(a => a.platform === 'facebook').user_id,
-    liS:   accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).access_token,
-    liH:   accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).access_token,
-    liStageId: accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).user_id,
-    liHomeroId: accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).user_id,
+    liS:       accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).access_token,
+    liH:       accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).access_token,
+    liStageUrn: `urn:li:organization:${accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).user_id}`,
+    liHomeroUrn: `urn:li:person:${accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).user_id}`,
   };
 }
 
@@ -164,7 +164,7 @@ async function publicarThreads(tokens, mediaUrls, legenda) {
   for (const url of mediaUrls) {
     const r = await fetch(`${API}/${userId}/threads`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ media_type: 'VIDEO', video_url: url, is_carousel_item: 'true', access_token: token }),
+      body: JSON.stringify({ media_type: 'VIDEO', video_url: url, is_carousel_item: true, access_token: token }),
     });
     const d = await r.json();
     if (d.error) throw new Error(`Threads container falhou: ${JSON.stringify(d.error)}`);
@@ -224,7 +224,7 @@ async function publicarLinkedIn(token, authorUrn, mediaUrls, legenda) {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'X-Restli-Protocol-Version': '2.0.0' },
     body: JSON.stringify({
-      author: authorUrn.length < 15 ? `urn:li:organization:${authorUrn}` : `urn:li:person:${authorUrn}`,
+      author: authorUrn,
       lifecycleState: 'PUBLISHED',
       specificContent: {
         'com.linkedin.ugc.ShareContent': {
@@ -399,7 +399,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   try {
     const tokens = await getTokens();
     process.stdout.write('  LinkedIn Homero... ');
-    await publicarLinkedIn(tokens.liH, tokens.liHomeroId, mediaUrls, dados.legenda);
+    await publicarLinkedIn(tokens.liH, tokens.liHomeroUrn, mediaUrls, dados.legenda);
     console.log('OK');
   } catch(e) { console.log(`ERRO: ${e.message}`); }
 
@@ -407,7 +407,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   try {
     const tokens = await getTokens();
     process.stdout.write('  LinkedIn Stage... ');
-    await publicarLinkedIn(tokens.liS, tokens.liStageId, mediaUrls, dados.legenda);
+    await publicarLinkedIn(tokens.liS, tokens.liStageUrn, mediaUrls, dados.legenda);
     console.log('OK');
   } catch(e) { console.log(`ERRO: ${e.message}`); }
 
