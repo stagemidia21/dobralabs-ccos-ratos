@@ -45,13 +45,18 @@ const FOTOS = {
   codigo:  'capa-vibe-coding.jpg',
 };
 
-function escolherFoto(tema) {
-  const t = tema.toLowerCase();
-  if (t.includes('google') || t.includes('tráfego') || t.includes('ads')) return FOTOS.google;
-  if (t.includes('agente') || t.includes('dorme') || t.includes('n8n')) return FOTOS.agente;
-  if (t.includes('vibe') || t.includes('código') || t.includes('codigo')) return FOTOS.codigo;
-  if (t.includes('limite') || t.includes('workflow')) return FOTOS.limite;
-  return FOTOS.dev;
+// Rotação fixa por número do post — garante foto diferente em cada carrossel
+const FOTOS_ROTACAO = [
+  'opt_c.jpg',
+  'opt_b.jpg',
+  'opt_d.jpg',
+  'opt1.jpg',
+  'opt2.jpg',
+  'opt3.jpg',
+];
+
+function escolherFoto(tema, numPost = 0) {
+  return FOTOS_ROTACAO[(numPost - 1) % FOTOS_ROTACAO.length] || FOTOS.dev;
 }
 
 function callClaude(prompt, timeout = 180000) {
@@ -181,7 +186,7 @@ async function publicarThreads(tokens, mediaUrls, legenda) {
   // Carrossel container
   const cr = await fetch(`${API}/${userId}/threads`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), text: legenda, access_token: token }),
+    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), text: legenda.slice(0, 500), access_token: token }),
   });
   const cd = await cr.json();
   if (cd.error) throw new Error(`Threads carrossel falhou: ${JSON.stringify(cd.error)}`);
@@ -219,7 +224,7 @@ async function publicarLinkedIn(token, authorUrn, mediaUrls, legenda) {
     method: 'POST',
     headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'X-Restli-Protocol-Version': '2.0.0' },
     body: JSON.stringify({
-      author: `urn:li:person:${authorUrn}`,
+      author: authorUrn.length < 15 ? `urn:li:organization:${authorUrn}` : `urn:li:person:${authorUrn}`,
       lifecycleState: 'PUBLISHED',
       specificContent: {
         'com.linkedin.ugc.ShareContent': {
@@ -318,7 +323,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   console.log(`  ✓ ${dados.slides.length} slides gerados`);
 
   // 2. Cria JSX
-  const foto = escolherFoto(tema);
+  const foto = escolherFoto(tema, numPost);
   const jsx = gerarJSX(compId, foto, dados.slides);
   const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
   fs.writeFileSync(jsxPath, jsx);
@@ -409,7 +414,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   console.log(`  ✅ Post ${numPost} concluído!`);
   await sendTelegram(`✅ Post ${numPost}/6 publicado em todas as redes!\n\nLegenda:\n${dados.legenda}`);
 
-  return postId;
+  return igId;
 }
 
 // ─── PAUTA DE HOJE ──────────────────────────────────────────────────────────
