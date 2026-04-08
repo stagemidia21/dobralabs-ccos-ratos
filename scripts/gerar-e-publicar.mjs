@@ -71,58 +71,16 @@ async function sendTelegram(text) {
   }
 }
 
-// Gera o JSX do carrossel com SlideCapaFoto + SlideTexto × 8 + SlideCTA
+// Gera o JSX do carrossel usando CarrosselDinamico + JSON.stringify
+// Assim apóstrofes e aspas no texto NUNCA quebram o esbuild
 function gerarJSX(compId, foto, slides) {
-  const D = 'SLIDE_DURATION_FRAMES';
+  const slidesJson = JSON.stringify(slides, null, 2);
+  return `import { CarrosselDinamico } from './CarrosselDinamico.jsx';
 
-  const sequences = slides.map((s, i) => {
-    if (i === 0) {
-      // Capa
-      return `
-      <Sequence from={0} durationInFrames={${D}}>
-        <SlideCapaFoto
-          imageSrc="${foto}"
-          title={"${s.title.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '')}"}
-          fonte="${(s.fonte || 'Fonte: @homero.ads').replace(/"/g, '\\"')}"
-          slideNum={1} total={${slides.length}}
-        />
-      </Sequence>`;
-    }
-    if (i === slides.length - 1) {
-      // CTA
-      return `
-      <Sequence from={${i} * ${D}} durationInFrames={${D}}>
-        <SlideCTA
-          handle="@homero.ads"
-          sub="IA aplicada a resultados reais"
-          cta="${s.cta || 'Seguir agora'}"
-        />
-      </Sequence>`;
-    }
-    // Slide texto
-    return `
-      <Sequence from={${i} * ${D}} durationInFrames={${D}}>
-        <SlideTexto
-          label="${s.label.replace(/"/g, '\\"')}"
-          title={"${s.title.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"}
-          body={"${s.body.replace(/"/g, '\\"').replace(/\n/g, ' ').replace(/\r/g, '')}"}
-          slideNum={${i + 1}} total={${slides.length}}
-        />
-      </Sequence>`;
-  });
-
-  return `import { Sequence } from 'remotion';
-import { SlideCapaFoto } from './slides/SlideCapaFoto.jsx';
-import { SlideTexto } from './slides/SlideTexto.jsx';
-import { SlideCTA } from './slides/SlideCTA.jsx';
-import { SLIDE_DURATION_FRAMES } from './tokens.js';
+const SLIDES = ${slidesJson};
 
 export function ${compId}() {
-  return (
-    <>
-      ${sequences.join('\n')}
-    </>
-  );
+  return <CarrosselDinamico slides={SLIDES} foto={${JSON.stringify(foto)}} />;
 }
 `;
 }
@@ -175,19 +133,65 @@ async function uploadSlide(filePath, filename) {
   return media_url;
 }
 
-async function publicar(mediaUrls, legenda) {
-  const res = await fetch(`${BASE_URL}/v1/social-posts`, {
-    method: 'POST', headers: authHeaders,
-    body: JSON.stringify({
-      caption: legenda,
-      social_accounts: CONTAS,
-      media: mediaUrls.map(url => ({ url })),
-      platform_configurations: { instagram: { placement: 'timeline' } },
-    }),
+async function getIGToken() {
+  const r = await fetch(`${BASE_URL}/v1/social-accounts`, { headers: authHeaders });
+  const d = await r.json();
+  return (d.data || d).find(a => a.platform === 'instagram').access_token;
+}
+
+async function publicarInstagramDireto(mediaUrls, legenda) {
+  const token = await getIGToken();
+  const IG_USER_ID = '26285906407703501';
+  const IG_API = 'https://graph.instagram.com';
+
+  // 1. Cria containers de vídeo
+  console.log('  Criando containers no Instagram...');
+  const containerIds = [];
+  for (let i = 0; i < mediaUrls.length; i++) {
+    const r = await fetch(`${IG_API}/${IG_USER_ID}/media`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ media_type: 'VIDEO', video_url: mediaUrls[i], is_carousel_item: 'true', access_token: token }),
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(`Container ${i+1} falhou: ${JSON.stringify(d.error)}`);
+    containerIds.push(d.id);
+    process.stdout.write(`    Container ${i+1}/${mediaUrls.length} OK\n`);
+  }
+
+  // 2. Aguarda todos ficarem FINISHED
+  console.log('  Aguardando processamento...');
+  for (const id of containerIds) {
+    const start = Date.now();
+    while (Date.now() - start < 120000) {
+      await new Promise(r => setTimeout(r, 5000));
+      const r = await fetch(`${IG_API}/${id}?fields=status_code&access_token=${token}`);
+      const d = await r.json();
+      if (d.status_code === 'FINISHED') break;
+      if (d.status_code === 'ERROR') throw new Error(`Container ${id} falhou`);
+      process.stdout.write('.');
+    }
+  }
+  console.log(' OK');
+
+  // 3. Container do carrossel
+  const cr = await fetch(`${IG_API}/${IG_USER_ID}/media`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), caption: legenda, access_token: token }),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(JSON.stringify(data));
-  return data.id;
+  const cd = await cr.json();
+  if (cd.error) throw new Error(`Carrossel container falhou: ${JSON.stringify(cd.error)}`);
+
+  // 4. Aguarda carrossel container
+  await new Promise(r => setTimeout(r, 5000));
+
+  // 5. Publica
+  const pr = await fetch(`${IG_API}/${IG_USER_ID}/media_publish`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ creation_id: cd.id, access_token: token }),
+  });
+  const pd = await pr.json();
+  if (pd.error) throw new Error(`Publicação falhou: ${JSON.stringify(pd.error)}`);
+  return pd.id;
 }
 
 async function processarPost(numPost, tema, angulo, fonte = '') {
@@ -243,7 +247,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     const outFileWin = outFile.replace(/\//g, '\\');
     const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
     execSync(
-      `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --log=error`,
+      `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error`,
       { cwd: REMOTION_DIR, stdio: 'pipe', shell: true }
     );
     console.log('OK');
@@ -260,7 +264,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     console.log('OK');
   }
 
-  const postId = await publicar(mediaUrls, dados.legenda);
+  const postId = await publicarInstagramDireto(mediaUrls, dados.legenda);
   console.log(`  ✅ Post ${numPost} publicado! ID: ${postId}`);
   await sendTelegram(`✅ Post ${numPost}/6 publicado!\n\nLegenda:\n${dados.legenda}`);
 
