@@ -105,7 +105,7 @@ function gerarJSX(compId, foto, slides) {
         <SlideTexto
           label="${s.label.replace(/"/g, '\\"')}"
           title={"${s.title.replace(/"/g, '\\"').replace(/\n/g, '\\n')}"}
-          body="${s.body.replace(/"/g, '\\"')}"
+          body={"${s.body.replace(/"/g, '\\"').replace(/\n/g, ' ').replace(/\r/g, '')}"}
           slideNum={${i + 1}} total={${slides.length}}
         />
       </Sequence>`;
