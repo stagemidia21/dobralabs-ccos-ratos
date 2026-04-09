@@ -406,7 +406,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     const num = String(i + 1).padStart(2, '0');
     const outFile = path.join(slidesDir, `slide-${num}.mp4`);
     const outFileWin = outFile.replace(/\//g, '\\');
-    const cmd = `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error`;
+    const cmd = `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error --video-bitrate-in-kbps=3000`;
 
     let tentativa = 0;
     while (tentativa < 3) {
@@ -513,6 +513,32 @@ const POSTS_HOJE = [
   },
 ];
 
+// ─── LOCK FILE — serializa processos, evita Bun crash por concorrência ────────
+
+const LOCK_FILE = path.join(ROOT, '_contexto/publish.lock');
+const LOCK_MAX_AGE = 40 * 60 * 1000; // 40 min — stale lock
+
+async function acquireLock() {
+  while (fs.existsSync(LOCK_FILE)) {
+    try {
+      const lock = JSON.parse(fs.readFileSync(LOCK_FILE, 'utf8'));
+      const age = Date.now() - new Date(lock.started).getTime();
+      if (age > LOCK_MAX_AGE) {
+        console.log('  ⚠ Lock expirado, removendo...');
+        fs.unlinkSync(LOCK_FILE);
+        break;
+      }
+      console.log(`  ⏳ Aguardando lock do post ${lock.num || '?'} (${Math.round(age / 60000)}min)...`);
+      await new Promise(r => setTimeout(r, 20000));
+    } catch { break; }
+  }
+  fs.writeFileSync(LOCK_FILE, JSON.stringify({ pid: process.pid, started: new Date().toISOString(), num: numArg || temaArg }));
+}
+
+function releaseLock() {
+  try { fs.unlinkSync(LOCK_FILE); } catch {}
+}
+
 // ─── MAIN ────────────────────────────────────────────────────────────────────
 // Uso:
 //   node gerar-e-publicar.mjs --tema "tema" --angulo "angulo" [--num N]
@@ -529,6 +555,14 @@ const anguloArg = getArg('--angulo');
 const numArg    = parseInt(getArg('--num') || process.argv[2]);
 
 async function main() {
+  await acquireLock();
+
+  // Garante que o lock é liberado em qualquer saída
+  process.on('exit', releaseLock);
+  process.on('SIGINT', () => { releaseLock(); process.exit(1); });
+  process.on('SIGTERM', () => { releaseLock(); process.exit(1); });
+  process.on('uncaughtException', (err) => { releaseLock(); console.error(err); process.exit(1); });
+
   if (temaArg) {
     // Chamada dinâmica vinda do bot
     const num = (!isNaN(numArg) && numArg >= 1) ? numArg : 1;
