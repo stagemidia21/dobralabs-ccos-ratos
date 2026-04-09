@@ -147,3 +147,156 @@ Fonte: ...
 
 Regras: pelo menos 1 post de Claude Code, pelo menos 1 baseado em notícia do dia, ângulos diferentes dos concorrentes, nunca repetir ângulo no mesmo dia.
 Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76
+
+🚀 Pipeline Diário — 09/04/2026
+
+📡 Buscando referências via Apify...
+📱 Buscando posts dos perfis de referência...
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:13.848Z ACTOR: Pulling container image of build gUO7T7Eh363Y5U0fu from registry.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:13.851Z ACTOR: Creating container.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:14.089Z ACTOR: Starting container.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:14.091Z ACTOR: Running under "LIMITED_PERMISSIONS" permission level.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:14.909Z [32mINFO[39m  System info[90m {"apifyVersion":"3.6.0","apifyClientVersion":"2.22.2","crawleeVersion":"3.16.0","osType":"Linux","nodeVersion":"v22.22.1"}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:15.087Z [32mINFO[39m  Results Limit [object Object], ACTOR_MAX_PAID_DATASET_ITEMS
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:15.102Z [32mINFO[39m  [Status message]: Starting the scraper with 9 direct URL(s)
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:15.249Z [32mINFO[39m [33m CheerioCrawler:[39m Starting the crawler.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:16.995Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Retrying after error: Page Not Found • Instagram
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:16.995Z     at preRouteErrorCheck (file:///usr/src/app/dist/index.js:38:388806)[90m {"id":"MurgzYPKF6JyAoc","url":"https://i.instagram.com/api/v1/users/web_profile_info/?username=bruno.ai1","retryCount":1}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:17.180Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Retrying after error: Page Not Found • Instagram
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:17.181Z     at preRouteErrorCheck (file:///usr/src/app/dist/index.js:38:388806)[90m {"id":"VRnFJibscitFnUD","url":"https://i.instagram.com/api/v1/users/web_profile_info/?username=eusouier","retryCount":1}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:17.759Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Retrying after error: Page Not Found • Instagram
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:17.760Z     at preRouteErrorCheck (file:///usr/src/app/dist/index.js:38:388806)[90m {"id":"zOCl5uDkGExPOqL","url":"https://i.instagram.com/api/v1/users/web_profile_info/?username=bubows.ai","retryCount":1}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:19.169Z [32mINFO[39m  NO RESULTS: zero public posts for https://www.instagram.com/gabreiss_/ within the given requirements
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:19.224Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked, retrying it again with different session
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:19.224Z     at CheerioCrawler._requestFunctionErrorHandler (file:///usr/src/app/dist/index.js:1:28024)[90m {"id":"k19eNOyNWUWNLzu","url":"https://i.instagram.com/api/v1/users/web_profile_info/?username=thaleslaray","retryCount":1}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:19.473Z [32mINFO[39m  NO RESULTS: zero public posts for https://www.instagram.com/viverdeia/ within the given requirements
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.209Z [33mWARN[39m  Page Not Found • Instagram[90m {"inputUrl":"https://www.instagram.com/bruno.ai1/"}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.267Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Request blocked, retrying it again with different session
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.268Z     at CheerioCrawler._requestFunctionErrorHandler (file:///usr/src/app/dist/index.js:1:28024)[90m {"id":"VRnFJibscitFnUD","url":"https://i.instagram.com/api/v1/users/web_profile_info/?username=eusouier","retryCount":2}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.544Z [33mWARN[39m  Page Not Found • Instagram[90m {"inputUrl":"https://www.instagram.com/bubows.ai/"}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.962Z [33mWARN[39m [33m RequestQueue(YU9ML4DHfEHEvAQs7, no-name):[39m Queue head returned a request that is already in progress?![90m {"nextRequestId":"q447JTfriTBz6UE","inProgress":true,"recentlyHandled":false}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.962Z [33mWARN[39m [33m RequestQueue(YU9ML4DHfEHEvAQs7, no-name):[39m Queue head returned a request that is already in progress?![90m {"nextRequestId":"2pLFBEgyXNLBV5f","inProgress":true,"recentlyHandled":false}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:21.962Z [33mWARN[39m [33m RequestQueue(YU9ML4DHfEHEvAQs7, no-name):[39m Queue head returned a request that is already in progress?![90m {"nextRequestId":"gXjJ2ZpKT1d6Gki","inProgress":true,"recentlyHandled":false}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:27.462Z [33mWARN[39m  Page Not Found • Instagram[90m {"inputUrl":"https://www.instagram.com/eusouier/"}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:30.131Z [32mINFO[39m [33m CheerioCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:30.255Z [32mINFO[39m [33m CheerioCrawler:[39m Final request statistics:[90m {"requestsFinished":27,"requestsFailed":0,"retryHistogram":[23,3,1],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":2402,"requestsFinishedPerMinute":107,"requestsFailedPerMinute":0,"requestTotalDurationMillis":64856,"requestsTotal":27,"crawlerRuntimeMillis":15148}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:30.255Z [32mINFO[39m [33m CheerioCrawler:[39m Finished! Total 27 requests: 27 succeeded, 0 failed.[90m {"terminal":true}[39m
+[36minstagram-scraper runId:z0veMbDada4i10XFf -> [39m2026-04-09T10:00:30.256Z [32mINFO[39m  [Status message]: Scraper finished
+  → 4 posts nas últimas 48h (de 17 total)
+📰 Buscando notícias dos últimos 2 dias...
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:31.801Z ACTOR: Pulling container image of build ag5IWnRTtSxqRFKZg from registry.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:31.809Z ACTOR: Creating container.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:31.849Z ACTOR: Starting container.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:31.850Z ACTOR: Running under "LIMITED_PERMISSIONS" permission level.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:32.058Z Running on architecture: x86_64
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:32.058Z Will run command: xvfb-run -a -s "-ac -screen 0 1920x1080x24+32 -nolisten tcp" /bin/bash -o pipefail -c ./start_xvfb_and_run_cmd.sh && NODE_NO_WARNINGS=1 ./run_protected.sh node dist/main.js
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:32.856Z [32mINFO[39m  System info[90m {"apifyVersion":"3.5.2","apifyClientVersion":"2.22.2","crawleeVersion":"3.16.1-beta.30","osType":"Linux","nodeVersion":"v22.22.2"}[39m
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:33.043Z [33mWARN[39m  A non-zero value of the `dynamicContentWaitSecs` option is not supported by the Cheerio crawler.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:33.060Z [33mWARN[39m  A non-zero value of the `dynamicContentWaitSecs` option is not supported by the Cheerio crawler.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:33.061Z [32mINFO[39m  Crawling will be started using 7 start URLs and 0 sitemap URLs
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:33.500Z [32mINFO[39m [33m CheerioCrawler:[39m Starting the crawler.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:34.424Z [33mWARN[39m [33m CheerioCrawler:[39m Reclaiming failed request back to the list or queue. Proxy rejected the CONNECT tunnel with status code 590.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:34.425Z [90m {"id":"lwDCatCrX0m1XEa","url":"https://blog.anthropic.com/","retryCount":1}[39m
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:35.434Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 55 new links on https://blog.google/.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:37.603Z [33mWARN[39m [33m CheerioCrawler:[39m The start URL "https://ai.meta.com/blog" has been redirected to "https://ai.meta.com/blog/". Processing the redirected URL...
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:37.678Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 42 new links on https://the-decoder.com/.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:37.966Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 8 new links on https://ai.meta.com/blog.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:39.011Z [33mWARN[39m [33m CheerioCrawler:[39m The start URL "https://techcrunch.com/category/artificial-intelligence" has been redirected to "https://techcrunch.com/category/artificial-intelligence/". Processing the redirected URL...
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:39.199Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 40 new links on https://huggingface.co/blog.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:39.553Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 1 new link on https://techcrunch.com/category/artificial-intelligence.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:39.553Z [32mINFO[39m [33m CheerioCrawler:[39m The crawler has been gracefully stopped.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:39.607Z [32mINFO[39m [33m CheerioCrawler:[39m No new requests are allowed because the `stop()` method has been called. Ongoing requests will be allowed to complete.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:40.029Z [33mWARN[39m [33m CheerioCrawler:[39m The start URL "https://exame.com/tecnologia" has been redirected to "https://exame.com/tecnologia/". Processing the redirected URL...
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:40.861Z [32mINFO[39m [33m CheerioCrawler:[39m Enqueued 24 new links on https://exame.com/tecnologia.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:40.896Z [32mINFO[39m [33m CheerioCrawler:[39m The crawler has finished all the remaining ongoing requests and will shut down now.
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:41.103Z [32mINFO[39m [33m CheerioCrawler:[39m Final request statistics:[90m {"requestsFinished":6,"requestsFailed":0,"retryHistogram":[6],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":1859,"requestsFinishedPerMinute":47,"requestsFailedPerMinute":0,"requestTotalDurationMillis":11156,"requestsTotal":6,"crawlerRuntimeMillis":7692}[39m
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:41.104Z [32mINFO[39m [33m CheerioCrawler:[39m Finished! Total 6 requests: 6 succeeded, 0 failed.[90m {"terminal":true}[39m
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:43.418Z [33mWARN[39m  Shutting down SitemapCrawler, waiting for the main crawler to finish...
+[36mwebsite-content-crawler runId:v7jNmEmeI1Nxft5aT -> [39m2026-04-09T10:00:53.499Z [33mWARN[39m  Main crawler finished successfully, exiting the run...
+
+✓ Salvo em _contexto/referencias-do-dia.json
+  Posts de referência: 4
+  Notícias: 6
+
+📱 POSTS EM ALTA:
+  @thaleslaray — -1 likes — Gestor de tráfego: saiba como usar o Claude Code para agregar valor ao seu servi...
+  @thaleslaray — -1 likes — Você não precisa de um time pesado pra ter uma operação profissional.
+
+Precisa s...
+  @thaleslaray — -1 likes — Sam Altman previu. Em 2024 ele disse que a IA criaria a primeira empresa de 1 bi...
+  @rafa.grandi — 897 likes — Como rodar o Google com o OpenClaw 🤯⚡️
+
+Comenta “Local” que te mando pelo Direc...
+
+📰 NOTÍCIAS:
+  The Keyword | Google Product and Technology News and Stories
+  Artificial Intelligence: News, Business, Science | THE DECODER
+  AI at Meta Blog
+  Hugging Face – Blog
+  AI News & Artificial Intelligence | TechCrunch
+  Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas qu
+✓ 4 posts, 6 notícias
+📋 Gerando pauta...
+❌ Falha ao gerar pauta: Claude CLI falhou: Command failed: claude -p Você é o assistente de pauta do @homero.ads (Homero Zanichelli — Stage Mídia).
+Linha editorial: Claude Code OS — IA aplicada a negócios, tráfego pago e automação.
+Tom: técnico, direto, sem enrolação, sem teoria. Português BR.
+Hoje: quinta-feira, 09/04/2026
+
+POSTS EM ALTA (últimas 48h):
+@thaleslaray: Gestor de tráfego: saiba como usar o Claude Code para agregar valor ao seu serviço e escalar sua operação.
+
+No dia 11 de Abril vai rolar a Operação Cl
+@thaleslaray: Você não precisa de um time pesado pra ter uma operação profissional.
+
+Precisa saber usar as ferramentas certas. Aqui eu mostro como tenho usado o Cla
+@thaleslaray: Sam Altman previu. Em 2024 ele disse que a IA criaria a primeira empresa de 1 bilhão com um único fundador.
+
+Essa semana o New York Times encontrou es
+@rafa.grandi: Como rodar o Google com o OpenClaw 🤯⚡️
+
+Comenta “Local” que te mando pelo Direct 
+
+#claude #google #openclaw #vibecoding #ia
+
+NOTÍCIAS DO DIA:
+• The Keyword | Google Product and Technology News and Stories
+• Artificial Intelligence: News, Business, Science | THE DECODER
+• AI at Meta Blog
+• Hugging Face – Blog
+• AI News & Artificial Intelligence | TechCrunch
+• Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!
+
+Gere APENAS a pauta com 6 posts no formato exato abaixo (sem texto antes ou depois):
+
+POST 1 | FEED
+Tema: [tema direto]
+Ângulo: [como abordar — diferente dos concorrentes]
+Fonte: [notícia/série Claude Code/viral]
+
+POST 2 | CARROSSEL IMAGEM
+Tema: ...
+Ângulo: ...
+Fonte: ...
+
+POST 3 | CARROSSEL VÍDEO
+Tema: ...
+Ângulo: ...
+Fonte: ...
+
+POST 4 | FEED
+Tema: ...
+Ângulo: ...
+Fonte: ...
+
+POST 5 | CARROSSEL IMAGEM
+Tema: ...
+Ângulo: ...
+Fonte: ...
+
+POST 6 | CARROSSEL VÍDEO
+Tema: ...
+Ângulo: ...
+Fonte: ...
+
+Regras: pelo menos 1 post de Claude Code, pelo menos 1 baseado em notícia do dia, ângulos diferentes dos concorrentes, nunca repetir ângulo no mesmo dia.
+Assertion failed: !(handle->flags & UV_HANDLE_CLOSING), file src\win\async.c, line 76

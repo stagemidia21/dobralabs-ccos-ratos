@@ -1,37 +1,37 @@
 {
-  "gerado_em": "2026-04-08T20:40:09.402Z",
+  "gerado_em": "2026-04-09T10:00:04.809Z",
   "posts_referencia": [
-    {
-      "perfil": "rafa.grandi",
-      "caption": "Como rodar o Google com o OpenClaw 🤯⚡️\n\nComenta “Local” que te mando pelo Direct \n\n#claude #google #openclaw #vibecoding #ia",
-      "likes": 465,
-      "comments": 649,
-      "url": "https://www.instagram.com/p/DW36CUMk3nN/",
-      "data": "2026-04-08T14:13:12.000Z"
-    },
-    {
-      "perfil": "thaleslaray",
-      "caption": "Claude AI, Claude Code e Cowork: Você sabe quando usar cada um deles? 🤔\n\nArraste até o final pra ver um breve resumo sobre como eles funcionam.\n\nE se você quer aprender a usar cada um na prática…\n\nNo dia 11 de Abril vai rolar uma Imersão inédita, onde vou mostrar ao vivo como extrair o melhor dessas ferramentas pra automatizar as tarefas que hoje dependem de você ou de uma equipe.\n\nComenta “OPERA",
-      "likes": -1,
-      "comments": 42,
-      "url": "https://www.instagram.com/p/DW1IDyBAL5J/",
-      "data": "2026-04-07T12:15:32.000Z"
-    },
     {
       "perfil": "thaleslaray",
       "caption": "Gestor de tráfego: saiba como usar o Claude Code para agregar valor ao seu serviço e escalar sua operação.\n\nNo dia 11 de Abril vai rolar a Operação Claude Code – 1 dia inteiro de imersão onde eu vou te mostrar como dominar o Claude e usá-lo pra substituir ferramentas e tarefas que hoje tomam seu tempo e seu dinheiro. \n\nComenta “OPERAÇÃO” pra garantir sua vaga 👇",
       "likes": -1,
-      "comments": 165,
+      "comments": 189,
       "url": "https://www.instagram.com/p/DW2Fn6gEry1/",
       "data": "2026-04-07T21:13:30.000Z"
     },
     {
       "perfil": "thaleslaray",
+      "caption": "Você não precisa de um time pesado pra ter uma operação profissional.\n\nPrecisa saber usar as ferramentas certas. Aqui eu mostro como tenho usado o Claude Code pra substituir processos que antes dependiam de um time.\n\nE se você também quer saber como fazer isso eu posso te ajudar...\n\nNos próximos dias, vou fazer um intensivo de Claude e modelos agênticos que pensam, decidem e executam tarefas sozin",
+      "likes": -1,
+      "comments": 14,
+      "url": "https://www.instagram.com/p/DW4zb1IidIj/",
+      "data": "2026-04-08T22:32:17.000Z"
+    },
+    {
+      "perfil": "thaleslaray",
       "caption": "Sam Altman previu. Em 2024 ele disse que a IA criaria a primeira empresa de 1 bilhão com um único fundador.\n\nEssa semana o New York Times encontrou esse homem: Matthew Gallagher.\n\nEu não vou te prometer bilhões...\n\nMas posso te mostrar como criar times completos de I.A.que vão trabalhar na sua operação 24h por dia no automático – e diminuir os custos na sua operação. Topa aprender comigo?\n\nComenta",
       "likes": -1,
-      "comments": 23,
+      "comments": 36,
       "url": "https://www.instagram.com/p/DW3uaKsgAGJ/",
       "data": "2026-04-08T12:29:07.000Z"
+    },
+    {
+      "perfil": "rafa.grandi",
+      "caption": "Como rodar o Google com o OpenClaw 🤯⚡️\n\nComenta “Local” que te mando pelo Direct \n\n#claude #google #openclaw #vibecoding #ia",
+      "likes": 897,
+      "comments": 1166,
+      "url": "https://www.instagram.com/p/DW36CUMk3nN/",
+      "data": "2026-04-08T14:13:12.000Z"
     }
   ],
   "noticias": [
@@ -41,6 +41,11 @@
       "resumo": "The Keyword | Google Product and Technology News and Stories\nMore news\nVideo spotlight\nYour inbox, your business \nHere’s how we built Gmail to keep your data secure and private in the Gemini era. \nMore Videos\nThe latest from our CEO\nGet the latest news from Google in your inbox. \nDone. Just one step"
     },
     {
+      "titulo": "Artificial Intelligence: News, Business, Science | THE DECODER",
+      "url": "https://the-decoder.com/",
+      "resumo": "Artificial Intelligence: News, Business, Science\nSkip to content\nAnthropic launches managed infrastructure for autonomous AI agents\nAnthropic’s new “Claude Managed Agents” gives developers a hosted platform for building and running autonomous AI agents. Early adopters like Notion and Rakuten are alr"
+    },
+    {
       "titulo": "AI at Meta Blog",
       "url": "https://ai.meta.com/blog",
       "resumo": "AI at Meta Blog\nGet the latest from AI at Meta in your inbox\nSign up"
@@ -48,12 +53,7 @@
     {
       "titulo": "Hugging Face – Blog",
       "url": "https://huggingface.co/blog",
-      "resumo": "Hugging Face – Blog\nCommunity Blog & Articles\nCommunity Articles\nview all\nHow we OCR'ed 30,000 papers using Codex, open OCR models and Jobs \n1 day ago\n•\n28\nBidirLM: Turning Generative LLMs into the Best Open-Source Omnimodal Encoders \nabout 22 hours ago\n•\n17\nKV Caching Explained: Optimizing Transfor"
-    },
-    {
-      "titulo": "Artificial Intelligence: News, Business, Science | THE DECODER",
-      "url": "https://the-decoder.com/",
-      "resumo": "Artificial Intelligence: News, Business, Science\nRead full article about: Stability AI launches Brand Studio for brand-consistent image generation \nStability AI, once a major force in open-source AI with its Stable Diffusion image model, is shifting its focus to commercial products. The company's la"
+      "resumo": "Hugging Face – Blog\nCommunity Blog & Articles\nCommunity Articles\nview all\nHow we OCR'ed 30,000 papers using Codex, open OCR models and Jobs \n1 day ago\n•\n33\nBidirLM: Turning Generative LLMs into the Best Open-Source Omnimodal Encoders \n1 day ago\n•\n18\nKV Caching Explained: Optimizing Transformer Infer"
     },
     {
       "titulo": "AI News & Artificial Intelligence | TechCrunch",
@@ -63,7 +63,7 @@
     {
       "titulo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!",
       "url": "https://exame.com/tecnologia",
-      "resumo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!\nContinua após a publicidade\nHá 6 horas • 2 min de leitura\nHá 6 horas • 3 min de leitura\nHá 6 horas • 3 min de leitura\nHá 6 horas • 4 min de"
+      "resumo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!\nContinua após a publicidade\nHá 19 horas • 2 min de leitura\nHá 20 horas • 3 min de leitura\nHá 20 horas • 3 min de leitura\nHá 20 horas • 4 mi"
     }
   ]
 }
