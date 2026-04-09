@@ -358,14 +358,17 @@ bot.hears(['📱 Carrossel Vídeo', '🖼 Carrossel Imagem', '📸 Feed'], (ctx)
   ctx.reply(`Formato: *${ctx.message.text}*\nManda o tema ou notícia:`, { parse_mode: 'Markdown' });
 });
 
-// Aprovar tudo — gera todos os 6 em sequência
+// Aprovar tudo — gera todos os 6 em background (evita timeout do Telegraf)
 bot.hears('✅ Aprovar tudo', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
   if (!s.pauta) return ctx.reply('Rode /pauta primeiro.');
 
-  await ctx.reply('🚀 Gerando todos os 6 posts em sequência... (pode demorar alguns minutos)');
+  // Responde imediatamente pra não estourar o timeout do Telegraf
+  await ctx.reply('🚀 Gerando os 6 posts... Vou mandando aqui conforme ficar pronto.');
 
+  // Processa em background
+  setImmediate(async () => {
   const drafts = [];
   for (let n = 1; n <= 6; n++) {
     const linhas = s.pauta.split('\n');
@@ -379,14 +382,14 @@ bot.hears('✅ Aprovar tudo', async (ctx) => {
     const tema = (postLines.match(/Tema:\s*(.+)/) || [])[1] || 'tema';
     const angulo = (postLines.match(/Ângulo:\s*(.+)/) || [])[1] || '';
 
-    await ctx.reply(`⏳ Post ${n}/6 — ${tema}`);
+    await sendLong(ctx, `⏳ Post ${n}/6 — ${tema}`);
 
     try {
       const conteudo = await gerarConteudoPost(tema, angulo, formato);
       drafts.push({ n, tema, formato, conteudo });
       await sendLong(ctx, `📝 *Post ${n} — ${formato.toUpperCase()}*\n\n${conteudo}`, { parse_mode: 'Markdown' });
     } catch (err) {
-      await ctx.reply(`❌ Post ${n} falhou: ${err.message}`);
+      await sendLong(ctx, `❌ Post ${n} falhou: ${err.message}`);
       drafts.push({ n, tema, formato, conteudo: null, erro: err.message });
     }
   }
@@ -395,14 +398,14 @@ bot.hears('✅ Aprovar tudo', async (ctx) => {
   s.fase = 'revisando_pauta';
 
   const ok = drafts.filter(d => d.conteudo).length;
-  await ctx.reply(
-    `✅ ${ok}/6 posts gerados!\n\n` +
-    `Os conteúdos estão acima. Revise e use /aprovar N pra ajustar algum individualmente.`,
+  await sendLong(ctx,
+    `✅ ${ok}/6 posts gerados!\n\nRevise e use /aprovar N pra ajustar algum individualmente.`,
     Markup.keyboard([
       ['📅 /pauta — Nova busca'],
       ['✍️ /gerar — Post avulso'],
     ]).resize()
   );
+  }); // fim setImmediate
 });
 
 // Refazer pauta
