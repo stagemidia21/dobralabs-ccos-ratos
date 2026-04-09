@@ -4,6 +4,7 @@ import { execSync, execFileSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { HUMANIZER_INSTRUCOES } from './humanizer-rules.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -54,13 +55,13 @@ function callClaude(prompt, timeout = 120000) {
 }
 
 function humanizar(texto, contexto = '') {
-  const prompt = `Editor de conteúdo do @homero.ads. Tom: técnico, direto, sem coach, sem papo motivacional.
+  const prompt = `${HUMANIZER_INSTRUCOES}
 ${contexto ? `Contexto: ${contexto}\n` : ''}
 Texto:
 ---
 ${texto}
 ---
-Reescreva eliminando padrões de IA: sem "crucial/vital/pivotal/landscape/underscore/testament/enhance/foster/showcase", sem "não é só X é Y", sem rule of three forçado, sem em-dash em excesso, sem bullets desnecessários. Máximo 5 hashtags. Frases curtas e diretas. Varie o ritmo. Primeira pessoa quando couber. Entregue APENAS o texto reescrito.`;
+Máximo 5 hashtags. Entregue APENAS o texto reescrito, sem preâmbulo.`;
   return callClaude(prompt, 180000);
 }
 

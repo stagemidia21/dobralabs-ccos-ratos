@@ -13,8 +13,12 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 
+const CLAUDE_BIN = process.platform === 'win32'
+  ? path.join(process.env.USERPROFILE || 'C:/Users/homer', '.local/bin/claude.exe')
+  : '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude';
+
 function callClaude(prompt, timeout = 120000) {
-  return execFileSync('claude', ['-p', prompt], {
+  return execFileSync(CLAUDE_BIN, ['-p', prompt], {
     cwd: ROOT, timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
   }).trim();
 }
