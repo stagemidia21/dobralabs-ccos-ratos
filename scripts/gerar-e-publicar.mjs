@@ -61,8 +61,12 @@ function escolherFoto(tema, numPost = 0) {
   return FOTOS_ROTACAO[(numPost - 1) % FOTOS_ROTACAO.length] || FOTOS.dev;
 }
 
+const CLAUDE_BIN = process.platform === 'win32'
+  ? path.join(process.env.USERPROFILE || 'C:/Users/homer', '.local/bin/claude.exe')
+  : '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude';
+
 function callClaude(prompt, timeout = 180000) {
-  return execFileSync('claude', ['-p', prompt], {
+  return execFileSync(CLAUDE_BIN, ['-p', prompt], {
     cwd: ROOT, timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
   }).trim();
 }
@@ -468,16 +472,31 @@ const POSTS_HOJE = [
 ];
 
 // ─── MAIN ────────────────────────────────────────────────────────────────────
+// Uso:
+//   node gerar-e-publicar.mjs --tema "tema" --angulo "angulo" [--num N]
+//   node gerar-e-publicar.mjs N          → post N da pauta hardcoded (legado)
+//   node gerar-e-publicar.mjs            → todos os 6 da pauta hardcoded
 
-const numArg = parseInt(process.argv[2]);
+function getArg(name) {
+  const idx = process.argv.indexOf(name);
+  return idx !== -1 ? process.argv[idx + 1] : null;
+}
+
+const temaArg   = getArg('--tema');
+const anguloArg = getArg('--angulo');
+const numArg    = parseInt(getArg('--num') || process.argv[2]);
 
 async function main() {
-  if (numArg >= 1 && numArg <= 6) {
-    // Roda um post específico
+  if (temaArg) {
+    // Chamada dinâmica vinda do bot
+    const num = (!isNaN(numArg) && numArg >= 1) ? numArg : 1;
+    await processarPost(num, temaArg, anguloArg || '');
+  } else if (!isNaN(numArg) && numArg >= 1 && numArg <= 6) {
+    // Post específico da pauta hardcoded
     const p = POSTS_HOJE[numArg - 1];
     await processarPost(numArg, p.tema, p.angulo);
   } else {
-    // Roda todos os 6 em sequência
+    // Todos os 6 da pauta hardcoded
     await sendTelegram('🚀 Iniciando produção dos 6 posts do dia...');
     for (let i = 0; i < POSTS_HOJE.length; i++) {
       const p = POSTS_HOJE[i];
