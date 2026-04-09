@@ -47,18 +47,23 @@ const FOTOS = {
   codigo:  'capa-vibe-coding.jpg',
 };
 
-// Rotação fixa por número do post — garante foto diferente em cada carrossel
-const FOTOS_ROTACAO = [
-  'opt_c.jpg',
-  'opt_b.jpg',
-  'opt_d.jpg',
-  'opt1.jpg',
-  'opt2.jpg',
-  'opt3.jpg',
-];
+// Rotação automática — usa banco em public/fundos/ se existir, senão fallback
+const FOTOS_FALLBACK = ['opt_c.jpg', 'opt_b.jpg', 'opt_d.jpg', 'opt1.jpg', 'opt2.jpg', 'opt3.jpg'];
+const FUNDOS_DIR = path.join(PUBLIC_DIR, 'fundos');
+
+function listarFundos() {
+  if (fs.existsSync(FUNDOS_DIR)) {
+    const arquivos = fs.readdirSync(FUNDOS_DIR)
+      .filter(f => /\.(jpg|jpeg|png)$/i.test(f))
+      .sort();
+    if (arquivos.length > 0) return arquivos.map(f => `fundos/${f}`);
+  }
+  return FOTOS_FALLBACK;
+}
 
 function escolherFoto(tema, numPost = 0) {
-  return FOTOS_ROTACAO[(numPost - 1) % FOTOS_ROTACAO.length] || FOTOS.dev;
+  const banco = listarFundos();
+  return banco[(numPost - 1 + banco.length) % banco.length];
 }
 
 const CLAUDE_BIN = process.platform === 'win32'
