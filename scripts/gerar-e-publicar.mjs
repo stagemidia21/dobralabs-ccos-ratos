@@ -47,9 +47,10 @@ const FOTOS = {
   codigo:  'capa-vibe-coding.jpg',
 };
 
-// Rotação automática — usa banco em public/fundos/ se existir, senão fallback
+// Rotação com histórico — nunca repete o mesmo fundo na mesma semana
 const FOTOS_FALLBACK = ['opt_c.jpg', 'opt_b.jpg', 'opt_d.jpg', 'opt1.jpg', 'opt2.jpg', 'opt3.jpg'];
 const FUNDOS_DIR = path.join(PUBLIC_DIR, 'fundos');
+const HISTORICO_PATH = path.join(ROOT, '_contexto/fundos-historico.json');
 
 function listarFundos() {
   if (fs.existsSync(FUNDOS_DIR)) {
@@ -61,9 +62,33 @@ function listarFundos() {
   return FOTOS_FALLBACK;
 }
 
+function carregarHistorico() {
+  try { return JSON.parse(fs.readFileSync(HISTORICO_PATH, 'utf8')); } catch { return {}; }
+}
+
+function registrarUso(foto) {
+  const h = carregarHistorico();
+  h[foto] = new Date().toISOString();
+  fs.mkdirSync(path.dirname(HISTORICO_PATH), { recursive: true });
+  fs.writeFileSync(HISTORICO_PATH, JSON.stringify(h, null, 2));
+}
+
 function escolherFoto(tema, numPost = 0) {
   const banco = listarFundos();
-  return banco[(numPost - 1 + banco.length) % banco.length];
+  const historico = carregarHistorico();
+  const umaSemana = 7 * 24 * 60 * 60 * 1000;
+  const agora = Date.now();
+
+  // Ordena pelo uso mais antigo (ou nunca usadas primeiro)
+  const ordenadas = [...banco].sort((a, b) => {
+    const ua = historico[a] ? new Date(historico[a]).getTime() : 0;
+    const ub = historico[b] ? new Date(historico[b]).getTime() : 0;
+    return ua - ub;
+  });
+
+  // Pega a que foi usada há mais tempo (ou nunca)
+  const escolhida = ordenadas[numPost % ordenadas.length] || banco[0];
+  return escolhida;
 }
 
 const CLAUDE_BIN = process.platform === 'win32'
@@ -349,10 +374,11 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
 
   // 2. Cria JSX
   const foto = escolherFoto(tema, numPost);
+  registrarUso(foto);
   const jsx = gerarJSX(compId, foto, dados.slides);
   const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
   fs.writeFileSync(jsxPath, jsx);
-  console.log(`  ✓ JSX criado: ${compId}.jsx`);
+  console.log(`  ✓ JSX criado: ${compId}.jsx (fundo: ${foto})`);
 
   // 3. Registra no Root.jsx
   let root = fs.readFileSync(path.join(SRC_DIR, 'Root.jsx'), 'utf8');
