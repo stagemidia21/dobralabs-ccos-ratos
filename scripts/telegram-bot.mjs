@@ -81,7 +81,7 @@ function gerarPauta(referencias) {
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere APENAS a pauta com 6 posts (sem texto antes ou depois):
+Gere APENAS a pauta com 6 posts de FEED ou CARROSSEL (sem texto antes ou depois). NUNCA sugira story — story é gerado separado quando pedido.
 
 POST 1 | FEED
 Tema: ...
@@ -93,7 +93,7 @@ Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 3 | CARROSSEL VÍDEO
+POST 3 | CARROSSEL IMAGEM
 Tema: ...
 Ângulo: ...
 Fonte: ...
@@ -108,12 +108,12 @@ Tema: ...
 Ângulo: ...
 Fonte: ...
 
-POST 6 | CARROSSEL VÍDEO
+POST 6 | CARROSSEL IMAGEM
 Tema: ...
 Ângulo: ...
 Fonte: ...
 
-Regras: pelo menos 1 Claude Code, pelo menos 1 notícia do dia, ângulos diferentes dos concorrentes.`;
+Regras: pelo menos 1 Claude Code, pelo menos 1 notícia do dia, ângulos diferentes dos concorrentes. Sem story, sem reels, só feed e carrossel.`;
 
   return callClaude(prompt);
 }
@@ -167,12 +167,34 @@ bot.command('help', async (ctx) => {
     `*Comandos do bot:*\n\n` +
     `📅 /pauta — Busca notícias + referências e gera 6 posts do dia\n` +
     `✍️ /gerar — Gera um post avulso\n` +
+    `📸 /story — Gera e publica um story\n` +
     `✅ /aprovar N — Gera conteúdo do post N\n` +
     `❌ /recusar N — Recusa e pede substituição\n` +
     `📊 /status — Estado atual\n` +
     `🔄 /refazer — Refaz o último post`,
     { parse_mode: 'Markdown' }
   );
+});
+
+// /story — gera story sob demanda
+bot.command('story', async (ctx) => {
+  if (!isAuthorized(ctx)) return;
+  const tema = ctx.message.text.replace('/story', '').trim();
+  if (!tema) {
+    await ctx.reply('Qual o tema do story?\nEx: /story planos Stage Mídia — o que está incluído');
+    return;
+  }
+  await ctx.reply(`📸 Gerando story...\nTema: ${tema}\n\n⏳ Pode demorar ~3min (render + upload + publicação)`);
+  try {
+    execSync(`node ${path.join(ROOT, 'scripts/gerar-story.mjs')} "${tema.replace(/"/g, '\\"')}"`, {
+      cwd: ROOT,
+      timeout: 300000,
+      stdio: 'ignore',
+    });
+    await ctx.reply(`✅ Story publicado no Instagram!\nTema: ${tema}`);
+  } catch (err) {
+    await ctx.reply(`❌ Erro no story: ${err.message.slice(0, 300)}\n\nRode no terminal pra ver o log:\nnode scripts/gerar-story.mjs "${tema}"`);
+  }
 });
 
 bot.command('status', (ctx) => {

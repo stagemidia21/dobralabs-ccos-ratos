@@ -53,8 +53,12 @@ function escolherFoto() {
   return FOTOS_STORY[dia % FOTOS_STORY.length];
 }
 
+const CLAUDE_BIN = process.platform === 'win32'
+  ? path.join(process.env.USERPROFILE || 'C:/Users/homer', '.local/bin/claude.exe')
+  : '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude';
+
 function callClaude(prompt, timeout = 120000) {
-  return execFileSync('claude', ['-p', prompt], {
+  return execFileSync(CLAUDE_BIN, ['-p', prompt], {
     cwd: ROOT, timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
   }).trim();
 }
@@ -171,7 +175,7 @@ async function executar(tema) {
 
   // 1b. Humaniza textos
   console.log('  Humanizando textos...');
-  data = humanizarJSON(data);
+  data = await humanizarJSON(data);
   console.log(`  ✓ Humanizado`);
 
   // 2. Salva JSON dos dados
