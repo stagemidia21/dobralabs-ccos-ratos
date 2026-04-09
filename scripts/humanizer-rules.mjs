@@ -71,7 +71,7 @@ Retorne EXATAMENTE o mesmo JSON com os textos reescritos. Sem markdown, sem expl
 
 ${textosBrutos}`;
 
-  const raw = callClaude(prompt, 90000);
+  const raw = callClaude(prompt, 180000);
   const match = raw.match(/\{[\s\S]*\}/);
   if (!match) {
     console.warn('  ⚠ Humanizer não retornou JSON — usando texto original');
