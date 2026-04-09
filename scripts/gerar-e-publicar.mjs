@@ -398,20 +398,31 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
 
   // 4. Renderiza os slides
   const FRAMES_PER_SLIDE = 300; // 10s × 30fps
+  const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
   console.log('  Renderizando slides...');
   for (let i = 0; i < dados.slides.length; i++) {
     const start = i * FRAMES_PER_SLIDE;
     const end = start + FRAMES_PER_SLIDE - 1;
     const num = String(i + 1).padStart(2, '0');
     const outFile = path.join(slidesDir, `slide-${num}.mp4`);
-    process.stdout.write(`    Slide ${num}... `);
     const outFileWin = outFile.replace(/\//g, '\\');
-    const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
-    execSync(
-      `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error`,
-      { cwd: REMOTION_DIR, stdio: 'pipe', shell: true }
-    );
-    console.log('OK');
+    const cmd = `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error`;
+
+    let tentativa = 0;
+    while (tentativa < 3) {
+      try {
+        process.stdout.write(`    Slide ${num}${tentativa > 0 ? ` (retry ${tentativa})` : ''}... `);
+        // Pausa antes de retry pra liberar memória
+        if (tentativa > 0) await new Promise(r => setTimeout(r, 3000 * tentativa));
+        execSync(cmd, { cwd: REMOTION_DIR, stdio: 'pipe', shell: true });
+        console.log('OK');
+        break;
+      } catch (err) {
+        tentativa++;
+        if (tentativa >= 3) throw new Error(`Slide ${num} falhou após 3 tentativas: ${err.message.slice(0, 100)}`);
+        console.log(`falhou, retry ${tentativa}...`);
+      }
+    }
   }
 
   // 5. Upload + publicar
