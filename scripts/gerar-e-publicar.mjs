@@ -502,6 +502,12 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     salvarCarrossel(dados, { tema, foto: escolherFoto(tema, numPost), numPost, igId, plataformas: ['instagram', 'threads', 'facebook', 'linkedin'] });
   } catch(e) { console.log(`  ⚠ Obsidian: ${e.message}`); }
 
+  // Limpa MP4s do post após publicar — libera disco
+  try {
+    fs.rmSync(slidesDir, { recursive: true, force: true });
+    console.log(`  🗑 MP4s removidos (${slidesDir})`);
+  } catch(e) { console.log(`  ⚠ Limpeza: ${e.message}`); }
+
   console.log(`  ✅ Post ${numPost} concluído!`);
   await sendTelegram(`✅ Post ${numPost}/6 publicado em todas as redes!\n\nLegenda:\n${dados.legenda}`);
 
