@@ -129,29 +129,43 @@ export function ${compId}() {
 // Gera os dados dos slides via Claude
 function gerarSlides(tema, angulo, fonte, legenda) {
   const historico = lerHistorico(14);
-  const prompt = `Você é o assistente de conteúdo do @homero.ads (Stage Mídia). Tom: técnico, direto, sem coach. Português BR. Sem padrões de IA.
+  const fonteTexto = fonte ? `\nFONTE/NOTÍCIA ORIGINAL:\n${fonte}\n` : '';
+
+  const prompt = `Você é o criador de conteúdo do @homero.ads — Homero Zanichelli, fundador da Stage Mídia.
+Tom: técnico, direto, primeira pessoa quando natural. Português BR. Sem padrões de IA, sem coach, sem motivacional.
+Público: empresários donos de PME, gestores de tráfego com 2+ anos de experiência. NÃO é iniciante, NÃO é dev.
+
+REGRAS EDITORIAIS OBRIGATÓRIAS:
+- NUNCA citar concorrentes do Homero (outras agências, outros gestores, outros criadores de conteúdo de marketing)
+- Se o tema veio de uma notícia, cobrir os fatos completos — não resumir nem pular partes importantes
+- Campo "fonte" na capa: citar a fonte real (ex: "Fonte: The New York Times", "Fonte: TechCrunch", "Fonte: Meta Newsroom"). Se não tiver fonte externa, usar "Stage Mídia"
+- Body de cada slide: denso, com dado concreto ou situação real — não frase vaga
+- Cada slide deve ter uma ideia completa, não metade de um raciocínio
+
 ${historico}
+${fonteTexto}
 Tema: ${tema}
 Ângulo: ${angulo}
 
 Gere EXATAMENTE este JSON (sem markdown, sem explicação):
 {
   "slides": [
-    { "tipo": "capa", "title": "TÍTULO EM CAPS\\nATÉ 4 LINHAS\\nCOM \\\\n", "fonte": "Fonte: breve crédito" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas sem enrolação" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-3 frases diretas" },
-    { "tipo": "cta", "cta": "texto do botão CTA curto" }
+    { "tipo": "capa", "title": "TÍTULO EM CAPS\\nATÉ 4 LINHAS\\nCOM \\\\n", "fonte": "Fonte: [nome da fonte real]" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "texto", "label": "label curta", "title": "TÍTULO\\nEM CAPS", "body": "2-4 frases diretas com dado concreto" },
+    { "tipo": "cta", "cta": "texto do botão CTA curto e direto" }
   ],
-  "legenda": "legenda completa pra Instagram, 150-250 palavras, primeira pessoa, exatamente 5 hashtags no final"
+  "legenda": "legenda completa pra Instagram, 200-300 palavras, primeira pessoa, contextualiza o tema, termina com CTA claro, exatamente 5 hashtags no final"
 }
 
-Regras: títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body sem bullet, legenda sem padrões de IA. CRÍTICO: o array "slides" deve ter EXATAMENTE 10 elementos — nem mais, nem menos.`;
+CRÍTICO: o array "slides" deve ter EXATAMENTE 10 elementos — nem mais, nem menos.
+Títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body sem bullet.`;
 
   // Tenta até 3 vezes — JSON inválido e ETIMEDOUT são intermitentes
   for (let tentativa = 1; tentativa <= 3; tentativa++) {
