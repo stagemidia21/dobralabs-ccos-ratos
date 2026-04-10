@@ -151,7 +151,7 @@ Gere EXATAMENTE este JSON (sem markdown, sem explicação):
   "legenda": "legenda completa pra Instagram, 150-250 palavras, primeira pessoa, exatamente 5 hashtags no final"
 }
 
-Regras: títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body sem bullet, legenda sem padrões de IA.`;
+Regras: títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body sem bullet, legenda sem padrões de IA. CRÍTICO: o array "slides" deve ter EXATAMENTE 10 elementos — nem mais, nem menos.`;
 
   // Tenta até 3 vezes — JSON inválido e ETIMEDOUT são intermitentes
   for (let tentativa = 1; tentativa <= 3; tentativa++) {
@@ -172,7 +172,12 @@ Regras: títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por títu
           return '';
         })
       );
-      return JSON.parse(sanitized);
+      const parsed = JSON.parse(sanitized);
+      // Garante exatamente 10 slides — trunca se Claude mandar mais
+      if (parsed.slides && parsed.slides.length > 10) {
+        parsed.slides = parsed.slides.slice(0, 10);
+      }
+      return parsed;
     } catch (err) {
       if (tentativa >= 3) throw new Error('Claude não retornou JSON válido após 3 tentativas: ' + err.message);
     }
