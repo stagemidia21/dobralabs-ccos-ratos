@@ -71,20 +71,28 @@ Retorne EXATAMENTE o mesmo JSON com os textos reescritos. Sem markdown, sem expl
 
 ${textosBrutos}`;
 
-  const raw = callClaude(prompt, 180000);
-  const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) {
-    console.warn('  ⚠ Humanizer não retornou JSON — usando texto original');
-    return dados;
+  for (let tentativa = 1; tentativa <= 3; tentativa++) {
+    try {
+      if (tentativa > 1) {
+        console.warn(`  ⚠ Humanizer retry ${tentativa - 1}...`);
+        // Pausa entre retries pra deixar o Claude CLI respirar
+        const delay = 10000 * tentativa;
+        const end = Date.now() + delay;
+        while (Date.now() < end) { /* spin wait síncrono */ }
+      }
+      const raw = callClaude(prompt, 240000);
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Sem JSON');
+      const humanizado = JSON.parse(match[0]);
+      return mesclarHumanizado(dados, humanizado);
+    } catch (err) {
+      if (tentativa >= 3) {
+        console.warn(`  ⚠ Humanizer falhou após 3 tentativas — usando texto original`);
+        return dados;
+      }
+    }
   }
-
-  try {
-    const humanizado = JSON.parse(match[0]);
-    return mesclarHumanizado(dados, humanizado);
-  } catch {
-    console.warn('  ⚠ Humanizer retornou JSON inválido — usando texto original');
-    return dados;
-  }
+  return dados;
 }
 
 // Extrai só os campos editáveis pra mandar pro Claude (menos tokens)
