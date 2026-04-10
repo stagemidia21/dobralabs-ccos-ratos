@@ -596,6 +596,7 @@ function getArg(name) {
 
 const temaArg   = getArg('--tema');
 const anguloArg = getArg('--angulo');
+const fonteArg  = getArg('--fonte');
 const numArg    = parseInt(getArg('--num') || process.argv[2]);
 
 async function main() {
@@ -610,7 +611,7 @@ async function main() {
   if (temaArg) {
     // Chamada dinâmica vinda do bot
     const num = (!isNaN(numArg) && numArg >= 1) ? numArg : 1;
-    await processarPost(num, temaArg, anguloArg || '');
+    await processarPost(num, temaArg, anguloArg || '', fonteArg || '');
   } else if (!isNaN(numArg) && numArg >= 1 && numArg <= 6) {
     // Post específico da pauta hardcoded
     const p = POSTS_HOJE[numArg - 1];

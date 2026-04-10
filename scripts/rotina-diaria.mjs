@@ -83,7 +83,9 @@ function gerarPauta(referencias) {
   const refsTexto = referencias
     ? `\nPOSTS EM ALTA (últimas 48h):\n${referencias.posts_referencia.map(p =>
         `@${p.perfil} (${p.comments} comentários): ${p.caption.slice(0, 150)}`
-      ).join('\n')}\n\nNOTÍCIAS:\n${referencias.noticias.map(n => `• ${n.titulo}`).join('\n')}`
+      ).join('\n')}\n\nNOTÍCIAS DO DIA (com fonte e data):\n${referencias.noticias.map(n =>
+        `• ${n.titulo} — Fonte: ${n.fonte || n.veiculo || 'desconhecida'}, ${new Date().toLocaleDateString('pt-BR')}`
+      ).join('\n')}`
     : '';
 
   const prompt = `Você é o estrategista de conteúdo do @homero.ads (Homero Zanichelli — Stage Mídia).
@@ -99,45 +101,55 @@ Cada carrossel vira um vídeo de 10 slides publicado em todas as redes.
 POST 1 | CARROSSEL VÍDEO
 Tema: [max 80 chars]
 Ângulo: [abordagem específica diferente dos concorrentes, max 200 chars]
+Fonte: [nome do veículo e data, ex: "TechCrunch, 10/04/2026" — ou "Stage Mídia" se não vier de notícia]
 
 POST 2 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 3 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 4 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 5 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 6 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 7 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 8 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 9 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 POST 10 | CARROSSEL VÍDEO
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
 Regras:
-- Pelo menos 2 baseados em notícia do dia
+- Pelo menos 2 baseados em notícia do dia (com Fonte preenchida corretamente)
 - Pelo menos 1 sobre Claude Code
 - Pelo menos 1 sobre tráfego pago / Meta Ads / Google Ads
 - Ângulos DIFERENTES entre si, nunca repetir abordagem
@@ -152,22 +164,23 @@ function parsePauta(texto) {
     const linhas = texto.split('\n');
     const idx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
     if (idx === -1) continue;
-    const bloco = linhas.slice(idx, idx + 6).join('\n');
+    const bloco = linhas.slice(idx, idx + 8).join('\n');
     const tema   = (bloco.match(/Tema:\s*(.+)/) || [])[1]?.trim();
     const angulo = (bloco.match(/Ângulo:\s*(.+)/) || [])[1]?.trim() || '';
-    if (tema) posts.push({ n, tema, angulo });
+    const fonte  = (bloco.match(/Fonte:\s*(.+)/) || [])[1]?.trim() || 'Stage Mídia';
+    if (tema) posts.push({ n, tema, angulo, fonte });
   }
   return posts;
 }
 
 // ─── PUBLICAR UM POST ─────────────────────────────────────────────────────────
 
-function publicarPost(n, tema, angulo) {
+function publicarPost(n, tema, angulo, fonte = '') {
   return new Promise((resolve, reject) => {
     const script = path.join(ROOT, 'scripts/gerar-e-publicar.mjs');
-    const proc = spawn('node', [script, '--tema', tema, '--angulo', angulo, '--num', String(n)], {
-      cwd: ROOT, stdio: 'inherit',
-    });
+    const args = [script, '--tema', tema, '--angulo', angulo, '--num', String(n)];
+    if (fonte) args.push('--fonte', fonte);
+    const proc = spawn('node', args, { cwd: ROOT, stdio: 'inherit' });
     proc.on('close', code => code === 0 ? resolve() : reject(new Error(`Post ${n} saiu com código ${code}`)));
   });
 }
@@ -223,7 +236,7 @@ async function main() {
     console.log(`\n▶ Post ${post.n}/10: ${post.tema}`);
 
     try {
-      await publicarPost(post.n, post.tema, post.angulo);
+      await publicarPost(post.n, post.tema, post.angulo, post.fonte || '');
     } catch (err) {
       console.error(`  ✗ Falhou: ${err.message}`);
       await tg(`❌ Post ${post.n} falhou: ${err.message}`);
