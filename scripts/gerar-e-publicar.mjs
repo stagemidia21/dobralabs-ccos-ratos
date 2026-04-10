@@ -153,11 +153,30 @@ Gere EXATAMENTE este JSON (sem markdown, sem explicação):
 
 Regras: títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body sem bullet, legenda sem padrões de IA.`;
 
-  const raw = callClaude(prompt);
-  // Extrai JSON mesmo se vier com texto ao redor
-  const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) throw new Error('Claude não retornou JSON válido: ' + raw.slice(0, 200));
-  return JSON.parse(match[0]);
+  // Tenta até 3 vezes — JSON inválido e ETIMEDOUT são intermitentes
+  for (let tentativa = 1; tentativa <= 3; tentativa++) {
+    try {
+      if (tentativa > 1) {
+        console.log(`    (retry ${tentativa - 1} geração...)`);
+        execSync(`node -e "setTimeout(()=>{},${5000 * tentativa})"`, { shell: true });
+      }
+      const raw = callClaude(prompt, tentativa === 3 ? 240000 : 180000);
+      const match = raw.match(/\{[\s\S]*\}/);
+      if (!match) throw new Error('Sem JSON no output');
+      // Sanitiza caracteres de controle dentro de strings JSON antes de parsear
+      const sanitized = match[0].replace(/("(?:[^"\\]|\\.)*")/g, m =>
+        m.replace(/[\x00-\x1f]/g, c => {
+          if (c === '\n') return '\\n';
+          if (c === '\r') return '\\r';
+          if (c === '\t') return '\\t';
+          return '';
+        })
+      );
+      return JSON.parse(sanitized);
+    } catch (err) {
+      if (tentativa >= 3) throw new Error('Claude não retornou JSON válido após 3 tentativas: ' + err.message);
+    }
+  }
 }
 
 async function uploadSlide(filePath, filename) {
