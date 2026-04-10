@@ -1,57 +1,57 @@
 {
-  "data": "Thu Apr 09 2026",
-  "gerado_em": "2026-04-09T18:15:14.311Z",
+  "data": "Fri Apr 10 2026",
+  "gerado_em": "2026-04-10T14:48:23.931Z",
   "posts": [
     {
       "n": 1,
-      "tema": "O que a empresa de 1 bilhão com 1 fundador significa pro seu negócio",
-      "angulo": "A notícia do NYT que confirmou a previsão de Sam Altman virou manchete — mas o que muda na prática pra quem tem uma PME hoje? Não é sobre ser unicórnio. É sobre operar mais com menos pessoa."
+      "tema": "O Google lançou geração de vídeo gratuita no Google Vids",
+      "angulo": "Enquanto todo mundo debate qualidade, empresário esperto já tá usando pra criar vídeos de produto, tutorial e anúncio sem contratar editor — mostra o fluxo prático do zero ao publish."
     },
     {
       "n": 2,
-      "tema": "Claude Code: o que é e por que gestores de tráfego estão adotando",
-      "angulo": "@thaleslaray está em alta ensinando Claude Code pra gestores — mas o ângulo dele é técnico. Aqui: o que o dono de negócio (não o gestor) ganha com isso na prática, sem saber programar."
+      "tema": "Claude Code OS: como montar seu sistema operacional de agência em 1 dia",
+      "angulo": "Diferente dos posts de \"time de IA\", aqui o foco é no dono que não tem equipe — ele mesmo vira o sistema. Mostra a stack real: skills, contexto, automações, tudo dentro do Claude Code."
     },
     {
       "n": 3,
-      "tema": "Como automatizei a operação da agência sem contratar mais ninguém",
-      "angulo": "Não é teoria de produtividade. É o sistema real: o que foi automatizado, com qual ferramenta, e o que isso liberou de hora por semana. Resultado > processo."
+      "tema": "Por que seu anúncio no Meta tá caro e não converte (diagnóstico rápido)",
+      "angulo": "Não é criativo, não é público — é estrutura de campanha. Mostra os 5 erros de configuração que inflam CPL sem avisar, com print de campanhas reais como referência."
     },
     {
       "n": 4,
-      "tema": "Google Ads em 2026: o que mudou e o que a maioria ainda faz errado",
-      "angulo": "A IA do Google já toma decisões de lance, segmentação e criativo sozinha. O problema não é usar — é saber quando confiar e quando cortar. Guia prático pra não queimar verba."
+      "tema": "Google lança IA nova — o que muda de verdade pra quem anuncia",
+      "angulo": "Baseado nas novidades do The Decoder/TechCrunch: desconstrói o hype e traduz o impacto direto em Performance Max, Search e Discovery para quem roda Google Ads hoje."
     },
     {
       "n": 5,
-      "tema": "Meta Ads: por que sua campanha trava depois de poucos dias de entrega",
-      "angulo": "Não é o algoritmo te punindo. É o ciclo de aprendizado mal configurado. Explica a lógica do \"modo de aprendizado\" e o que fazer (e parar de fazer) pra estabilizar entrega."
+      "tema": "Quanto custa não automatizar o atendimento da sua empresa",
+      "angulo": "Não fala sobre chatbot genérico — fala sobre custo real: horas perdidas da equipe, leads que esfriaram, vendas perdidas no fora do horário. Fecha com o cálculo de ROI de uma automação básica."
     },
     {
       "n": 6,
-      "tema": "IA na sua empresa: 5 processos pra automatizar essa semana, com zero código",
-      "angulo": "Foco em PME sem time de TI. Cada processo com ferramenta específica, tempo de setup e o que ele elimina. Sem pitch de curso, sem teoria — lista de execução direta."
+      "tema": "Como usar IA pra criar a copy do seu anúncio em 10 minutos",
+      "angulo": "Não é \"use o ChatGPT\". Mostra o fluxo com contexto de negócio real (persona, objeção, oferta) → prompt estruturado → variações de anúncio prontas pra testar no Meta Ads, com exemplo de PME local."
     },
     {
       "n": 7,
-      "tema": "Quanto custa NÃO usar IA na operação do seu negócio",
-      "angulo": "Não é \"você vai ficar pra trás\" — é calculado. Horas de trabalho manual × custo por hora × tarefas repetitivas. Mostra o número real que o empresário está jogando fora todo mês."
+      "tema": "Meta anuncia novidades de IA pra anunciantes — o que aproveitar agora",
+      "angulo": "Baseado nas atualizações do AI at Meta Blog: foca especificamente nas ferramentas de criação automática de anúncio e otimização de público que já estão no Gerenciador de Anúncios, sem esperar feature nova."
     },
     {
       "n": 8,
-      "tema": "Claude Code OS: como montar seu sistema operacional de negócios com IA",
-      "angulo": "Diferente de \"usar o ChatGPT pra responder email\". É estrutura: contexto persistente, skills por área, agentes rodando tarefas. O que é, como funciona, por onde começar."
+      "tema": "O erro que faz donos de PME perderem dinheiro com IA",
+      "angulo": "Contraponto direto ao hype de \"time completo de IA\": mostra que empilhar ferramentas sem processo é mais caro que não usar nada. A solução é sistema, não assinatura."
     },
     {
       "n": 9,
-      "tema": "Funil de vendas em 2026: o que parou de funcionar e o que está convertendo",
-      "angulo": "Baseado em dados reais de campanhas ativas. Não é lista de boas práticas — é o que foi testado, o que morreu e o que está vivo. Ângulo de operador de agência, não de teórico."
+      "tema": "Como a IA da Hugging Face está mudando o mercado de automação",
+      "angulo": "Traduz o que saiu no blog da Hugging Face pra linguagem de empresário: modelos open source rodando local reduzem custo de API em operações repetitivas — cases práticos de quando vale a pena."
     },
     {
       "n": 10,
-      "tema": "Como usar IA pra criar, revisar e publicar conteúdo sem perder sua voz",
-      "angulo": "O erro mais comum: deixar a IA soar como IA. Mostra o fluxo real de geração → humanização → publicação, com critérios práticos pra saber se o texto ainda soa como você ou virou conteúdo genérico."
+      "tema": "Relatório de performance que seu cliente entende e valoriza",
+      "angulo": "Não é tutorial de planilha — é sobre o que escrever além dos números. Mostra o formato \"Leitura Stage\": dado + interpretação + decisão recomendada. Diferencia gestor de tráfego de commodidade."
     }
   ],
-  "texto": "POST 1 | CARROSSEL VÍDEO\nTema: O que a empresa de 1 bilhão com 1 fundador significa pro seu negócio\nÂngulo: A notícia do NYT que confirmou a previsão de Sam Altman virou manchete — mas o que muda na prática pra quem tem uma PME hoje? Não é sobre ser unicórnio. É sobre operar mais com menos pessoa.\n\nPOST 2 | CARROSSEL VÍDEO\nTema: Claude Code: o que é e por que gestores de tráfego estão adotando\nÂngulo: @thaleslaray está em alta ensinando Claude Code pra gestores — mas o ângulo dele é técnico. Aqui: o que o dono de negócio (não o gestor) ganha com isso na prática, sem saber programar.\n\nPOST 3 | CARROSSEL VÍDEO\nTema: Como automatizei a operação da agência sem contratar mais ninguém\nÂngulo: Não é teoria de produtividade. É o sistema real: o que foi automatizado, com qual ferramenta, e o que isso liberou de hora por semana. Resultado > processo.\n\nPOST 4 | CARROSSEL VÍDEO\nTema: Google Ads em 2026: o que mudou e o que a maioria ainda faz errado\nÂngulo: A IA do Google já toma decisões de lance, segmentação e criativo sozinha. O problema não é usar — é saber quando confiar e quando cortar. Guia prático pra não queimar verba.\n\nPOST 5 | CARROSSEL VÍDEO\nTema: Meta Ads: por que sua campanha trava depois de poucos dias de entrega\nÂngulo: Não é o algoritmo te punindo. É o ciclo de aprendizado mal configurado. Explica a lógica do \"modo de aprendizado\" e o que fazer (e parar de fazer) pra estabilizar entrega.\n\nPOST 6 | CARROSSEL VÍDEO\nTema: IA na sua empresa: 5 processos pra automatizar essa semana, com zero código\nÂngulo: Foco em PME sem time de TI. Cada processo com ferramenta específica, tempo de setup e o que ele elimina. Sem pitch de curso, sem teoria — lista de execução direta.\n\nPOST 7 | CARROSSEL VÍDEO\nTema: Quanto custa NÃO usar IA na operação do seu negócio\nÂngulo: Não é \"você vai ficar pra trás\" — é calculado. Horas de trabalho manual × custo por hora × tarefas repetitivas. Mostra o número real que o empresário está jogando fora todo mês.\n\nPOST 8 | CARROSSEL VÍDEO\nTema: Claude Code OS: como montar seu sistema operacional de negócios com IA\nÂngulo: Diferente de \"usar o ChatGPT pra responder email\". É estrutura: contexto persistente, skills por área, agentes rodando tarefas. O que é, como funciona, por onde começar.\n\nPOST 9 | CARROSSEL VÍDEO\nTema: Funil de vendas em 2026: o que parou de funcionar e o que está convertendo\nÂngulo: Baseado em dados reais de campanhas ativas. Não é lista de boas práticas — é o que foi testado, o que morreu e o que está vivo. Ângulo de operador de agência, não de teórico.\n\nPOST 10 | CARROSSEL VÍDEO\nTema: Como usar IA pra criar, revisar e publicar conteúdo sem perder sua voz\nÂngulo: O erro mais comum: deixar a IA soar como IA. Mostra o fluxo real de geração → humanização → publicação, com critérios práticos pra saber se o texto ainda soa como você ou virou conteúdo genérico.\n\n---\n\n**Destaques de prioridade de execução:**\n- Posts 1 e 2 têm ancoragem em notícia/trend quente — publicar primeiro, janela curta\n- Post 4 e 5 são evergreen com dado atual — boa âncora pra meio de semana\n- Post 7 tem gatilho de dor forte — testar como primeiro slide de vídeo com CTA direto"
+  "texto": "POST 1 | CARROSSEL VÍDEO\nTema: O Google lançou geração de vídeo gratuita no Google Vids\nÂngulo: Enquanto todo mundo debate qualidade, empresário esperto já tá usando pra criar vídeos de produto, tutorial e anúncio sem contratar editor — mostra o fluxo prático do zero ao publish.\n\nPOST 2 | CARROSSEL VÍDEO\nTema: Claude Code OS: como montar seu sistema operacional de agência em 1 dia\nÂngulo: Diferente dos posts de \"time de IA\", aqui o foco é no dono que não tem equipe — ele mesmo vira o sistema. Mostra a stack real: skills, contexto, automações, tudo dentro do Claude Code.\n\nPOST 3 | CARROSSEL VÍDEO\nTema: Por que seu anúncio no Meta tá caro e não converte (diagnóstico rápido)\nÂngulo: Não é criativo, não é público — é estrutura de campanha. Mostra os 5 erros de configuração que inflam CPL sem avisar, com print de campanhas reais como referência.\n\nPOST 4 | CARROSSEL VÍDEO\nTema: Google lança IA nova — o que muda de verdade pra quem anuncia\nÂngulo: Baseado nas novidades do The Decoder/TechCrunch: desconstrói o hype e traduz o impacto direto em Performance Max, Search e Discovery para quem roda Google Ads hoje.\n\nPOST 5 | CARROSSEL VÍDEO\nTema: Quanto custa não automatizar o atendimento da sua empresa\nÂngulo: Não fala sobre chatbot genérico — fala sobre custo real: horas perdidas da equipe, leads que esfriaram, vendas perdidas no fora do horário. Fecha com o cálculo de ROI de uma automação básica.\n\nPOST 6 | CARROSSEL VÍDEO\nTema: Como usar IA pra criar a copy do seu anúncio em 10 minutos\nÂngulo: Não é \"use o ChatGPT\". Mostra o fluxo com contexto de negócio real (persona, objeção, oferta) → prompt estruturado → variações de anúncio prontas pra testar no Meta Ads, com exemplo de PME local.\n\nPOST 7 | CARROSSEL VÍDEO\nTema: Meta anuncia novidades de IA pra anunciantes — o que aproveitar agora\nÂngulo: Baseado nas atualizações do AI at Meta Blog: foca especificamente nas ferramentas de criação automática de anúncio e otimização de público que já estão no Gerenciador de Anúncios, sem esperar feature nova.\n\nPOST 8 | CARROSSEL VÍDEO\nTema: O erro que faz donos de PME perderem dinheiro com IA\nÂngulo: Contraponto direto ao hype de \"time completo de IA\": mostra que empilhar ferramentas sem processo é mais caro que não usar nada. A solução é sistema, não assinatura.\n\nPOST 9 | CARROSSEL VÍDEO\nTema: Como a IA da Hugging Face está mudando o mercado de automação\nÂngulo: Traduz o que saiu no blog da Hugging Face pra linguagem de empresário: modelos open source rodando local reduzem custo de API em operações repetitivas — cases práticos de quando vale a pena.\n\nPOST 10 | CARROSSEL VÍDEO\nTema: Relatório de performance que seu cliente entende e valoriza\nÂngulo: Não é tutorial de planilha — é sobre o que escrever além dos números. Mostra o formato \"Leitura Stage\": dado + interpretação + decisão recomendada. Diferencia gestor de tráfego de commodidade."
 }
