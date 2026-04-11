@@ -1,37 +1,29 @@
 {
-  "gerado_em": "2026-04-10T10:00:05.106Z",
+  "gerado_em": "2026-04-11T11:09:11.265Z",
   "posts_referencia": [
     {
       "perfil": "thaleslaray",
-      "caption": "Topa passar 1 dia inteiro comigo aprendendo a montar um time completo de I.A. com Claude Code? 👀\n\n(Leia o post até o final para pegar alguns spoilers do que vai rolar)\n\nA Operação Claude Code vai rolar no dia 11/04 a partir das 9h.\n\nSe você decidir passar esse dia comigo, isso pode mudar completamente a forma como você opera, e quanto você paga pra operar.\n\nComenta “OPERAÇÃO” aqui pra garantir su",
+      "caption": "🚨 Comente “OPERAÇÃO” pra participar.\n\nAmanhã às 9h começa a Operação Claude Code.\n\nVamos passar o dia inteiro juntos vendo, na prática, como:\n\n✅ Mapear os gargalos que mais drenam tempo e dinheiro da sua operação.\n✅ Criar seu time de I.A. com Claude Code do zero, sem programar.\n✅ Automatizar fluxos completos que rodam sozinhos.\n✅ Escalar o sistema pra outros nichos ou transformar em serviço.\n✅ E ",
       "likes": -1,
-      "comments": 82,
-      "url": "https://www.instagram.com/p/DW6V8OOADWP/",
-      "data": "2026-04-09T12:53:02.000Z"
+      "comments": 114,
+      "url": "https://www.instagram.com/p/DW9JXmXh87S/",
+      "data": "2026-04-10T15:00:00.000Z"
     },
     {
       "perfil": "thaleslaray",
-      "caption": "Você não precisa de um time pesado pra ter uma operação profissional.\n\nPrecisa saber usar as ferramentas certas. Aqui eu mostro como tenho usado o Claude Code pra substituir processos que antes dependiam de um time.\n\nE se você também quer saber como fazer isso eu posso te ajudar...\n\nNos próximos dias, vou fazer um intensivo de Claude e modelos agênticos que pensam, decidem e executam tarefas sozin",
+      "caption": "Qualquer processo repetitivo da sua operação pode virar uma Skill que executa tarefas por você e elimina um custo fixo da sua folha.\n\nQuer aprender a construir suas próprias skills do zero?\n\nComenta “OPERAÇÃO” pra ter acesso à imersão de 1 dia pra dominar o Claude Code e a criação de times com I.A 👇",
       "likes": -1,
-      "comments": 26,
-      "url": "https://www.instagram.com/p/DW4zb1IidIj/",
-      "data": "2026-04-08T22:32:17.000Z"
+      "comments": 178,
+      "url": "https://www.instagram.com/p/DW84koVAJlX/",
+      "data": "2026-04-10T12:34:08.000Z"
     },
     {
       "perfil": "thaleslaray",
       "caption": "Donos de Agência de Marketing: saiba como usar o Claude Code para agregar valor aos seus serviços e escalar sua operação.\n\nNo dia 11 de Abril vai rolar a Operação Claude Code – 1 dia inteiro de imersão onde eu vou te mostrar como dominar o Claude e usá-lo pra substituir ferramentas e tarefas que hoje tomam seu tempo e seu dinheiro.\n\nComenta “OPERAÇÃO” pra garantir sua vaga 👇",
       "likes": -1,
-      "comments": 49,
+      "comments": 93,
       "url": "https://www.instagram.com/p/DW7ObgKCZy9/",
       "data": "2026-04-09T21:06:39.000Z"
-    },
-    {
-      "perfil": "rafa.grandi",
-      "caption": "Comenta “Carrossel” que te mando o PROMPT pelo direct!\n\n#claude #claudecode #ia #canva #vibecoding",
-      "likes": 306,
-      "comments": 642,
-      "url": "https://www.instagram.com/p/DW7Nujtk41V/",
-      "data": "2026-04-09T21:02:46.000Z"
     }
   ],
   "noticias": [
@@ -43,17 +35,7 @@
     {
       "titulo": "Artificial Intelligence: News, Business, Science | THE DECODER",
       "url": "https://the-decoder.com/",
-      "resumo": "Artificial Intelligence: News, Business, Science\nSkip to content\nRead full article about: OpenAI is building a cybersecurity product for a select group of companies \nAccording to Axios, OpenAI is working on a new cybersecurity product that will only be available to a small group of companies.\nAxios "
-    },
-    {
-      "titulo": "Hugging Face – Blog",
-      "url": "https://huggingface.co/blog",
-      "resumo": "Hugging Face – Blog\nCommunity Blog & Articles\nCommunity Articles\nview all\nHow we OCR'ed 30,000 papers using Codex, open OCR models and Jobs \n3 days ago\n•\n35\nBidirLM: Turning Generative LLMs into the Best Open-Source Omnimodal Encoders \n2 days ago\n•\n23\nKV Caching Explained: Optimizing Transformer Inf"
-    },
-    {
-      "titulo": "AI News & Artificial Intelligence | TechCrunch",
-      "url": "https://techcrunch.com/category/artificial-intelligence",
-      "resumo": "AI News & Artificial Intelligence\nNews coverage on artificial intelligence and machine learning tech, the companies building them, and the ethical issues AI raises today. This encompasses generative AI, including large language models, text-to-image and text-to-video models; speech recognition and g"
+      "resumo": "Artificial Intelligence: News, Business, Science\nRead full article about: Overworld's Waypoint-1.5 brings AI-generated 3D worlds to Mac and Windows on consumer hardware \nAI startup Overworld has released Waypoint-1.5, an update to its real-time world simulation system that generates interactive 3D w"
     },
     {
       "titulo": "AI at Meta Blog",
@@ -61,14 +43,19 @@
       "resumo": "AI at Meta Blog\nGet the latest from AI at Meta in your inbox\nSign up"
     },
     {
-      "titulo": "Google Vids updates include high-quality video generation at no cost and more",
-      "url": "https://blog.google/products-and-platforms/products/workspace/google-vids-updates-lyria-veo/",
-      "resumo": "Google Vids updates include high-quality video generation at no cost and more\nCreate, edit and share videos at no cost in Google Vids\nNew AI capabilities are coming to Google Vids, powered by Lyria 3 and Veo 3.1, including high-quality video generation at no cost, custom music creation and more. \nGe"
+      "titulo": "AI News & Artificial Intelligence | TechCrunch",
+      "url": "https://techcrunch.com/category/artificial-intelligence",
+      "resumo": "AI News & Artificial Intelligence\nNews coverage on artificial intelligence and machine learning tech, the companies building them, and the ethical issues AI raises today. This encompasses generative AI, including large language models, text-to-image and text-to-video models; speech recognition and g"
     },
     {
       "titulo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!",
       "url": "https://exame.com/tecnologia",
-      "resumo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!\nContinua após a publicidade\nHá um dia • 2 min de leitura\nHá um dia • 3 min de leitura\nHá um dia • 3 min de leitura\nHá um dia • 4 min de lei"
+      "resumo": "Tecnologia | Exame | Notícias sobre Tecnologia, Web, Redes Sociais e empresas que moldam esse mercado: Google, YouTube, Facebook, Twitter e Apple ✅ ✚ Acesse já!\nContinua após a publicidade\nHá 19 horas • 3 min de leitura\nHá 20 horas • 2 min de leitura\nHá 20 horas • 3 min de leitura\nHá 2 dias • 3 min "
+    },
+    {
+      "titulo": "Hugging Face – Blog",
+      "url": "https://huggingface.co/blog",
+      "resumo": "Hugging Face – Blog\nCommunity Blog & Articles\nCommunity Articles\nview all\nHow we OCR'ed 30,000 papers using Codex, open OCR models and Jobs \n4 days ago\n•\n38\nBidirLM: Turning Generative LLMs into the Best Open-Source Omnimodal Encoders \n4 days ago\n•\n23\nKV Caching Explained: Optimizing Transformer Inf"
     }
   ]
 }
