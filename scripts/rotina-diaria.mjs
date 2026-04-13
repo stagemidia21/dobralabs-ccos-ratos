@@ -4,8 +4,8 @@
  *
  * Fluxo:
  *   1. Busca referências (posts virais + notícias)
- *   2. Gera pauta de 10 carrosseis via Claude
- *   3. Publica 1 post a cada 90 minutos (7h → 21h30)
+ *   2. Gera pauta de 3 carrosseis via Claude
+ *   3. Publica: 7h, 12h, 18h
  *
  * PM2 cron: inicia às 7h, posts saem ao longo do dia
  * Uso manual: node scripts/rotina-diaria.mjs [--post N]
@@ -95,72 +95,40 @@ Tom: técnico, direto, sem coach, sem motivacional. Português BR.
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere a pauta de 10 CARROSSEIS VÍDEO (sem texto antes/depois, sem story, sem feed).
-Cada carrossel vira um vídeo de 10 slides publicado em todas as redes.
+Gere a pauta de EXATAMENTE 3 CARROSSEIS VÍDEO — os 3 mais relevantes do dia.
+Critério de seleção: potencial de parar o scroll, ângulo diferente do que todo mundo faz, dado concreto no centro.
 
-POST 1 | CARROSSEL VÍDEO
-Tema: [max 80 chars]
-Ângulo: [abordagem específica diferente dos concorrentes, max 200 chars]
-Fonte: [nome do veículo e data, ex: "TechCrunch, 10/04/2026" — ou "Stage Mídia" se não vier de notícia]
+POST 1 | CARROSSEL VÍDEO — publica às 7h
+Tema: [max 80 chars — gancho forte, primeira coisa que o empresário vê de manhã]
+Ângulo: [abordagem específica, max 200 chars]
+Fonte: [nome do veículo e data, ex: "TechCrunch, 13/04/2026" — ou "Stage Mídia" se não vier de notícia]
 
-POST 2 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
+POST 2 | CARROSSEL VÍDEO — publica às 12h
+Tema: [max 80 chars — pico de atenção do meio-dia]
+Ângulo: [abordagem específica, max 200 chars]
 Fonte: ...
 
-POST 3 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 4 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 5 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 6 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 7 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 8 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 9 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-Fonte: ...
-
-POST 10 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
+POST 3 | CARROSSEL VÍDEO — publica às 18h
+Tema: [max 80 chars — encerramento do dia útil, empresário saindo do trabalho]
+Ângulo: [abordagem específica, max 200 chars]
 Fonte: ...
 
 Regras:
-- Pelo menos 2 baseados em notícia do dia (com Fonte preenchida corretamente)
-- Pelo menos 1 sobre Claude Code
-- Pelo menos 1 sobre tráfego pago / Meta Ads / Google Ads
-- Ângulos DIFERENTES entre si, nunca repetir abordagem
+- Pelo menos 1 baseado em notícia do dia com dado real (Fonte preenchida)
+- Ângulos completamente diferentes entre si
+- Pelo menos 1 sobre IA aplicada a negócio ou tráfego pago
+- NUNCA repetir tema de posts já publicados nos últimos 14 dias
 - Foco em resultado prático para empresário, nunca teoria`;
 
   return callClaude(prompt, 120000);
 }
 
+// Horários fixos de publicação: 7h, 12h, 18h
+const HORARIOS = [7, 12, 18];
+
 function parsePauta(texto) {
   const posts = [];
-  for (let n = 1; n <= 10; n++) {
+  for (let n = 1; n <= 3; n++) {
     const linhas = texto.split('\n');
     const idx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
     if (idx === -1) continue;
@@ -168,7 +136,7 @@ function parsePauta(texto) {
     const tema   = (bloco.match(/Tema:\s*(.+)/) || [])[1]?.trim();
     const angulo = (bloco.match(/Ângulo:\s*(.+)/) || [])[1]?.trim() || '';
     const fonte  = (bloco.match(/Fonte:\s*(.+)/) || [])[1]?.trim() || 'Stage Mídia';
-    if (tema) posts.push({ n, tema, angulo, fonte });
+    if (tema) posts.push({ n, tema, angulo, fonte, hora: HORARIOS[n - 1] });
   }
   return posts;
 }
@@ -192,7 +160,7 @@ async function main() {
   const hoje = new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
 
   console.log(`\n🚀 Rotina diária @homero.ads — ${hoje}`);
-  await tg(`🚀 Rotina iniciada — ${hoje}\n10 carrosseis vídeo ao longo do dia`);
+  await tg(`🚀 Rotina iniciada — ${hoje}\n3 carrosseis vídeo: 7h, 12h, 18h`);
 
   // 1. Referências
   console.log('\n📡 Buscando referências...');
@@ -222,18 +190,30 @@ async function main() {
 
     // Manda pauta no Telegram pra review
     let resumo = `📋 *PAUTA DO DIA — ${hoje}*\n\n`;
-    posts.forEach(p => { resumo += `*${p.n}.* ${p.tema}\n`; });
-    resumo += `\n⏱ Publicação: 1 post a cada 90min\n🎬 Todos como carrossel vídeo`;
+    posts.forEach(p => { resumo += `*${p.hora}h* ${p.tema}\n`; });
+    resumo += `\n🎬 3 carrosseis vídeo — 7h, 12h, 18h`;
     await tg(resumo);
   }
 
-  // 3. Roda posts em sequência com intervalo
+  // 3. Roda posts nos horários fixos: 7h, 12h, 18h
   const postsFiltrados = postArg ? posts.filter(p => p.n === postArg) : posts;
 
   for (let i = 0; i < postsFiltrados.length; i++) {
     const post = postsFiltrados[i];
 
-    console.log(`\n▶ Post ${post.n}/10: ${post.tema}`);
+    // Aguarda até o horário agendado (só se não for --post manual)
+    if (!postArg && post.hora) {
+      const agora = new Date();
+      const alvo = new Date();
+      alvo.setHours(post.hora, 0, 0, 0);
+      const espera = alvo.getTime() - agora.getTime();
+      if (espera > 60000) { // só espera se faltam mais de 1 minuto
+        console.log(`\n⏳ Aguardando horário do post ${post.n} (${post.hora}h)...`);
+        await new Promise(r => setTimeout(r, espera));
+      }
+    }
+
+    console.log(`\n▶ Post ${post.n}/3 (${post.hora}h): ${post.tema}`);
 
     try {
       await publicarPost(post.n, post.tema, post.angulo, post.fonte || '');
@@ -241,18 +221,10 @@ async function main() {
       console.error(`  ✗ Falhou: ${err.message}`);
       await tg(`❌ Post ${post.n} falhou: ${err.message}`);
     }
-
-    // Aguarda 90min antes do próximo (exceto no último)
-    if (i < postsFiltrados.length - 1) {
-      const proxHora = new Date(Date.now() + INTERVALO_MS);
-      console.log(`\n⏳ Próximo post às ${proxHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}...`);
-      await tg(`⏳ Post ${post.n} publicado. Próximo em 90 minutos.`);
-      await new Promise(r => setTimeout(r, INTERVALO_MS));
-    }
   }
 
   console.log('\n🎉 Rotina do dia concluída!');
-  await tg(`🎉 Rotina concluída!\n${postsFiltrados.length} posts publicados hoje.`);
+  await tg(`🎉 Rotina concluída!\n${postsFiltrados.length}/3 posts publicados hoje.`);
 }
 
 main().catch(async err => {

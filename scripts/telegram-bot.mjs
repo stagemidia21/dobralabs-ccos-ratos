@@ -57,64 +57,55 @@ function gerarPauta(referencias) {
       ).join('\n')}\n\nNOTÍCIAS:\n${referencias.noticias.map(n => `• ${n.titulo}`).join('\n')}`
     : '';
 
-  const prompt = `Pauta do @homero.ads (Stage Mídia). Linha editorial: IA aplicada a negócios, tráfego pago, automação para empresários e donos de negócio. Tom: técnico, direto.
+  const prompt = `Pauta do @homero.ads (Stage Mídia). Linha editorial: IA aplicada a negócios, tráfego pago, automação para empresários. Tom: técnico, direto, sem coach.
 Hoje: ${hoje}
 ${refsTexto}
 
-Gere APENAS a pauta com 6 CARROSSÉIS VÍDEO (sem texto antes ou depois). Todos são carrossel vídeo — sem feed, sem story, sem imagem estática.
+Gere EXATAMENTE 3 CARROSSEIS VÍDEO — os 3 melhores do dia. Sem feed, sem story.
 
-POST 1 | CARROSSEL VÍDEO
-Tema: [tema direto, max 80 chars]
-Ângulo: [como abordar — diferente dos concorrentes, max 150 chars]
+POST 1 | CARROSSEL VÍDEO — 7h
+Tema: [max 80 chars]
+Ângulo: [abordagem específica, max 200 chars]
+Fonte: [veículo e data ou "Stage Mídia"]
 
-POST 2 | CARROSSEL VÍDEO
+POST 2 | CARROSSEL VÍDEO — 12h
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
-POST 3 | CARROSSEL VÍDEO
+POST 3 | CARROSSEL VÍDEO — 18h
 Tema: ...
 Ângulo: ...
+Fonte: ...
 
-POST 4 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-
-POST 5 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-
-POST 6 | CARROSSEL VÍDEO
-Tema: ...
-Ângulo: ...
-
-Regras: pelo menos 1 sobre Claude/IA, pelo menos 1 baseado em notícia do dia, ângulos diferentes entre si, foco em empresário (não em dev ou gestor de tráfego iniciante).`;
+Regras: ângulos diferentes entre si, pelo menos 1 baseado em notícia do dia, foco em resultado prático para empresário.`;
 
   return callClaude(prompt, 120000);
 }
 
 function parsePauta(pauta) {
+  const HORARIOS = [7, 12, 18];
   const posts = [];
-  for (let n = 1; n <= 6; n++) {
+  for (let n = 1; n <= 3; n++) {
     const linhas = pauta.split('\n');
     const idx = linhas.findIndex(l => l.match(new RegExp(`POST ${n}\\s*\\|`)));
     if (idx === -1) continue;
     const bloco = linhas.slice(idx, idx + 8).join('\n');
     const tema   = (bloco.match(/Tema:\s*(.+)/) || [])[1]?.trim() || `Post ${n}`;
     const angulo = (bloco.match(/Ângulo:\s*(.+)/) || [])[1]?.trim() || '';
-    posts.push({ n, tema, angulo });
+    const fonte  = (bloco.match(/Fonte:\s*(.+)/) || [])[1]?.trim() || 'Stage Mídia';
+    posts.push({ n, tema, angulo, fonte, hora: HORARIOS[n - 1] });
   }
   return posts;
 }
 
 // ─── EXECUTA CARROSSEL VÍA gerar-e-publicar.mjs (em background) ──────────────
 
-function rodarCarrossel(n, tema, angulo) {
+function rodarCarrossel(n, tema, angulo, fonte = '') {
   const script = path.join(ROOT, 'scripts/gerar-e-publicar.mjs');
-  const proc = spawn(
-    'node',
-    [script, '--tema', tema, '--angulo', angulo, '--num', String(n)],
-    { cwd: ROOT, stdio: 'ignore', detached: true }
-  );
+  const args = [script, '--tema', tema, '--angulo', angulo, '--num', String(n)];
+  if (fonte) args.push('--fonte', fonte);
+  const proc = spawn('node', args, { cwd: ROOT, stdio: 'ignore', detached: true });
   proc.unref();
 }
 
@@ -200,11 +191,10 @@ bot.command('pauta', async (ctx) => {
 
     await sendLong(ctx, pauta);
     await ctx.reply(
-      `Aprova? Use /aprovar N pra rodar um post ou "✅ Aprovar tudo" pra rodar os 6.\n\nCada post: Claude gera → Remotion renderiza → publica em todas as redes.`,
+      `Aprova? Use /aprovar N pra rodar um post ou "✅ Aprovar tudo" pra rodar os 3.\n\nCada post: Claude gera → Remotion renderiza → publica em todas as redes.`,
       Markup.keyboard([
         ['✅ Aprovar tudo', '🔄 Refazer pauta'],
         ['/aprovar 1', '/aprovar 2', '/aprovar 3'],
-        ['/aprovar 4', '/aprovar 5', '/aprovar 6'],
       ]).resize()
     );
   } catch (err) {
@@ -220,34 +210,33 @@ bot.command('aprovar', async (ctx) => {
   if (!s.pauta || !s.posts?.length) return ctx.reply('Rode /pauta primeiro.');
 
   const n = parseInt(ctx.message.text.split(' ')[1]);
-  if (!n || n < 1 || n > 6) return ctx.reply('Use: /aprovar 1 a 6');
+  if (!n || n < 1 || n > 3) return ctx.reply('Use: /aprovar 1, 2 ou 3');
 
   const post = s.posts.find(p => p.n === n);
   if (!post) return ctx.reply(`Post ${n} não encontrado na pauta.`);
 
   await ctx.reply(
-    `🎬 Post ${n} em produção:\n${post.tema}\n\nRodando Remotion... você recebe update aqui quando publicar (~5-8min).`
+    `🎬 Post ${n} (${post.hora}h) em produção:\n${post.tema}\n\nRodando Remotion... ~5-8min.`
   );
 
-  rodarCarrossel(n, post.tema, post.angulo);
+  rodarCarrossel(n, post.tema, post.angulo, post.fonte || '');
 });
 
-// Aprovar tudo — dispara os 6 em sequência no background
+// Aprovar tudo — dispara os 3 em sequência no background
 bot.hears('✅ Aprovar tudo', async (ctx) => {
   if (!isAuthorized(ctx)) return;
   const s = getState(ctx.chat.id);
   if (!s.pauta || !s.posts?.length) return ctx.reply('Rode /pauta primeiro.');
 
   await ctx.reply(
-    `🚀 Disparando os 6 carrosseis em produção.\n\nCada um vai notificar aqui quando publicar. Isso leva ~30-45min no total.`,
+    `🚀 Disparando os 3 carrosseis em produção.\n\nCada um notifica aqui quando publicar. ~15-20min no total.`,
     Markup.keyboard([['📅 /pauta — Nova busca'], ['📊 /status']]).resize()
   );
 
-  // Dispara em sequência com delay entre cada um pra não sobrecarregar
   setImmediate(async () => {
     for (const post of s.posts) {
-      rodarCarrossel(post.n, post.tema, post.angulo);
-      await new Promise(r => setTimeout(r, 5000)); // 5s entre cada disparo
+      rodarCarrossel(post.n, post.tema, post.angulo, post.fonte || '');
+      await new Promise(r => setTimeout(r, 5000));
     }
   });
 });
