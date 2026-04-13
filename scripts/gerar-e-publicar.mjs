@@ -201,12 +201,12 @@ Títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body
 async function uploadSlide(filePath, filename) {
   const r = await fetch(`${BASE_URL}/v1/media/create-upload-url`, {
     method: 'POST', headers: authHeaders,
-    body: JSON.stringify({ file_name: filename, content_type: 'video/mp4' }),
+    body: JSON.stringify({ file_name: filename, content_type: 'image/jpeg' }),
   });
   if (!r.ok) throw new Error(`Upload URL falhou: ${await r.text()}`);
   const { upload_url, media_url } = await r.json();
   const putR = await fetch(upload_url, {
-    method: 'PUT', headers: { 'Content-Type': 'video/mp4' },
+    method: 'PUT', headers: { 'Content-Type': 'image/jpeg' },
     body: fs.readFileSync(filePath),
   });
   if (!putR.ok) throw new Error(`PUT falhou: ${putR.status}`);
