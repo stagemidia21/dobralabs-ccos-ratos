@@ -101,6 +101,51 @@ function callClaude(prompt, timeout = 180000) {
   }).trim();
 }
 
+// ─── NANO BANANA — Gemini Imagen capa ────────────────────────────────────────
+
+const GEMINI_KEY = process.env.GEMINI_API_KEY;
+
+function gerarPromptImagem(tema, angulo) {
+  // SCDS: Subject · Context · Details · Style
+  const temaLimpo = tema.replace(/[^\w\s]/gi, '').slice(0, 80);
+  return `Cinematic dark background image for a social media post about: "${temaLimpo}".
+Context: digital marketing, artificial intelligence applied to business, paid traffic.
+Details: abstract technology elements, circuit patterns, soft digital glow, deep shadows, no text, no people, no faces, no logos.
+Style: ultra dark, deep navy and black tones, minimal accent light in electric blue or white, premium corporate aesthetic, ultra high detail, 4K, photorealistic, full bleed portrait.
+Aspect ratio: 9:16 vertical portrait.`;
+}
+
+async function gerarImagemCapa(tema, angulo, numPost) {
+  if (!GEMINI_KEY) {
+    console.log('  ⚠ GEMINI_API_KEY não configurada — usando fundo do banco');
+    return null;
+  }
+
+  const prompt = gerarPromptImagem(tema, angulo);
+
+  const r = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${GEMINI_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        instances: [{ prompt }],
+        parameters: { sampleCount: 1, aspectRatio: '9:16', personGeneration: 'DONT_ALLOW' },
+      }),
+    }
+  );
+
+  const data = await r.json();
+  if (data.error) throw new Error(`Gemini Imagen: ${JSON.stringify(data.error)}`);
+
+  const b64 = data.predictions?.[0]?.bytesBase64Encoded;
+  if (!b64) throw new Error('Gemini não retornou imagem');
+
+  const imgPath = path.join(FUNDOS_DIR, `capa-post-${numPost}.jpg`);
+  fs.writeFileSync(imgPath, Buffer.from(b64, 'base64'));
+  return `fundos/capa-post-${numPost}.jpg`;
+}
+
 async function sendTelegram(text) {
   if (!BOT_TOKEN || !CHAT_ID) return;
   for (const chunk of (text.match(/[\s\S]{1,4000}/g) || [text])) {
@@ -420,8 +465,16 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   dados = humanizarJSON(dados);
   console.log(`  ✓ Humanizado`);
 
-  // 2. Cria JSX
-  const foto = escolherFoto(tema, numPost);
+  // 2. Gera imagem da capa com Gemini (nano banana)
+  let foto = escolherFoto(tema, numPost);
+  try {
+    process.stdout.write('  Gerando capa com Gemini... ');
+    const capaGerada = await gerarImagemCapa(tema, angulo, numPost);
+    if (capaGerada) { foto = capaGerada; console.log('OK'); }
+    else console.log('fallback banco');
+  } catch (err) {
+    console.log(`fallback banco (${err.message.slice(0, 60)})`);
+  }
   registrarUso(foto);
   const jsx = gerarJSX(compId, foto, dados.slides);
   const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
