@@ -1,0 +1,28 @@
+{
+  "data": "Mon Apr 13 2026",
+  "gerado_em": "2026-04-13T11:38:45.291Z",
+  "posts": [
+    {
+      "n": 1,
+      "tema": "** Agente de IA no WhatsApp: o dono que dorme e o lead que converte",
+      "angulo": "** Como empresários locais estão configurando agentes de atendimento no WhatsApp que qualificam leads, respondem objeções e agendam consultas sem nenhuma intervenção humana — enquanto o dono está em reunião ou fora do horário. Não é automação de resposta automática do \"Olá, como posso ajudar?\". É qualificação real com contexto do negócio. Dado no centro: tempo médio de resposta é o principal fator de conversão em vendas via WhatsApp para PME.",
+      "fonte": "** Stage Mídia",
+      "hora": 7
+    },
+    {
+      "n": 2,
+      "tema": "** O Google mudou o que aparece antes do seu anúncio. Isso afeta você.",
+      "angulo": "** AI Overviews do Google estão ocupando o topo das páginas de busca em queries comerciais, empurrando anúncios e resultados orgânicos para baixo. O impacto direto: custo por clique aumentando em categorias onde a IA \"resolve\" a pergunta na própria SERP. O que o gestor de tráfego pago precisa ajustar agora — segmentação, intenção de busca e copy de anúncio — para não pagar mais pelo mesmo resultado.",
+      "fonte": "** The Keyword (Google), 13/04/2026",
+      "hora": 12
+    },
+    {
+      "n": 3,
+      "tema": "** Você usa IA pra produzir mais. O concorrente usa pra decidir melhor.",
+      "angulo": "** A maioria dos gestores usa IA como ferramenta de execução: gerar copy, criar criativo, resumir relatório. Poucos usam como ferramenta de análise: identificar padrão de saturação de público antes da queda de resultado, detectar fadiga de criativo pelos dados antes do CPM explodir, prever qual campanha vai canibalizar a outra. Essa distinção — IA pra velocidade vs. IA pra decisão — é o que vai separar resultado mediano de vantagem competitiva real em 2026.",
+      "fonte": "** Stage Mídia",
+      "hora": 18
+    }
+  ],
+  "texto": "Histórico verificado. Tópicos já cobertos nos últimos 14 dias: vazamento do Claude Code, automação de conteúdo do terminal ao post, vibe coding, Gemma4. Evitados nos 3 abaixo.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n\n**Tema:** Agente de IA no WhatsApp: o dono que dorme e o lead que converte\n\n**Ângulo:** Como empresários locais estão configurando agentes de atendimento no WhatsApp que qualificam leads, respondem objeções e agendam consultas sem nenhuma intervenção humana — enquanto o dono está em reunião ou fora do horário. Não é automação de resposta automática do \"Olá, como posso ajudar?\". É qualificação real com contexto do negócio. Dado no centro: tempo médio de resposta é o principal fator de conversão em vendas via WhatsApp para PME.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n\n**Tema:** O Google mudou o que aparece antes do seu anúncio. Isso afeta você.\n\n**Ângulo:** AI Overviews do Google estão ocupando o topo das páginas de busca em queries comerciais, empurrando anúncios e resultados orgânicos para baixo. O impacto direto: custo por clique aumentando em categorias onde a IA \"resolve\" a pergunta na própria SERP. O que o gestor de tráfego pago precisa ajustar agora — segmentação, intenção de busca e copy de anúncio — para não pagar mais pelo mesmo resultado.\n\n**Fonte:** The Keyword (Google), 13/04/2026\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n\n**Tema:** Você usa IA pra produzir mais. O concorrente usa pra decidir melhor.\n\n**Ângulo:** A maioria dos gestores usa IA como ferramenta de execução: gerar copy, criar criativo, resumir relatório. Poucos usam como ferramenta de análise: identificar padrão de saturação de público antes da queda de resultado, detectar fadiga de criativo pelos dados antes do CPM explodir, prever qual campanha vai canibalizar a outra. Essa distinção — IA pra velocidade vs. IA pra decisão — é o que vai separar resultado mediano de vantagem competitiva real em 2026.\n\n**Fonte:** Stage Mídia\n\n---\n\nQuer que eu execute algum dos 3 agora via `/roteiro-post`?"
+}
