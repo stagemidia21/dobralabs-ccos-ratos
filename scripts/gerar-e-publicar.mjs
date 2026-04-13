@@ -239,7 +239,7 @@ async function publicarThreads(tokens, mediaUrls, legenda) {
   for (const url of mediaUrls) {
     const r = await fetch(`${API}/${userId}/threads`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ media_type: 'VIDEO', video_url: url, is_carousel_item: true, access_token: token }),
+      body: JSON.stringify({ media_type: 'IMAGE', image_url: url, is_carousel_item: true, access_token: token }),
     });
     const d = await r.json();
     if (d.error) throw new Error(`Threads container falhou: ${JSON.stringify(d.error)}`);
@@ -290,14 +290,24 @@ async function publicarFacebook(tokens, mediaUrls, legenda) {
   const { fb: token, fbId: pageId } = tokens;
   const API = 'https://graph.facebook.com/v19.0';
 
-  // Facebook: envia como reel/video (carousel de vídeo não é suportado da mesma forma)
-  // Usa o primeiro slide como vídeo principal
-  const r = await fetch(`${API}/${pageId}/videos`, {
+  // Carrossel de imagem no Facebook: upload individual + post multi-foto
+  const photoIds = [];
+  for (const url of mediaUrls) {
+    const r = await fetch(`${API}/${pageId}/photos`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url, published: false, access_token: token }),
+    });
+    const d = await r.json();
+    if (d.error) throw new Error(`Facebook foto falhou: ${JSON.stringify(d.error)}`);
+    photoIds.push({ media_fbid: d.id });
+  }
+
+  const r = await fetch(`${API}/${pageId}/feed`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ file_url: mediaUrls[0], description: legenda, access_token: token }),
+    body: JSON.stringify({ message: legenda, attached_media: photoIds, access_token: token }),
   });
   const d = await r.json();
-  if (d.error) throw new Error(`Facebook video falhou: ${JSON.stringify(d.error)}`);
+  if (d.error) throw new Error(`Facebook post falhou: ${JSON.stringify(d.error)}`);
   return d.id;
 }
 
@@ -329,13 +339,13 @@ async function publicarInstagramDireto(mediaUrls, legenda) {
   const IG_USER_ID = '26285906407703501';
   const IG_API = 'https://graph.instagram.com';
 
-  // 1. Cria containers de vídeo
+  // 1. Cria containers de imagem
   console.log('  Criando containers no Instagram...');
   const containerIds = [];
   for (let i = 0; i < mediaUrls.length; i++) {
     const r = await fetch(`${IG_API}/${IG_USER_ID}/media`, {
       method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ media_type: 'VIDEO', video_url: mediaUrls[i], is_carousel_item: 'true', access_token: token }),
+      body: JSON.stringify({ image_url: mediaUrls[i], is_carousel_item: 'true', access_token: token }),
     });
     const d = await r.json();
     if (d.error) throw new Error(`Container ${i+1} falhou: ${JSON.stringify(d.error)}`);
@@ -343,12 +353,12 @@ async function publicarInstagramDireto(mediaUrls, legenda) {
     process.stdout.write(`    Container ${i+1}/${mediaUrls.length} OK\n`);
   }
 
-  // 2. Aguarda todos ficarem FINISHED
+  // 2. Imagem não precisa de polling — mas mantemos curto pra garantir
   console.log('  Aguardando processamento...');
   for (const id of containerIds) {
     const start = Date.now();
-    while (Date.now() - start < 120000) {
-      await new Promise(r => setTimeout(r, 5000));
+    while (Date.now() - start < 30000) {
+      await new Promise(r => setTimeout(r, 3000));
       const r = await fetch(`${IG_API}/${id}?fields=status_code&access_token=${token}`);
       const d = await r.json();
       if (d.status_code === 'FINISHED') break;
@@ -434,23 +444,21 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     console.log(`  ✓ Registrado no Root.jsx`);
   }
 
-  // 4. Renderiza os slides
-  const FRAMES_PER_SLIDE = 300; // 10s × 30fps
+  // 4. Renderiza os slides como imagem estática (remotion still)
+  const FRAMES_PER_SLIDE = 300; // 10s × 30fps — usado só pra calcular frame do meio
   const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
-  console.log('  Renderizando slides...');
+  console.log('  Renderizando slides (imagem)...');
   for (let i = 0; i < dados.slides.length; i++) {
-    const start = i * FRAMES_PER_SLIDE;
-    const end = start + FRAMES_PER_SLIDE - 1;
+    const frameDoMeio = i * FRAMES_PER_SLIDE + Math.floor(FRAMES_PER_SLIDE / 2);
     const num = String(i + 1).padStart(2, '0');
-    const outFile = path.join(slidesDir, `slide-${num}.mp4`);
+    const outFile = path.join(slidesDir, `slide-${num}.jpg`);
     const outFileWin = outFile.replace(/\//g, '\\');
-    const cmd = `"${remotionBin}" render ${compId} "${outFileWin}" --frames=${start}-${end} --concurrency=1 --log=error --video-bitrate-in-kbps=3000`;
+    const cmd = `"${remotionBin}" still ${compId} "${outFileWin}" --frame=${frameDoMeio} --image-format=jpeg --jpeg-quality=90 --log=error`;
 
     let tentativa = 0;
     while (tentativa < 3) {
       try {
         process.stdout.write(`    Slide ${num}${tentativa > 0 ? ` (retry ${tentativa})` : ''}... `);
-        // Pausa antes de retry pra liberar memória
         if (tentativa > 0) await new Promise(r => setTimeout(r, 3000 * tentativa));
         execSync(cmd, { cwd: REMOTION_DIR, stdio: 'pipe', shell: true });
         console.log('OK');
@@ -465,7 +473,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
 
   // 5. Upload + publicar
   console.log('  Publicando...');
-  const slides = fs.readdirSync(slidesDir).filter(f => f.endsWith('.mp4')).sort();
+  const slides = fs.readdirSync(slidesDir).filter(f => f.endsWith('.jpg')).sort();
   const mediaUrls = [];
   for (const s of slides) {
     process.stdout.write(`    Upload ${s}... `);
@@ -519,7 +527,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   // Limpa MP4s do post após publicar — libera disco
   try {
     fs.rmSync(slidesDir, { recursive: true, force: true });
-    console.log(`  🗑 MP4s removidos (${slidesDir})`);
+    console.log(`  🗑 Slides removidos (${slidesDir})`);
   } catch(e) { console.log(`  ⚠ Limpeza: ${e.message}`); }
 
   console.log(`  ✅ Post ${numPost} concluído!`);
