@@ -130,7 +130,7 @@ async function gerarImagemCapa(tema, angulo, numPost) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseModalities: ['IMAGE', 'TEXT'], responseMimeType: 'image/jpeg' },
+        generationConfig: { responseModalities: ['TEXT', 'IMAGE'] },
       }),
     }
   );
