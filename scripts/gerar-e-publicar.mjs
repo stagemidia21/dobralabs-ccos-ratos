@@ -101,65 +101,6 @@ function callClaude(prompt, timeout = 180000) {
   }).trim();
 }
 
-// ─── NANO BANANA — Gemini Imagen capa ────────────────────────────────────────
-
-const GEMINI_KEY = process.env.GEMINI_API_KEY;
-
-function gerarPromptImagem(tema, angulo) {
-  const t = (tema + ' ' + angulo).toLowerCase();
-
-  let cena;
-  if (t.includes('whatsapp') || t.includes('chat') || t.includes('mensagem') || t.includes('atendimento')) {
-    cena = 'macro close-up of a smartphone screen glowing in complete darkness, chat conversation interface visible on screen, placed flat on a dark textured concrete surface, single narrow LED strip backlighting, extreme shallow depth of field, creamy bokeh';
-  } else if (t.includes('google') || t.includes('tráfego') || t.includes('anúncio') || t.includes('campanha') || t.includes('ads')) {
-    cena = 'ultra-sharp close-up of an open MacBook Pro showing colorful analytics dashboard with bar charts, placed on dark oak desk, single directional side light, keyboard in soft foreground blur, deep dark background';
-  } else if (t.includes('meta') || t.includes('facebook') || t.includes('instagram') || t.includes('feed') || t.includes('redes sociais')) {
-    cena = 'premium smartphone floating above a reflective dark surface showing a glowing social media feed, dark studio with single cool rim light, dramatic shadows, perfect vertical composition';
-  } else if (t.includes('automação') || t.includes('automatizar') || t.includes('agente') || t.includes('bot')) {
-    cena = 'close-up of server rack LED status lights glowing in dark data center, green and blue indicator lights, rack-mounted hardware in deep focus, cinematic fog effect, single dramatic backlight';
-  } else if (t.includes('relatório') || t.includes('performance') || t.includes('resultado') || t.includes('métrica') || t.includes('dado')) {
-    cena = 'close-up of a premium tablet showing data visualization charts on dark marble desk, single soft studio spotlight from above, glass and minimalist objects in soft focus beside it, luxury feel';
-  } else if (t.includes('ia') || t.includes('inteligência') || t.includes('claude') || t.includes('gpt') || t.includes('modelo')) {
-    cena = 'dark minimalist desk with ultrawide monitor displaying terminal code with syntax highlighting, subtle monitor backlight glow, cable management visible, single side window light at night';
-  } else if (t.includes('custo') || t.includes('dinheiro') || t.includes('receita') || t.includes('lucro') || t.includes('financeiro')) {
-    cena = 'close-up of a premium mechanical keyboard with a smartphone beside it showing a financial chart, dark wood grain desk, single warm key light from above, selective focus, luxury dark lifestyle';
-  } else {
-    cena = 'dark premium home office desk setup, glowing MacBook Air screen, low-key single source lighting, desktop organization visible, professional minimalist aesthetic, depth of field blur on foreground elements';
-  }
-
-  return `RAW photo, ultra-realistic DSLR photograph, ${cena}. Shot on Canon EOS R5 mirrorless camera, 85mm f/1.4 prime lens at f/2.0, ISO 800. Cinematic dark color grading, deep rich blacks, subtle highlight contrast. No people, no faces, no text, no watermarks, no logos anywhere. 9:16 vertical portrait aspect ratio. Photorealistic, 8K resolution, tack sharp main subject.`;
-}
-
-async function gerarImagemCapa(tema, angulo, numPost) {
-  const TOGETHER_KEY = process.env.TOGETHER_API_KEY;
-  if (!TOGETHER_KEY) throw new Error('TOGETHER_API_KEY não configurada');
-
-  const prompt = gerarPromptImagem(tema, angulo);
-
-  const r = await fetch('https://api.together.xyz/v1/images/generations', {
-    method: 'POST',
-    headers: { 'Authorization': `Bearer ${TOGETHER_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'black-forest-labs/FLUX.1-schnell-Free',
-      prompt,
-      width: 1080,
-      height: 1920,
-      steps: 4,
-      n: 1,
-      response_format: 'b64_json',
-    }),
-  });
-
-  const data = await r.json();
-  if (data.error) throw new Error(`Together: ${JSON.stringify(data.error)}`);
-
-  const b64 = data.data?.[0]?.b64_json;
-  if (!b64) throw new Error('Together não retornou imagem');
-
-  const imgPath = path.join(FUNDOS_DIR, `capa-post-${numPost}.jpg`);
-  fs.writeFileSync(imgPath, Buffer.from(b64, 'base64'));
-  return `fundos/capa-post-${numPost}.jpg`;
-}
 
 async function sendTelegram(text) {
   if (!BOT_TOKEN || !CHAT_ID) return;
@@ -480,16 +421,8 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   dados = humanizarJSON(dados);
   console.log(`  ✓ Humanizado`);
 
-  // 2. Gera imagem da capa com Gemini (nano banana)
-  let foto = escolherFoto(tema, numPost);
-  try {
-    process.stdout.write('  Gerando capa com Gemini... ');
-    const capaGerada = await gerarImagemCapa(tema, angulo, numPost);
-    if (capaGerada) { foto = capaGerada; console.log('OK'); }
-    else console.log('fallback banco');
-  } catch (err) {
-    console.log(`fallback banco (${err.message.slice(0, 60)})`);
-  }
+  // 2. Escolhe fundo do banco de fotos
+  const foto = escolherFoto(tema, numPost);
   registrarUso(foto);
   const jsx = gerarJSX(compId, foto, dados.slides);
   const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
