@@ -124,22 +124,24 @@ async function gerarImagemCapa(tema, angulo, numPost) {
   const prompt = gerarPromptImagem(tema, angulo);
 
   const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-001:predict?key=${GEMINI_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-preview-image-generation:generateContent?key=${GEMINI_KEY}`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        instances: [{ prompt }],
-        parameters: { sampleCount: 1, aspectRatio: '9:16', personGeneration: 'DONT_ALLOW' },
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { responseModalities: ['IMAGE', 'TEXT'], responseMimeType: 'image/jpeg' },
       }),
     }
   );
 
   const data = await r.json();
-  if (data.error) throw new Error(`Gemini Imagen: ${JSON.stringify(data.error)}`);
+  if (data.error) throw new Error(`Gemini: ${JSON.stringify(data.error)}`);
 
-  const b64 = data.predictions?.[0]?.bytesBase64Encoded;
-  if (!b64) throw new Error('Gemini não retornou imagem');
+  const parts = data.candidates?.[0]?.content?.parts || [];
+  const imgPart = parts.find(p => p.inlineData?.mimeType?.startsWith('image/'));
+  if (!imgPart) throw new Error('Gemini não retornou imagem');
+  const b64 = imgPart.inlineData.data;
 
   const imgPath = path.join(FUNDOS_DIR, `capa-post-${numPost}.jpg`);
   fs.writeFileSync(imgPath, Buffer.from(b64, 'base64'));
