@@ -116,35 +116,17 @@ Aspect ratio: 9:16 vertical portrait.`;
 }
 
 async function gerarImagemCapa(tema, angulo, numPost) {
-  if (!GEMINI_KEY) {
-    console.log('  ⚠ GEMINI_API_KEY não configurada — usando fundo do banco');
-    return null;
-  }
-
   const prompt = gerarPromptImagem(tema, angulo);
+  const encoded = encodeURIComponent(prompt);
+  const seed = Date.now() % 99999;
+  const url = `https://image.pollinations.ai/prompt/${encoded}?width=1080&height=1920&model=flux&seed=${seed}&nologo=true&enhance=true`;
 
-  const r = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseModalities: ['TEXT', 'IMAGE'] },
-      }),
-    }
-  );
+  const r = await fetch(url, { redirect: 'follow' });
+  if (!r.ok) throw new Error(`Pollinations: ${r.status}`);
 
-  const data = await r.json();
-  if (data.error) throw new Error(`Gemini: ${JSON.stringify(data.error)}`);
-
-  const parts = data.candidates?.[0]?.content?.parts || [];
-  const imgPart = parts.find(p => p.inlineData?.mimeType?.startsWith('image/'));
-  if (!imgPart) throw new Error('Gemini não retornou imagem');
-  const b64 = imgPart.inlineData.data;
-
+  const buffer = Buffer.from(await r.arrayBuffer());
   const imgPath = path.join(FUNDOS_DIR, `capa-post-${numPost}.jpg`);
-  fs.writeFileSync(imgPath, Buffer.from(b64, 'base64'));
+  fs.writeFileSync(imgPath, buffer);
   return `fundos/capa-post-${numPost}.jpg`;
 }
 
