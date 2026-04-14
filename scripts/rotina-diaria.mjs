@@ -120,7 +120,18 @@ Regras:
 - NUNCA repetir tema de posts já publicados nos últimos 14 dias
 - Foco em resultado prático para empresário, nunca teoria`;
 
-  return callClaude(prompt, 120000);
+  // Retry até 3x — Claude CLI pode dar ETIMEDOUT intermitente
+  for (let t = 1; t <= 3; t++) {
+    try {
+      if (t > 1) {
+        console.log(`  (retry ${t - 1} pauta...)`);
+        execSync(`node -e "setTimeout(()=>{},${8000 * t})"`, { shell: true });
+      }
+      return callClaude(prompt, t === 3 ? 300000 : 240000);
+    } catch (err) {
+      if (t >= 3) throw err;
+    }
+  }
 }
 
 // Horários fixos de publicação: 7h, 12h, 18h
