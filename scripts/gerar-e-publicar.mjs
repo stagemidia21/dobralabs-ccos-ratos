@@ -131,17 +131,33 @@ function gerarPromptImagem(tema, angulo) {
 }
 
 async function gerarImagemCapa(tema, angulo, numPost) {
+  const TOGETHER_KEY = process.env.TOGETHER_API_KEY;
+  if (!TOGETHER_KEY) throw new Error('TOGETHER_API_KEY não configurada');
+
   const prompt = gerarPromptImagem(tema, angulo);
-  const encoded = encodeURIComponent(prompt);
-  const seed = Date.now() % 99999;
-  const url = `https://image.pollinations.ai/prompt/${encoded}?width=1080&height=1920&model=flux&seed=${seed}&nologo=true&enhance=true`;
 
-  const r = await fetch(url, { redirect: 'follow' });
-  if (!r.ok) throw new Error(`Pollinations: ${r.status}`);
+  const r = await fetch('https://api.together.xyz/v1/images/generations', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${TOGETHER_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'black-forest-labs/FLUX.1-schnell-Free',
+      prompt,
+      width: 1080,
+      height: 1920,
+      steps: 4,
+      n: 1,
+      response_format: 'b64_json',
+    }),
+  });
 
-  const buffer = Buffer.from(await r.arrayBuffer());
+  const data = await r.json();
+  if (data.error) throw new Error(`Together: ${JSON.stringify(data.error)}`);
+
+  const b64 = data.data?.[0]?.b64_json;
+  if (!b64) throw new Error('Together não retornou imagem');
+
   const imgPath = path.join(FUNDOS_DIR, `capa-post-${numPost}.jpg`);
-  fs.writeFileSync(imgPath, buffer);
+  fs.writeFileSync(imgPath, Buffer.from(b64, 'base64'));
   return `fundos/capa-post-${numPost}.jpg`;
 }
 
