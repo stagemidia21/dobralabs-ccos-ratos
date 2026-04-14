@@ -106,27 +106,28 @@ function callClaude(prompt, timeout = 180000) {
 const GEMINI_KEY = process.env.GEMINI_API_KEY;
 
 function gerarPromptImagem(tema, angulo) {
-  const raw = callClaude(
-    `You are an expert AI image prompt engineer for FLUX photorealistic models.
-Create a single ultra-realistic photography prompt for this social media post background.
+  const t = (tema + ' ' + angulo).toLowerCase();
 
-Post theme: "${tema}"
-Post angle: "${angulo}"
+  let cena;
+  if (t.includes('whatsapp') || t.includes('chat') || t.includes('mensagem') || t.includes('atendimento')) {
+    cena = 'macro close-up of a smartphone screen glowing in complete darkness, chat conversation interface visible on screen, placed flat on a dark textured concrete surface, single narrow LED strip backlighting, extreme shallow depth of field, creamy bokeh';
+  } else if (t.includes('google') || t.includes('tráfego') || t.includes('anúncio') || t.includes('campanha') || t.includes('ads')) {
+    cena = 'ultra-sharp close-up of an open MacBook Pro showing colorful analytics dashboard with bar charts, placed on dark oak desk, single directional side light, keyboard in soft foreground blur, deep dark background';
+  } else if (t.includes('meta') || t.includes('facebook') || t.includes('instagram') || t.includes('feed') || t.includes('redes sociais')) {
+    cena = 'premium smartphone floating above a reflective dark surface showing a glowing social media feed, dark studio with single cool rim light, dramatic shadows, perfect vertical composition';
+  } else if (t.includes('automação') || t.includes('automatizar') || t.includes('agente') || t.includes('bot')) {
+    cena = 'close-up of server rack LED status lights glowing in dark data center, green and blue indicator lights, rack-mounted hardware in deep focus, cinematic fog effect, single dramatic backlight';
+  } else if (t.includes('relatório') || t.includes('performance') || t.includes('resultado') || t.includes('métrica') || t.includes('dado')) {
+    cena = 'close-up of a premium tablet showing data visualization charts on dark marble desk, single soft studio spotlight from above, glass and minimalist objects in soft focus beside it, luxury feel';
+  } else if (t.includes('ia') || t.includes('inteligência') || t.includes('claude') || t.includes('gpt') || t.includes('modelo')) {
+    cena = 'dark minimalist desk with ultrawide monitor displaying terminal code with syntax highlighting, subtle monitor backlight glow, cable management visible, single side window light at night';
+  } else if (t.includes('custo') || t.includes('dinheiro') || t.includes('receita') || t.includes('lucro') || t.includes('financeiro')) {
+    cena = 'close-up of a premium mechanical keyboard with a smartphone beside it showing a financial chart, dark wood grain desk, single warm key light from above, selective focus, luxury dark lifestyle';
+  } else {
+    cena = 'dark premium home office desk setup, glowing MacBook Air screen, low-key single source lighting, desktop organization visible, professional minimalist aesthetic, depth of field blur on foreground elements';
+  }
 
-Rules:
-- Ultra-realistic, indistinguishable from professional DSLR photography
-- NO people, NO faces, NO text, NO logos in the image
-- Scene must relate to the post theme (WhatsApp → smartphone close-up, Google Ads → dashboard on screen, automation → server/code, AI business → laptop + data)
-- Dark, premium, moody atmosphere — black and deep tones dominate
-- Specify camera body, lens, aperture (e.g. "Canon EOS R5, 85mm f/1.4, f/2.0")
-- Specify lighting (e.g. "single key light", "neon accent", "window light at dusk")
-- 9:16 vertical portrait format
-- End with: "no people, no text, no watermarks, ultra sharp, 8K"
-
-Return ONLY the prompt in English. No explanation. No quotes.`,
-    40000
-  );
-  return raw.trim().split('\n')[0]; // só a primeira linha, sem explicação
+  return `RAW photo, ultra-realistic DSLR photograph, ${cena}. Shot on Canon EOS R5 mirrorless camera, 85mm f/1.4 prime lens at f/2.0, ISO 800. Cinematic dark color grading, deep rich blacks, subtle highlight contrast. No people, no faces, no text, no watermarks, no logos anywhere. 9:16 vertical portrait aspect ratio. Photorealistic, 8K resolution, tack sharp main subject.`;
 }
 
 async function gerarImagemCapa(tema, angulo, numPost) {
