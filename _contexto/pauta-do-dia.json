@@ -1,28 +1,28 @@
 {
-  "data": "Mon Apr 13 2026",
-  "gerado_em": "2026-04-13T11:38:45.291Z",
+  "data": "Tue Apr 14 2026",
+  "gerado_em": "2026-04-14T03:47:14.848Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** Agente de IA no WhatsApp: o dono que dorme e o lead que converte",
-      "angulo": "** Como empresários locais estão configurando agentes de atendimento no WhatsApp que qualificam leads, respondem objeções e agendam consultas sem nenhuma intervenção humana — enquanto o dono está em reunião ou fora do horário. Não é automação de resposta automática do \"Olá, como posso ajudar?\". É qualificação real com contexto do negócio. Dado no centro: tempo médio de resposta é o principal fator de conversão em vendas via WhatsApp para PME.",
-      "fonte": "** Stage Mídia",
+      "tema": "** OpenAI vazou o plano secreto do modelo \"Spud\" — e o que isso muda pra você",
+      "angulo": "** Um memo interno da OpenAI revelou o codinome \"Spud\" e 5 prioridades estratégicas pra enterprise. O ângulo não é \"olha a novidade\" — é: o que isso sinaliza sobre pra onde o dinheiro de IA vai em 2026, e por que PMEs que dependem só de ChatGPT podem ficar pra trás.",
+      "fonte": "** The Decoder, 14/04/2026",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** O Google mudou o que aparece antes do seu anúncio. Isso afeta você.",
-      "angulo": "** AI Overviews do Google estão ocupando o topo das páginas de busca em queries comerciais, empurrando anúncios e resultados orgânicos para baixo. O impacto direto: custo por clique aumentando em categorias onde a IA \"resolve\" a pergunta na própria SERP. O que o gestor de tráfego pago precisa ajustar agora — segmentação, intenção de busca e copy de anúncio — para não pagar mais pelo mesmo resultado.",
-      "fonte": "** The Keyword (Google), 13/04/2026",
+      "tema": "** Seu concorrente já usa IA no WhatsApp. Seu cliente nem percebe.",
+      "angulo": "** Não é sobre chatbot. É sobre qualificação silenciosa: o lead chega, a IA classifica, responde e empurra pro funil sem ninguém tocar no celular. Mostrar o fluxo real em 6 slides — sem teoria, só o processo que funciona pra PME com menos de 5 funcionários.",
+      "fonte": "** Stage Mídia (série Claude Code OS)",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** Você usa IA pra produzir mais. O concorrente usa pra decidir melhor.",
-      "angulo": "** A maioria dos gestores usa IA como ferramenta de execução: gerar copy, criar criativo, resumir relatório. Poucos usam como ferramenta de análise: identificar padrão de saturação de público antes da queda de resultado, detectar fadiga de criativo pelos dados antes do CPM explodir, prever qual campanha vai canibalizar a outra. Essa distinção — IA pra velocidade vs. IA pra decisão — é o que vai separar resultado mediano de vantagem competitiva real em 2026.",
-      "fonte": "** Stage Mídia",
+      "tema": "** Por que a Anthropic decidiu não lançar uma IA — e o que isso diz sobre o mercado",
+      "angulo": "** O @thaleslaray tocou no assunto do Mythos, mas o ângulo aqui é diferente: não é \"a IA poderosa demais\", é o que o critério de contenção da Anthropic revela sobre maturidade de produto vs. corrida por lançamento. Pra empresário: o que isso ensina sobre lançar produto antes da hora. Viraliza por polêmica técnica com lição de negócio embutida.",
+      "fonte": "** Relatório interno Anthropic (via Thales Laray / perfis de referência) — angulagem própria Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "Histórico verificado. Tópicos já cobertos nos últimos 14 dias: vazamento do Claude Code, automação de conteúdo do terminal ao post, vibe coding, Gemma4. Evitados nos 3 abaixo.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n\n**Tema:** Agente de IA no WhatsApp: o dono que dorme e o lead que converte\n\n**Ângulo:** Como empresários locais estão configurando agentes de atendimento no WhatsApp que qualificam leads, respondem objeções e agendam consultas sem nenhuma intervenção humana — enquanto o dono está em reunião ou fora do horário. Não é automação de resposta automática do \"Olá, como posso ajudar?\". É qualificação real com contexto do negócio. Dado no centro: tempo médio de resposta é o principal fator de conversão em vendas via WhatsApp para PME.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n\n**Tema:** O Google mudou o que aparece antes do seu anúncio. Isso afeta você.\n\n**Ângulo:** AI Overviews do Google estão ocupando o topo das páginas de busca em queries comerciais, empurrando anúncios e resultados orgânicos para baixo. O impacto direto: custo por clique aumentando em categorias onde a IA \"resolve\" a pergunta na própria SERP. O que o gestor de tráfego pago precisa ajustar agora — segmentação, intenção de busca e copy de anúncio — para não pagar mais pelo mesmo resultado.\n\n**Fonte:** The Keyword (Google), 13/04/2026\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n\n**Tema:** Você usa IA pra produzir mais. O concorrente usa pra decidir melhor.\n\n**Ângulo:** A maioria dos gestores usa IA como ferramenta de execução: gerar copy, criar criativo, resumir relatório. Poucos usam como ferramenta de análise: identificar padrão de saturação de público antes da queda de resultado, detectar fadiga de criativo pelos dados antes do CPM explodir, prever qual campanha vai canibalizar a outra. Essa distinção — IA pra velocidade vs. IA pra decisão — é o que vai separar resultado mediano de vantagem competitiva real em 2026.\n\n**Fonte:** Stage Mídia\n\n---\n\nQuer que eu execute algum dos 3 agora via `/roteiro-post`?"
+  "texto": "Sem acesso ao vault. Vou cruzar o que sei do histórico de sessões (Google AI Overviews, WhatsApp AI agent, Claude Code) com a notícia real do dia (OpenAI \"Spud\" memo) e o viral do @thaleslaray (Mythos/Claude Code).\n\n---\n\n📅 PAUTA — Terça, 14/04/2026\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** OpenAI vazou o plano secreto do modelo \"Spud\" — e o que isso muda pra você\n**Ângulo:** Um memo interno da OpenAI revelou o codinome \"Spud\" e 5 prioridades estratégicas pra enterprise. O ângulo não é \"olha a novidade\" — é: o que isso sinaliza sobre pra onde o dinheiro de IA vai em 2026, e por que PMEs que dependem só de ChatGPT podem ficar pra trás.\n**Fonte:** The Decoder, 14/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** Seu concorrente já usa IA no WhatsApp. Seu cliente nem percebe.\n**Ângulo:** Não é sobre chatbot. É sobre qualificação silenciosa: o lead chega, a IA classifica, responde e empurra pro funil sem ninguém tocar no celular. Mostrar o fluxo real em 6 slides — sem teoria, só o processo que funciona pra PME com menos de 5 funcionários.\n**Fonte:** Stage Mídia (série Claude Code OS)\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** Por que a Anthropic decidiu não lançar uma IA — e o que isso diz sobre o mercado\n**Ângulo:** O @thaleslaray tocou no assunto do Mythos, mas o ângulo aqui é diferente: não é \"a IA poderosa demais\", é o que o critério de contenção da Anthropic revela sobre maturidade de produto vs. corrida por lançamento. Pra empresário: o que isso ensina sobre lançar produto antes da hora. Viraliza por polêmica técnica com lição de negócio embutida.\n**Fonte:** Relatório interno Anthropic (via Thales Laray / perfis de referência) — angulagem própria Stage Mídia\n\n---\n\n**Lógica de distribuição:**\n- Post 1 (7h): notícia real do dia com dado concreto → para o scroll logo de manhã\n- Post 2 (12h): prático, caso de uso direto → pico de atenção no almoço, público tomando decisão\n- Post 3 (18h): polêmica com lição → empresário saindo do trabalho, conteúdo pra processar no trânsito\n\n**Temas cobertos nos últimos 14 dias (evitados aqui):** Google AI Overviews vs. tráfego pago, carrossel de qualificação de leads WhatsApp (copy).\n\n---\n\nAprova, troca algum ou começa a produzir?"
 }
