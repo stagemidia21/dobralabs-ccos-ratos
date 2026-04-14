@@ -106,13 +106,27 @@ function callClaude(prompt, timeout = 180000) {
 const GEMINI_KEY = process.env.GEMINI_API_KEY;
 
 function gerarPromptImagem(tema, angulo) {
-  // SCDS: Subject · Context · Details · Style
-  const temaLimpo = tema.replace(/[^\w\s]/gi, '').slice(0, 80);
-  return `Cinematic dark background image for a social media post about: "${temaLimpo}".
-Context: digital marketing, artificial intelligence applied to business, paid traffic.
-Details: abstract technology elements, circuit patterns, soft digital glow, deep shadows, no text, no people, no faces, no logos.
-Style: ultra dark, deep navy and black tones, minimal accent light in electric blue or white, premium corporate aesthetic, ultra high detail, 4K, photorealistic, full bleed portrait.
-Aspect ratio: 9:16 vertical portrait.`;
+  const raw = callClaude(
+    `You are an expert AI image prompt engineer for FLUX photorealistic models.
+Create a single ultra-realistic photography prompt for this social media post background.
+
+Post theme: "${tema}"
+Post angle: "${angulo}"
+
+Rules:
+- Ultra-realistic, indistinguishable from professional DSLR photography
+- NO people, NO faces, NO text, NO logos in the image
+- Scene must relate to the post theme (WhatsApp → smartphone close-up, Google Ads → dashboard on screen, automation → server/code, AI business → laptop + data)
+- Dark, premium, moody atmosphere — black and deep tones dominate
+- Specify camera body, lens, aperture (e.g. "Canon EOS R5, 85mm f/1.4, f/2.0")
+- Specify lighting (e.g. "single key light", "neon accent", "window light at dusk")
+- 9:16 vertical portrait format
+- End with: "no people, no text, no watermarks, ultra sharp, 8K"
+
+Return ONLY the prompt in English. No explanation. No quotes.`,
+    40000
+  );
+  return raw.trim().split('\n')[0]; // só a primeira linha, sem explicação
 }
 
 async function gerarImagemCapa(tema, angulo, numPost) {
