@@ -1,28 +1,28 @@
 {
-  "data": "Tue Apr 14 2026",
-  "gerado_em": "2026-04-14T03:47:14.848Z",
+  "data": "Thu Apr 16 2026",
+  "gerado_em": "2026-04-16T14:05:41.210Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** OpenAI vazou o plano secreto do modelo \"Spud\" — e o que isso muda pra você",
-      "angulo": "** Um memo interno da OpenAI revelou o codinome \"Spud\" e 5 prioridades estratégicas pra enterprise. O ângulo não é \"olha a novidade\" — é: o que isso sinaliza sobre pra onde o dinheiro de IA vai em 2026, e por que PMEs que dependem só de ChatGPT podem ficar pra trás.",
-      "fonte": "** The Decoder, 14/04/2026",
+      "tema": "** `1.000 empresas pagam R$5M/ano pra usar IA. A sua ainda testa de graça.`",
+      "angulo": "** Pegar o dado concreto do post do @thaleslaray (1k+ empresas pagando $1M+/ano na Anthropic) e virar o argumento: não é sobre adotar IA — é sobre o custo de não tratar IA como infraestrutura. Cada slide mostra uma operação que essas empresas já automatizaram e PMEs ainda fazem manualmente.",
+      "fonte": "** Post viral @thaleslaray, 16/04/2026",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** Seu concorrente já usa IA no WhatsApp. Seu cliente nem percebe.",
-      "angulo": "** Não é sobre chatbot. É sobre qualificação silenciosa: o lead chega, a IA classifica, responde e empurra pro funil sem ninguém tocar no celular. Mostrar o fluxo real em 6 slides — sem teoria, só o processo que funciona pra PME com menos de 5 funcionários.",
-      "fonte": "** Stage Mídia (série Claude Code OS)",
+      "tema": "** `Gestor de tráfego que não usa IA vai cobrar menos. E vai perder.`",
+      "angulo": "** Não fala de IA no geral — fala especificamente da mesa de trabalho do gestor de tráfego. Quais 5 tarefas repetitivas (relatório, copy de anúncio, análise de criativo, resposta de leads, briefing de cliente) já podem ser automatizadas hoje, e quanto tempo isso libera por semana. Dado central: X horas/semana → investimento em estratégia vs. execução braçal.",
+      "fonte": "** Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** Por que a Anthropic decidiu não lançar uma IA — e o que isso diz sobre o mercado",
-      "angulo": "** O @thaleslaray tocou no assunto do Mythos, mas o ângulo aqui é diferente: não é \"a IA poderosa demais\", é o que o critério de contenção da Anthropic revela sobre maturidade de produto vs. corrida por lançamento. Pra empresário: o que isso ensina sobre lançar produto antes da hora. Viraliza por polêmica técnica com lição de negócio embutida.",
-      "fonte": "** Relatório interno Anthropic (via Thales Laray / perfis de referência) — angulagem própria Stage Mídia",
+      "tema": "** `Segundo cérebro com IA: o que ninguém te mostra depois que o hype passa`",
+      "angulo": "** Contraponto direto ao @rafa.grandi (668 comentários no \"segundo cérebro\"). Enquanto todo mundo ensina a *montar* o segundo cérebro, o Homero mostra o que acontece na prática: o sistema que realmente funciona para PME não é o Notion cheio de template — é o fluxo de decisão que o dono consegue manter sozinho em 15 minutos por dia. Concreto, sem hype.",
+      "fonte": "** Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "Sem acesso ao vault. Vou cruzar o que sei do histórico de sessões (Google AI Overviews, WhatsApp AI agent, Claude Code) com a notícia real do dia (OpenAI \"Spud\" memo) e o viral do @thaleslaray (Mythos/Claude Code).\n\n---\n\n📅 PAUTA — Terça, 14/04/2026\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** OpenAI vazou o plano secreto do modelo \"Spud\" — e o que isso muda pra você\n**Ângulo:** Um memo interno da OpenAI revelou o codinome \"Spud\" e 5 prioridades estratégicas pra enterprise. O ângulo não é \"olha a novidade\" — é: o que isso sinaliza sobre pra onde o dinheiro de IA vai em 2026, e por que PMEs que dependem só de ChatGPT podem ficar pra trás.\n**Fonte:** The Decoder, 14/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** Seu concorrente já usa IA no WhatsApp. Seu cliente nem percebe.\n**Ângulo:** Não é sobre chatbot. É sobre qualificação silenciosa: o lead chega, a IA classifica, responde e empurra pro funil sem ninguém tocar no celular. Mostrar o fluxo real em 6 slides — sem teoria, só o processo que funciona pra PME com menos de 5 funcionários.\n**Fonte:** Stage Mídia (série Claude Code OS)\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** Por que a Anthropic decidiu não lançar uma IA — e o que isso diz sobre o mercado\n**Ângulo:** O @thaleslaray tocou no assunto do Mythos, mas o ângulo aqui é diferente: não é \"a IA poderosa demais\", é o que o critério de contenção da Anthropic revela sobre maturidade de produto vs. corrida por lançamento. Pra empresário: o que isso ensina sobre lançar produto antes da hora. Viraliza por polêmica técnica com lição de negócio embutida.\n**Fonte:** Relatório interno Anthropic (via Thales Laray / perfis de referência) — angulagem própria Stage Mídia\n\n---\n\n**Lógica de distribuição:**\n- Post 1 (7h): notícia real do dia com dado concreto → para o scroll logo de manhã\n- Post 2 (12h): prático, caso de uso direto → pico de atenção no almoço, público tomando decisão\n- Post 3 (18h): polêmica com lição → empresário saindo do trabalho, conteúdo pra processar no trânsito\n\n**Temas cobertos nos últimos 14 dias (evitados aqui):** Google AI Overviews vs. tráfego pago, carrossel de qualificação de leads WhatsApp (copy).\n\n---\n\nAprova, troca algum ou começa a produzir?"
+  "texto": "O arquivo de referências está vazio e o acesso ao Obsidian está bloqueado agora. Vou trabalhar com os posts virais fornecidos como matéria-prima principal — que pelo orquestrador são a fonte mais importante.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `1.000 empresas pagam R$5M/ano pra usar IA. A sua ainda testa de graça.`\n**Ângulo:** Pegar o dado concreto do post do @thaleslaray (1k+ empresas pagando $1M+/ano na Anthropic) e virar o argumento: não é sobre adotar IA — é sobre o custo de não tratar IA como infraestrutura. Cada slide mostra uma operação que essas empresas já automatizaram e PMEs ainda fazem manualmente.\n**Fonte:** Post viral @thaleslaray, 16/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `Gestor de tráfego que não usa IA vai cobrar menos. E vai perder.`\n**Ângulo:** Não fala de IA no geral — fala especificamente da mesa de trabalho do gestor de tráfego. Quais 5 tarefas repetitivas (relatório, copy de anúncio, análise de criativo, resposta de leads, briefing de cliente) já podem ser automatizadas hoje, e quanto tempo isso libera por semana. Dado central: X horas/semana → investimento em estratégia vs. execução braçal.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Segundo cérebro com IA: o que ninguém te mostra depois que o hype passa`\n**Ângulo:** Contraponto direto ao @rafa.grandi (668 comentários no \"segundo cérebro\"). Enquanto todo mundo ensina a *montar* o segundo cérebro, o Homero mostra o que acontece na prática: o sistema que realmente funciona para PME não é o Notion cheio de template — é o fluxo de decisão que o dono consegue manter sozinho em 15 minutos por dia. Concreto, sem hype.\n**Fonte:** Stage Mídia\n\n---\n\n**Lógica da seleção:**\n\n| Post | Diferencial de ângulo |\n|---|---|\n| 7h | Dado de mercado virado pro empresário (não pro entusiasta de IA) |\n| 12h | Tráfego pago + IA — nicho específico do Homero, ninguém nessa grade está fazendo |\n| 18h | Desmonta o hype do concorrente mais viral do dia com dado prático — alto potencial de engajamento por discordância qualificada |\n\nQuer ir direto pro roteiro de um deles?"
 }
