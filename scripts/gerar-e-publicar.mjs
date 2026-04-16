@@ -473,6 +473,14 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   }
 
   // 5. Upload + publicar
+  if (DRY_RUN) {
+    const slides = fs.readdirSync(slidesDir).filter(f => f.endsWith('.jpg')).sort();
+    console.log(`  🧪 DRY RUN — ${slides.length} slides em ${slidesDir}`);
+    console.log(`  Legenda: ${dados.legenda.slice(0, 120)}...`);
+    console.log(`  ✅ Post ${numPost} (dry run) — nada publicado.`);
+    return 'dry-run';
+  }
+
   console.log('  Publicando...');
   const slides = fs.readdirSync(slidesDir).filter(f => f.endsWith('.jpg')).sort();
   const mediaUrls = [];
@@ -525,7 +533,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     salvarCarrossel(dados, { tema, foto: escolherFoto(tema, numPost), numPost, igId, plataformas: ['instagram', 'threads', 'facebook', 'linkedin'] });
   } catch(e) { console.log(`  ⚠ Obsidian: ${e.message}`); }
 
-  // Limpa MP4s do post após publicar — libera disco
+  // Limpa slides do post após publicar — libera disco
   try {
     fs.rmSync(slidesDir, { recursive: true, force: true });
     console.log(`  🗑 Slides removidos (${slidesDir})`);
@@ -607,6 +615,7 @@ const temaArg   = getArg('--tema');
 const anguloArg = getArg('--angulo');
 const fonteArg  = getArg('--fonte');
 const numArg    = parseInt(getArg('--num') || process.argv[2]);
+const DRY_RUN   = process.argv.includes('--dry-run');
 
 async function main() {
   await acquireLock();
