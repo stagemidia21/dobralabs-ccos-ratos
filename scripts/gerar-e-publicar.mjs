@@ -214,188 +214,42 @@ async function uploadSlide(filePath, filename) {
   return media_url;
 }
 
-async function getTokens() {
-  const r = await fetch(`${BASE_URL}/v1/social-accounts`, { headers: authHeaders });
-  const d = await r.json();
-  const accs = d.data || d;
-  return {
-    ig:    accs.find(a => a.platform === 'instagram').access_token,
-    th:    accs.find(a => a.platform === 'threads').access_token,
-    thId:  accs.find(a => a.platform === 'threads').user_id,
-    fb:    accs.find(a => a.platform === 'facebook').access_token,
-    fbId:  accs.find(a => a.platform === 'facebook').user_id,
-    liS:       accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).access_token,
-    liH:       accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).access_token,
-    liStageUrn: `urn:li:organization:${accs.find(a => a.platform === 'linkedin' && a.username.includes('Stage')).user_id}`,
-    liHomeroUrn: `urn:li:person:${accs.find(a => a.platform === 'linkedin' && a.username.includes('Homero')).user_id}`,
-  };
-}
+// IDs das contas conectadas no PostForMe
+const CONTAS_PFM = {
+  instagram:       'spc_OLQYtgi2qkckhJPbA56y6',
+  threads:         'spc_suZlmVRdsUuK7uoKZ2sp',
+  facebook:        'spc_ICb28Y2xx1WbjQDLcXVmN',
+  linkedin_homero: 'spc_e80YbEcrp7zDHltQlBCl',
+  linkedin_stage:  'spc_tvTRNzPUZtWkxx7yzGwW',
+  tiktok_business: 'spc_fGSQlvGbOwkpoDuKWBWxs',
+  pinterest:       'spc_rJdrDhfjsUVrPxhQqA3z',
+};
 
-async function publicarThreads(tokens, mediaUrls, legenda) {
-  const { th: token, thId: userId } = tokens;
-  const API = 'https://graph.threads.net';
-
-  // Cria containers de vídeo
-  const containerIds = [];
-  for (const url of mediaUrls) {
-    const r = await fetch(`${API}/${userId}/threads`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ media_type: 'IMAGE', image_url: url, is_carousel_item: true, access_token: token }),
-    });
-    const d = await r.json();
-    if (d.error) throw new Error(`Threads container falhou: ${JSON.stringify(d.error)}`);
-    containerIds.push(d.id);
-  }
-
-  // Aguarda containers
-  for (const id of containerIds) {
-    const start = Date.now();
-    while (Date.now() - start < 120000) {
-      await new Promise(r => setTimeout(r, 5000));
-      const r = await fetch(`${API}/${id}?fields=status&access_token=${token}`);
-      const d = await r.json();
-      if (d.status === 'FINISHED') break;
-      if (d.status === 'ERROR') throw new Error(`Threads container ${id} falhou`);
-    }
-  }
-
-  // Carrossel container
-  const cr = await fetch(`${API}/${userId}/threads`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), text: legenda.slice(0, 500), access_token: token }),
-  });
-  const cd = await cr.json();
-  if (cd.error) throw new Error(`Threads carrossel falhou: ${JSON.stringify(cd.error)}`);
-
-  // Aguarda carrossel container ficar FINISHED
-  const carStart = Date.now();
-  while (Date.now() - carStart < 60000) {
-    await new Promise(r => setTimeout(r, 5000));
-    const sr = await fetch(`${API}/${cd.id}?fields=status&access_token=${token}`);
-    const sd = await sr.json();
-    if (sd.status === 'FINISHED') break;
-    if (sd.status === 'ERROR') throw new Error(`Threads carrossel container falhou`);
-  }
-
-  // Publica
-  const pr = await fetch(`${API}/${userId}/threads_publish`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ creation_id: cd.id, access_token: token }),
-  });
-  const pd = await pr.json();
-  if (pd.error) throw new Error(`Threads publish falhou: ${JSON.stringify(pd.error)}`);
-  return pd.id;
-}
-
-async function publicarFacebook(tokens, mediaUrls, legenda) {
-  const { fb: token, fbId: pageId } = tokens;
-  const API = 'https://graph.facebook.com/v19.0';
-
-  // Carrossel de imagem no Facebook: upload individual + post multi-foto
-  const photoIds = [];
-  for (const url of mediaUrls) {
-    const r = await fetch(`${API}/${pageId}/photos`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ url, published: false, access_token: token }),
-    });
-    const d = await r.json();
-    if (d.error) throw new Error(`Facebook foto falhou: ${JSON.stringify(d.error)}`);
-    photoIds.push({ media_fbid: d.id });
-  }
-
-  const r = await fetch(`${API}/${pageId}/feed`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message: legenda, attached_media: photoIds, access_token: token }),
-  });
-  const d = await r.json();
-  if (d.error) throw new Error(`Facebook post falhou: ${JSON.stringify(d.error)}`);
-  return d.id;
-}
-
-async function publicarLinkedIn(token, authorUrn, mediaUrls, legenda) {
-  // LinkedIn: posta como texto (carrossel de vídeo nativo requer upload complexo)
-  const r = await fetch('https://api.linkedin.com/v2/ugcPosts', {
+async function publicarTodas(mediaUrls, legenda) {
+  const r = await fetch(`${BASE_URL}/v1/social-posts`, {
     method: 'POST',
-    headers: { 'Authorization': 'Bearer ' + token, 'Content-Type': 'application/json', 'X-Restli-Protocol-Version': '2.0.0' },
+    headers: authHeaders,
     body: JSON.stringify({
-      author: authorUrn,
-      lifecycleState: 'PUBLISHED',
-      specificContent: {
-        'com.linkedin.ugc.ShareContent': {
-          shareCommentary: { text: legenda },
-          shareMediaCategory: 'NONE',
-        },
-      },
-      visibility: { 'com.linkedin.ugc.MemberNetworkVisibility': 'PUBLIC' },
+      caption: legenda,
+      media: mediaUrls.map(url => ({ url })),
+      social_accounts: Object.values(CONTAS_PFM),
     }),
   });
-  const d = await r.json();
-  if (d.status && d.status !== 201) throw new Error(`LinkedIn falhou: ${JSON.stringify(d)}`);
-  return d.id || 'ok';
+  if (!r.ok) throw new Error(`PostForMe falhou: ${await r.text()}`);
+  return await r.json();
 }
 
-async function publicarInstagramDireto(mediaUrls, legenda) {
-  const tokens = await getTokens();
-  const token = tokens.ig;
-  const IG_USER_ID = '26285906407703501';
-  const IG_API = 'https://graph.instagram.com';
-
-  // 1. Cria containers de imagem
-  console.log('  Criando containers no Instagram...');
-  const containerIds = [];
-  for (let i = 0; i < mediaUrls.length; i++) {
-    const r = await fetch(`${IG_API}/${IG_USER_ID}/media`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ image_url: mediaUrls[i], is_carousel_item: 'true', access_token: token }),
-    });
-    const d = await r.json();
-    if (d.error) throw new Error(`Container ${i+1} falhou: ${JSON.stringify(d.error)}`);
-    containerIds.push(d.id);
-    process.stdout.write(`    Container ${i+1}/${mediaUrls.length} OK\n`);
-  }
-
-  // 2. Imagem não precisa de polling — mas mantemos curto pra garantir
-  console.log('  Aguardando processamento...');
-  for (const id of containerIds) {
-    const start = Date.now();
-    while (Date.now() - start < 30000) {
-      await new Promise(r => setTimeout(r, 3000));
-      const r = await fetch(`${IG_API}/${id}?fields=status_code&access_token=${token}`);
-      const d = await r.json();
-      if (d.status_code === 'FINISHED') break;
-      if (d.status_code === 'ERROR') throw new Error(`Container ${id} falhou`);
-      process.stdout.write('.');
-    }
-  }
-  console.log(' OK');
-
-  // 3. Container do carrossel
-  const cr = await fetch(`${IG_API}/${IG_USER_ID}/media`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ media_type: 'CAROUSEL', children: containerIds.join(','), caption: legenda, access_token: token }),
-  });
-  const cd = await cr.json();
-  if (cd.error) throw new Error(`Carrossel container falhou: ${JSON.stringify(cd.error)}`);
-
-  // 4. Aguarda carrossel container ficar FINISHED
-  const carWait = Date.now();
-  while (Date.now() - carWait < 60000) {
+async function aguardarResultados(postId, timeoutMs = 120000) {
+  const inicio = Date.now();
+  while (Date.now() - inicio < timeoutMs) {
     await new Promise(r => setTimeout(r, 5000));
-    const sr = await fetch(`${IG_API}/${cd.id}?fields=status_code&access_token=${token}`);
-    const sd = await sr.json();
-    if (sd.status_code === 'FINISHED') break;
-    if (sd.status_code === 'ERROR') throw new Error(`Carrossel container falhou`);
-    process.stdout.write('.');
+    const r = await fetch(`${BASE_URL}/v1/social-posts/${postId}/results`, { headers: authHeaders });
+    if (!r.ok) break;
+    const d = await r.json();
+    const results = d.data || d;
+    if (Array.isArray(results) && results.length > 0) return results;
   }
-
-  // 5. Publica
-  const pr = await fetch(`${IG_API}/${IG_USER_ID}/media_publish`, {
-    method: 'POST', headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ creation_id: cd.id, access_token: token }),
-  });
-  const pd = await pr.json();
-  if (pd.error) throw new Error(`Publicação falhou: ${JSON.stringify(pd.error)}`);
-  return pd.id;
+  return [];
 }
 
 async function processarPost(numPost, tema, angulo, fonte = '') {
@@ -491,46 +345,28 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
     console.log('OK');
   }
 
-  // Instagram
-  process.stdout.write('  Instagram... ');
-  const igId = await publicarInstagramDireto(mediaUrls, dados.legenda);
-  console.log(`OK (${igId})`);
+  process.stdout.write('  Publicando em todas as redes... ');
+  const pfmPost = await publicarTodas(mediaUrls, dados.legenda);
+  const pfmId = pfmPost.id || pfmPost.external_id || 'ok';
+  console.log(`OK (${pfmId})`);
 
-  // Threads
-  try {
-    const tokens = await getTokens();
-    process.stdout.write('  Threads... ');
-    const thId = await publicarThreads(tokens, mediaUrls, dados.legenda);
-    console.log(`OK (${thId})`);
-  } catch(e) { console.log(`ERRO: ${e.message}`); }
+  // Aguarda resultados por plataforma
+  const resultados = await aguardarResultados(pfmId);
+  const redes = ['instagram', 'threads', 'facebook', 'linkedin_homero', 'linkedin_stage', 'tiktok_business', 'pinterest'];
+  if (resultados.length > 0) {
+    resultados.forEach(r => {
+      const status = r.status === 'success' ? 'OK' : `ERRO: ${r.error_message || r.status}`;
+      console.log(`    ${r.platform || r.social_account?.platform}: ${status}`);
+    });
+  } else {
+    redes.forEach(r => console.log(`    ${r}: processando...`));
+  }
 
-  // Facebook
-  try {
-    const tokens = await getTokens();
-    process.stdout.write('  Facebook... ');
-    const fbId = await publicarFacebook(tokens, mediaUrls, dados.legenda);
-    console.log(`OK (${fbId})`);
-  } catch(e) { console.log(`ERRO: ${e.message}`); }
-
-  // LinkedIn Homero
-  try {
-    const tokens = await getTokens();
-    process.stdout.write('  LinkedIn Homero... ');
-    await publicarLinkedIn(tokens.liH, tokens.liHomeroUrn, mediaUrls, dados.legenda);
-    console.log('OK');
-  } catch(e) { console.log(`ERRO: ${e.message}`); }
-
-  // LinkedIn Stage
-  try {
-    const tokens = await getTokens();
-    process.stdout.write('  LinkedIn Stage... ');
-    await publicarLinkedIn(tokens.liS, tokens.liStageUrn, mediaUrls, dados.legenda);
-    console.log('OK');
-  } catch(e) { console.log(`ERRO: ${e.message}`); }
+  const igId = resultados.find(r => r.platform === 'instagram')?.external_id || pfmId;
 
   // Salva no Obsidian
   try {
-    salvarCarrossel(dados, { tema, foto: escolherFoto(tema, numPost), numPost, igId, plataformas: ['instagram', 'threads', 'facebook', 'linkedin'] });
+    salvarCarrossel(dados, { tema, foto: escolherFoto(tema, numPost), numPost, igId, plataformas: Object.keys(CONTAS_PFM) });
   } catch(e) { console.log(`  ⚠ Obsidian: ${e.message}`); }
 
   // Limpa slides do post após publicar — libera disco
