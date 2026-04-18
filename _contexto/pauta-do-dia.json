@@ -1,28 +1,28 @@
 {
-  "data": "Thu Apr 16 2026",
-  "gerado_em": "2026-04-16T14:05:41.210Z",
+  "data": "Sat Apr 18 2026",
+  "gerado_em": "2026-04-18T17:33:59.650Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** `1.000 empresas pagam R$5M/ano pra usar IA. A sua ainda testa de graça.`",
-      "angulo": "** Pegar o dado concreto do post do @thaleslaray (1k+ empresas pagando $1M+/ano na Anthropic) e virar o argumento: não é sobre adotar IA — é sobre o custo de não tratar IA como infraestrutura. Cada slide mostra uma operação que essas empresas já automatizaram e PMEs ainda fazem manualmente.",
-      "fonte": "** Post viral @thaleslaray, 16/04/2026",
+      "tema": "`Claude Opus 4.7 saiu. O que muda pro gestor de tráfego agora`",
+      "angulo": "Enquanto todo mundo fala do modelo, você fala do que fazer com ele: análise de conta em linguagem natural, diagnóstico de criativo, copy segmentado por avatar — tudo que o gestor perdia horas fazendo, agora em minutos. Checklist acionável, não review de tecnologia.",
+      "fonte": "TechCrunch / The Decoder, 18/04/2026",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** `Gestor de tráfego que não usa IA vai cobrar menos. E vai perder.`",
-      "angulo": "** Não fala de IA no geral — fala especificamente da mesa de trabalho do gestor de tráfego. Quais 5 tarefas repetitivas (relatório, copy de anúncio, análise de criativo, resposta de leads, briefing de cliente) já podem ser automatizadas hoje, e quanto tempo isso libera por semana. Dado central: X horas/semana → investimento em estratégia vs. execução braçal.",
-      "fonte": "** Stage Mídia",
+      "tema": "`Você gasta 4h/semana em relatório. São 208h/ano jogadas fora`",
+      "angulo": "Custo de oportunidade real — não \"use IA pra automatizar\", mas o número concreto do que o gestor perde fazendo na mão: tempo que poderia estar em estratégia, otimização e novos clientes. Fecha com o fluxo exato de como automatizar com Claude.",
+      "fonte": "Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** `Segundo cérebro com IA: o que ninguém te mostra depois que o hype passa`",
-      "angulo": "** Contraponto direto ao @rafa.grandi (668 comentários no \"segundo cérebro\"). Enquanto todo mundo ensina a *montar* o segundo cérebro, o Homero mostra o que acontece na prática: o sistema que realmente funciona para PME não é o Notion cheio de template — é o fluxo de decisão que o dono consegue manter sozinho em 15 minutos por dia. Concreto, sem hype.",
-      "fonte": "** Stage Mídia",
+      "tema": "`PME sem dev, sem agência — criou CRM, automação e dashboard sozinho`",
+      "angulo": "Claude Code OS aplicado ao empresário não técnico. Não é conteúdo de programador — é o dono de restaurante, clínica ou loja que montou sistema interno sem contratar ninguém. Passo a passo real, linguagem de negócio, resultado concreto.",
+      "fonte": "Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "O arquivo de referências está vazio e o acesso ao Obsidian está bloqueado agora. Vou trabalhar com os posts virais fornecidos como matéria-prima principal — que pelo orquestrador são a fonte mais importante.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `1.000 empresas pagam R$5M/ano pra usar IA. A sua ainda testa de graça.`\n**Ângulo:** Pegar o dado concreto do post do @thaleslaray (1k+ empresas pagando $1M+/ano na Anthropic) e virar o argumento: não é sobre adotar IA — é sobre o custo de não tratar IA como infraestrutura. Cada slide mostra uma operação que essas empresas já automatizaram e PMEs ainda fazem manualmente.\n**Fonte:** Post viral @thaleslaray, 16/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `Gestor de tráfego que não usa IA vai cobrar menos. E vai perder.`\n**Ângulo:** Não fala de IA no geral — fala especificamente da mesa de trabalho do gestor de tráfego. Quais 5 tarefas repetitivas (relatório, copy de anúncio, análise de criativo, resposta de leads, briefing de cliente) já podem ser automatizadas hoje, e quanto tempo isso libera por semana. Dado central: X horas/semana → investimento em estratégia vs. execução braçal.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Segundo cérebro com IA: o que ninguém te mostra depois que o hype passa`\n**Ângulo:** Contraponto direto ao @rafa.grandi (668 comentários no \"segundo cérebro\"). Enquanto todo mundo ensina a *montar* o segundo cérebro, o Homero mostra o que acontece na prática: o sistema que realmente funciona para PME não é o Notion cheio de template — é o fluxo de decisão que o dono consegue manter sozinho em 15 minutos por dia. Concreto, sem hype.\n**Fonte:** Stage Mídia\n\n---\n\n**Lógica da seleção:**\n\n| Post | Diferencial de ângulo |\n|---|---|\n| 7h | Dado de mercado virado pro empresário (não pro entusiasta de IA) |\n| 12h | Tráfego pago + IA — nicho específico do Homero, ninguém nessa grade está fazendo |\n| 18h | Desmonta o hype do concorrente mais viral do dia com dado prático — alto potencial de engajamento por discordância qualificada |\n\nQuer ir direto pro roteiro de um deles?"
+  "texto": "**PAUTA DO DIA — @homero.ads | Sábado, 18/04/2026**\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — publica às 7h**\nTema: `Claude Opus 4.7 saiu. O que muda pro gestor de tráfego agora`\nÂngulo: Enquanto todo mundo fala do modelo, você fala do que fazer com ele: análise de conta em linguagem natural, diagnóstico de criativo, copy segmentado por avatar — tudo que o gestor perdia horas fazendo, agora em minutos. Checklist acionável, não review de tecnologia.\nFonte: TechCrunch / The Decoder, 18/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — publica às 12h**\nTema: `Você gasta 4h/semana em relatório. São 208h/ano jogadas fora`\nÂngulo: Custo de oportunidade real — não \"use IA pra automatizar\", mas o número concreto do que o gestor perde fazendo na mão: tempo que poderia estar em estratégia, otimização e novos clientes. Fecha com o fluxo exato de como automatizar com Claude.\nFonte: Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — publica às 18h**\nTema: `PME sem dev, sem agência — criou CRM, automação e dashboard sozinho`\nÂngulo: Claude Code OS aplicado ao empresário não técnico. Não é conteúdo de programador — é o dono de restaurante, clínica ou loja que montou sistema interno sem contratar ninguém. Passo a passo real, linguagem de negócio, resultado concreto.\nFonte: Stage Mídia\n\n---\n\n**Lógica da seleção:**\n- POST 1 surfa na notícia do dia (Opus 4.7) com ângulo que os concorrentes ignoraram — o gestor de tráfego, não o dev\n- POST 2 atinge o pico de atenção com dado numérico concreto e dor real do público\n- POST 3 fecha o sábado com aspiração — o empresário saindo do trabalho e imaginando como seria ter isso funcionando"
 }
