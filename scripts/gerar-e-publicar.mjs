@@ -7,14 +7,18 @@
 
 import 'dotenv/config';
 import { execFileSync, execSync } from 'child_process';
+import { createRequire } from 'module';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { humanizarJSON } from './humanizer-rules.mjs';
 import { salvarCarrossel, lerHistorico } from './obsidian.mjs';
 
+const _require = createRequire(import.meta.url);
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
+const PAUTA_FILE = path.join(ROOT, '_contexto/pauta-do-dia.json');
 const REMOTION_DIR = path.join(ROOT, 'projetos/carrossel-remotion');
 const PUBLIC_DIR = path.join(REMOTION_DIR, 'public');
 const SRC_DIR = path.join(REMOTION_DIR, 'src');
@@ -113,18 +117,83 @@ async function sendTelegram(text) {
   }
 }
 
-// Gera o JSX do carrossel usando CarrosselDinamico + JSON.stringify
-// Assim apóstrofes e aspas no texto NUNCA quebram o esbuild
-function gerarJSX(compId, foto, slides) {
-  const slidesJson = JSON.stringify(slides, null, 2);
-  return `import { CarrosselDinamico } from './CarrosselDinamico.jsx';
+function gerarHTML(slide, slideIndex, totalSlides) {
+  const progressWidth = Math.round(((slideIndex + 1) / totalSlides) * 100);
+  const esc = s => String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const nl2br = s => esc(s).replace(/\\n/g, '<br>');
 
-const SLIDES = ${slidesJson};
+  let content = '';
+  if (slide.tipo === 'capa') {
+    content = `
+      <div class="logo">@homero.ads</div>
+      <div class="slide-num">${slideIndex + 1}/${totalSlides}</div>
+      <div class="overlay"></div>
+      <div class="capa-inner">
+        <h1 class="capa-title">${nl2br(slide.title)}</h1>
+        ${slide.fonte ? `<div class="fonte">${esc(slide.fonte)}</div>` : ''}
+      </div>
+      <div class="accent-bar"></div>`;
+  } else if (slide.tipo === 'texto') {
+    content = `
+      <div class="logo">@homero.ads</div>
+      <div class="slide-num">${slideIndex + 1}/${totalSlides}</div>
+      <div class="overlay"></div>
+      <div class="texto-inner">
+        ${slide.label ? `<div class="label">${esc(slide.label)}</div>` : ''}
+        <h2 class="texto-title">${nl2br(slide.title)}</h2>
+        <p class="body-text">${esc(slide.body)}</p>
+      </div>
+      <div class="progress-bar" style="width:${progressWidth}%"></div>`;
+  } else if (slide.tipo === 'cta') {
+    content = `
+      <div class="logo">@homero.ads</div>
+      <div class="overlay"></div>
+      <div class="cta-inner">
+        <div class="cta-label">PRÓXIMO PASSO</div>
+        <div class="cta-btn">${esc(slide.cta)}</div>
+        <div class="cta-follow">Siga @homero.ads para mais conteúdo</div>
+      </div>`;
+  }
 
-export function ${compId}() {
-  return <CarrosselDinamico slides={SLIDES} foto={${JSON.stringify(foto)}} />;
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1080px;overflow:hidden}
+body{background:#0B0B0B;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;position:relative}
+.overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,11,11,.92) 0%,rgba(11,11,11,.70) 100%)}
+.logo{position:absolute;top:48px;left:60px;color:#F05A1A;font-family:'Syne',Impact,sans-serif;font-size:26px;font-weight:800;letter-spacing:1px;z-index:10}
+.slide-num{position:absolute;top:48px;right:60px;color:rgba(255,255,255,.35);font-size:20px;z-index:10;font-family:'Syne',sans-serif}
+.capa-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:130px 60px 90px;z-index:10}
+.capa-title{font-family:'Bebas Neue',Impact,'Arial Black',sans-serif;font-size:104px;line-height:.95;color:#fff;text-transform:uppercase;max-width:960px}
+.fonte{margin-top:36px;color:#F05A1A;font-size:22px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px}
+.accent-bar{position:absolute;bottom:0;left:0;right:0;height:5px;background:#F05A1A;z-index:10}
+.texto-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:130px 60px 80px;z-index:10}
+.label{color:#F05A1A;font-family:'Syne',sans-serif;font-weight:700;font-size:22px;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px}
+.texto-title{font-family:'Bebas Neue',Impact,'Arial Black',sans-serif;font-size:82px;line-height:.95;color:#fff;text-transform:uppercase;margin-bottom:36px;max-width:960px}
+.body-text{color:rgba(255,255,255,.88);font-size:32px;line-height:1.55;max-width:960px;font-family:'Space Grotesk',sans-serif;font-weight:400}
+.progress-bar{position:absolute;bottom:0;left:0;height:5px;background:#F05A1A;z-index:10}
+.cta-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:10;gap:40px;padding:60px}
+.cta-label{color:rgba(255,255,255,.45);font-family:'Syne',sans-serif;font-weight:700;font-size:22px;letter-spacing:4px}
+.cta-btn{background:#F05A1A;color:#fff;padding:28px 72px;font-family:'Syne',sans-serif;font-weight:800;font-size:38px;border-radius:8px;text-align:center;box-shadow:0 0 48px rgba(240,90,26,.45)}
+.cta-follow{color:rgba(255,255,255,.45);font-size:26px;font-family:'Space Grotesk',sans-serif}
+</style></head><body>${content}</body></html>`;
 }
-`;
+
+async function renderizarSlides(slides, slidesDir) {
+  const { chromium } = _require('/opt/node22/lib/node_modules/playwright');
+  const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  const page = await browser.newPage();
+  await page.setViewportSize({ width: 1080, height: 1080 });
+  for (let i = 0; i < slides.length; i++) {
+    const html = gerarHTML(slides[i], i, slides.length);
+    await page.setContent(html, { waitUntil: 'networkidle', timeout: 30000 });
+    const num = String(i + 1).padStart(2, '0');
+    await page.screenshot({ path: path.join(slidesDir, `slide-${num}.jpg`), type: 'jpeg', quality: 90 });
+    process.stdout.write(`    Slide ${num}... OK\n`);
+  }
+  await browser.close();
 }
 
 // Gera os dados dos slides via Claude
@@ -275,56 +344,12 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   dados = humanizarJSON(dados);
   console.log(`  ✓ Humanizado`);
 
-  // 2. Escolhe fundo do banco de fotos
+  // 2. Renderiza slides via Playwright
   const foto = escolherFoto(tema, numPost);
   registrarUso(foto);
-  const jsx = gerarJSX(compId, foto, dados.slides);
-  const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
-  fs.writeFileSync(jsxPath, jsx);
-  console.log(`  ✓ JSX criado: ${compId}.jsx (fundo: ${foto})`);
-
-  // 3. Registra no Root.jsx
-  let root = fs.readFileSync(path.join(SRC_DIR, 'Root.jsx'), 'utf8');
-  if (!root.includes(compId)) {
-    root = root.replace(
-      "import { SlideFeed1, SlideFeed4 } from './SlideFeed.jsx';",
-      `import { SlideFeed1, SlideFeed4 } from './SlideFeed.jsx';\nimport { ${compId} } from './${compId}.jsx';`
-    );
-    // Adiciona composition antes do TikTok
-    root = root.replace(
-      "      {/* TikTok / Reels 9:16 */}",
-      `      <Composition id="${compId}" component={${compId}} durationInFrames={SLIDE_DURATION_FRAMES * ${dados.slides.length}} fps={FPS} width={INSTAGRAM.width} height={INSTAGRAM.height} />\n\n      {/* TikTok / Reels 9:16 */}`
-    );
-    fs.writeFileSync(path.join(SRC_DIR, 'Root.jsx'), root);
-    console.log(`  ✓ Registrado no Root.jsx`);
-  }
-
-  // 4. Renderiza os slides como imagem estática (remotion still)
-  const FRAMES_PER_SLIDE = 300; // 10s × 30fps — usado só pra calcular frame do meio
-  const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
-  console.log('  Renderizando slides (imagem)...');
-  for (let i = 0; i < dados.slides.length; i++) {
-    const frameDoMeio = i * FRAMES_PER_SLIDE + Math.floor(FRAMES_PER_SLIDE / 2);
-    const num = String(i + 1).padStart(2, '0');
-    const outFile = path.join(slidesDir, `slide-${num}.jpg`);
-    const outFileWin = outFile.replace(/\//g, '\\');
-    const cmd = `"${remotionBin}" still ${compId} "${outFileWin}" --frame=${frameDoMeio} --image-format=jpeg --jpeg-quality=90 --log=error`;
-
-    let tentativa = 0;
-    while (tentativa < 3) {
-      try {
-        process.stdout.write(`    Slide ${num}${tentativa > 0 ? ` (retry ${tentativa})` : ''}... `);
-        if (tentativa > 0) await new Promise(r => setTimeout(r, 3000 * tentativa));
-        execSync(cmd, { cwd: REMOTION_DIR, stdio: 'pipe', shell: true });
-        console.log('OK');
-        break;
-      } catch (err) {
-        tentativa++;
-        if (tentativa >= 3) throw new Error(`Slide ${num} falhou após 3 tentativas: ${err.message.slice(0, 100)}`);
-        console.log(`falhou, retry ${tentativa}...`);
-      }
-    }
-  }
+  console.log('  Renderizando slides...');
+  await renderizarSlides(dados.slides, slidesDir);
+  console.log(`  ✓ ${dados.slides.length} slides renderizados`);
 
   // 5. Upload + publicar
   if (DRY_RUN) {
@@ -467,9 +492,23 @@ async function main() {
     const num = (!isNaN(numArg) && numArg >= 1) ? numArg : 1;
     await processarPost(num, temaArg, anguloArg || '', fonteArg || '');
   } else if (!isNaN(numArg) && numArg >= 1 && numArg <= 6) {
-    // Post específico da pauta hardcoded
-    const p = POSTS_HOJE[numArg - 1];
-    await processarPost(numArg, p.tema, p.angulo);
+    let tema, angulo, fonte = '';
+    try {
+      const pauta = JSON.parse(fs.readFileSync(PAUTA_FILE, 'utf8'));
+      if (pauta.data === new Date().toDateString()) {
+        const post = pauta.posts.find(p => p.n === numArg);
+        if (post) {
+          tema = post.tema.replace(/^\*{0,2}\s*`?([^`]+)`?\s*\*{0,2}$/, '$1').trim();
+          angulo = post.angulo;
+          fonte = post.fonte || '';
+        }
+      }
+    } catch {}
+    if (!tema) {
+      const p = POSTS_HOJE[numArg - 1];
+      tema = p.tema; angulo = p.angulo;
+    }
+    await processarPost(numArg, tema, angulo, fonte);
   } else {
     // Todos os 6 da pauta hardcoded
     await sendTelegram('🚀 Iniciando produção dos 6 posts do dia...');
