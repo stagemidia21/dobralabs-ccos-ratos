@@ -101,7 +101,7 @@ const CLAUDE_BIN = process.platform === 'win32'
 
 function callClaude(prompt, timeout = 180000) {
   return execFileSync(CLAUDE_BIN, ['-p', prompt], {
-    cwd: ROOT, timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
+    cwd: '/tmp', timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
   }).trim();
 }
 
