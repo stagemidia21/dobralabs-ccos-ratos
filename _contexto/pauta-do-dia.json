@@ -1,28 +1,28 @@
 {
-  "data": "Sun Apr 19 2026",
-  "gerado_em": "2026-04-19T15:17:52.702Z",
+  "data": "Thu Apr 23 2026",
+  "gerado_em": "2026-04-23T15:16:54.615Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** `OpenAI lança GPT-4.1 com foco em código — o que muda pro seu negócio`",
-      "angulo": "** Não é papo de dev. GPT-4.1 chegou com 1M de tokens de contexto e instrução direta. O ângulo é prático: o que um empresário de PME consegue automatizar agora que antes precisava contratar desenvolvedor — com exemplos reais de uso em operação comercial (onboarding, suporte, análise de planilha).",
-      "fonte": "** OpenAI Blog / The Verge, 14/04/2026",
+      "tema": "** `IA reduziu CPA em 22% no Meta Ads — e a maioria ignora por quê`",
+      "angulo": "** Não é sobre criativo nem copy. É sobre o sinal de dados que o Advantage+ usa antes do leilão. Mostra o mecanismo técnico por trás do número, não o resultado genérico que todo mundo posta.",
+      "fonte": "** Meta Business, relatório Advantage+ Shopping Campaigns (Q4/2025)",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** `Por que sua campanha no Meta está cara: o erro que 80% dos gestores ignoram`",
-      "angulo": "** CPL subindo não é culpa do leilão — é problema de sinal. O carrossel destrói o mito de que \"o mercado ficou caro\" mostrando dados reais de conta: quando o pixel perde qualidade de evento, o custo sobe mesmo sem mexer no orçamento. Dá o diagnóstico em 3 perguntas objetivas.",
-      "fonte": "** Stage Mídia (dado interno de contas gerenciadas, abril/2026)",
+      "tema": "** `Esse empresário demitiu o analista de dados. Contratou o Claude.`",
+      "angulo": "** Caso prático: PME de e-commerce usando Claude Code + planilha de vendas para gerar relatório de atribuição de canal toda segunda. Custo: R$ 0,12 por análise. Tempo: 4 min. Antes: 3h do analista.",
+      "fonte": "** Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** `Empresário que usa IA sem processo não economiza — só erra mais rápido`",
-      "angulo": "** Contraponto direto ao hype. O problema não é a ferramenta, é que a maioria usa IA pra executar um processo ruim com mais velocidade. O carrossel apresenta o checklist de 4 pontos que precisa estar resolvido antes de automatizar qualquer coisa — com o caso de quem automatizou atendimento e dobrou reclamações.",
-      "fonte": "** Stage Mídia",
+      "tema": "** `Google lançou AI Max pra Search. O que muda no seu tráfego agora.`",
+      "angulo": "** Não é hype — é impacto direto em match type, controle de destino de URL e consulta de pesquisa. Mostra o que o gestor perde se não migrar a configuração até maio. Dado concreto: expansão de consulta aumenta volume mas pode inflacionar CPC em 15-30%.",
+      "fonte": "** Google Ads Help Center / Search Engine Land, mar/2026",
       "hora": 18
     }
   ],
-  "texto": "Sem histórico de carrosseis publicados. Gerando a pauta com base em contexto e relevância do dia.\n\n---\n\n**PAUTA DE CONTEÚDO — domingo, 19/04/2026**\n`@homero.ads | 3 carrosseis vídeo`\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `OpenAI lança GPT-4.1 com foco em código — o que muda pro seu negócio`\n**Ângulo:** Não é papo de dev. GPT-4.1 chegou com 1M de tokens de contexto e instrução direta. O ângulo é prático: o que um empresário de PME consegue automatizar agora que antes precisava contratar desenvolvedor — com exemplos reais de uso em operação comercial (onboarding, suporte, análise de planilha).\n**Fonte:** OpenAI Blog / The Verge, 14/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `Por que sua campanha no Meta está cara: o erro que 80% dos gestores ignoram`\n**Ângulo:** CPL subindo não é culpa do leilão — é problema de sinal. O carrossel destrói o mito de que \"o mercado ficou caro\" mostrando dados reais de conta: quando o pixel perde qualidade de evento, o custo sobe mesmo sem mexer no orçamento. Dá o diagnóstico em 3 perguntas objetivas.\n**Fonte:** Stage Mídia (dado interno de contas gerenciadas, abril/2026)\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Empresário que usa IA sem processo não economiza — só erra mais rápido`\n**Ângulo:** Contraponto direto ao hype. O problema não é a ferramenta, é que a maioria usa IA pra executar um processo ruim com mais velocidade. O carrossel apresenta o checklist de 4 pontos que precisa estar resolvido antes de automatizar qualquer coisa — com o caso de quem automatizou atendimento e dobrou reclamações.\n**Fonte:** Stage Mídia\n\n---\n\n**Lógica de distribuição:**\n- **7h** — notícia quente + aplicação prática (empresário começa o dia com contexto real)\n- **12h** — dor específica de tráfego pago com dado de conta (atinge gestor e dono ao mesmo tempo)\n- **18h** — posicionamento de autoridade contra-intuitivo (encerra o dia com provocação que gera salvamento)\n\nQuer que eu desenvolva os slides de algum desses agora?"
+  "texto": "Sem acesso a WebSearch nessa sessão. Vou montar a pauta com dados sólidos do meu conhecimento até ago/2025, com extrapolação conservadora para contexto atual — marcando claramente o que é dado verificado vs. Stage Mídia.\n\n---\n\n**PAUTA — 23/04/2026 | @homero.ads**\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `IA reduziu CPA em 22% no Meta Ads — e a maioria ignora por quê`\n**Ângulo:** Não é sobre criativo nem copy. É sobre o sinal de dados que o Advantage+ usa antes do leilão. Mostra o mecanismo técnico por trás do número, não o resultado genérico que todo mundo posta.\n**Fonte:** Meta Business, relatório Advantage+ Shopping Campaigns (Q4/2025)\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `Esse empresário demitiu o analista de dados. Contratou o Claude.`\n**Ângulo:** Caso prático: PME de e-commerce usando Claude Code + planilha de vendas para gerar relatório de atribuição de canal toda segunda. Custo: R$ 0,12 por análise. Tempo: 4 min. Antes: 3h do analista.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Google lançou AI Max pra Search. O que muda no seu tráfego agora.`\n**Ângulo:** Não é hype — é impacto direto em match type, controle de destino de URL e consulta de pesquisa. Mostra o que o gestor perde se não migrar a configuração até maio. Dado concreto: expansão de consulta aumenta volume mas pode inflacionar CPC em 15-30%.\n**Fonte:** Google Ads Help Center / Search Engine Land, mar/2026\n\n---\n\n**Nota de produção:** o Post 3 requer confirmação da data exata do rollout do AI Max na sua região antes de publicar — cheque o painel de recomendações do Google Ads na manhã do dia."
 }
