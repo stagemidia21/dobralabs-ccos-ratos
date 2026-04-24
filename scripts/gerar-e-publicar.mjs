@@ -7,15 +7,12 @@
 
 import 'dotenv/config';
 import { execFileSync, execSync } from 'child_process';
-import { createRequire } from 'module';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { humanizarJSON } from './humanizer-rules.mjs';
 import { salvarCarrossel, lerHistorico } from './obsidian.mjs';
 import { chromium } from 'playwright';
-
-const _require = createRequire(import.meta.url);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -224,86 +221,6 @@ async function renderizarSlidesHTML(slides, slidesDir) {
 
   await browser.close();
   fs.rmSync(tmpDir, { recursive: true, force: true });
-}
-
-// Gera o JSX do carrossel usando CarrosselDinamico + JSON.stringify
-// Assim apóstrofes e aspas no texto NUNCA quebram o esbuild
-function gerarJSX(compId, foto, slides) {
-  const slidesJson = JSON.stringify(slides, null, 2);
-  return `import { CarrosselDinamico } from './CarrosselDinamico.jsx';
-
-  let content = '';
-  if (slide.tipo === 'capa') {
-    content = `
-      <div class="logo">@homero.ads</div>
-      <div class="slide-num">${slideIndex + 1}/${totalSlides}</div>
-      <div class="overlay"></div>
-      <div class="capa-inner">
-        <h1 class="capa-title">${nl2br(slide.title)}</h1>
-        ${slide.fonte ? `<div class="fonte">${esc(slide.fonte)}</div>` : ''}
-      </div>
-      <div class="accent-bar"></div>`;
-  } else if (slide.tipo === 'texto') {
-    content = `
-      <div class="logo">@homero.ads</div>
-      <div class="slide-num">${slideIndex + 1}/${totalSlides}</div>
-      <div class="overlay"></div>
-      <div class="texto-inner">
-        ${slide.label ? `<div class="label">${esc(slide.label)}</div>` : ''}
-        <h2 class="texto-title">${nl2br(slide.title)}</h2>
-        <p class="body-text">${esc(slide.body)}</p>
-      </div>
-      <div class="progress-bar" style="width:${progressWidth}%"></div>`;
-  } else if (slide.tipo === 'cta') {
-    content = `
-      <div class="logo">@homero.ads</div>
-      <div class="overlay"></div>
-      <div class="cta-inner">
-        <div class="cta-label">PRÓXIMO PASSO</div>
-        <div class="cta-btn">${esc(slide.cta)}</div>
-        <div class="cta-follow">Siga @homero.ads para mais conteúdo</div>
-      </div>`;
-  }
-
-  return `<!DOCTYPE html><html><head><meta charset="utf-8">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html,body{width:1080px;height:1080px;overflow:hidden}
-body{background:#0B0B0B;color:#fff;font-family:'Space Grotesk',system-ui,sans-serif;position:relative}
-.overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(11,11,11,.92) 0%,rgba(11,11,11,.70) 100%)}
-.logo{position:absolute;top:48px;left:60px;color:#F05A1A;font-family:'Syne',Impact,sans-serif;font-size:26px;font-weight:800;letter-spacing:1px;z-index:10}
-.slide-num{position:absolute;top:48px;right:60px;color:rgba(255,255,255,.35);font-size:20px;z-index:10;font-family:'Syne',sans-serif}
-.capa-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:130px 60px 90px;z-index:10}
-.capa-title{font-family:'Bebas Neue',Impact,'Arial Black',sans-serif;font-size:104px;line-height:.95;color:#fff;text-transform:uppercase;max-width:960px}
-.fonte{margin-top:36px;color:#F05A1A;font-size:22px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:1px}
-.accent-bar{position:absolute;bottom:0;left:0;right:0;height:5px;background:#F05A1A;z-index:10}
-.texto-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:130px 60px 80px;z-index:10}
-.label{color:#F05A1A;font-family:'Syne',sans-serif;font-weight:700;font-size:22px;letter-spacing:3px;text-transform:uppercase;margin-bottom:28px}
-.texto-title{font-family:'Bebas Neue',Impact,'Arial Black',sans-serif;font-size:82px;line-height:.95;color:#fff;text-transform:uppercase;margin-bottom:36px;max-width:960px}
-.body-text{color:rgba(255,255,255,.88);font-size:32px;line-height:1.55;max-width:960px;font-family:'Space Grotesk',sans-serif;font-weight:400}
-.progress-bar{position:absolute;bottom:0;left:0;height:5px;background:#F05A1A;z-index:10}
-.cta-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:10;gap:40px;padding:60px}
-.cta-label{color:rgba(255,255,255,.45);font-family:'Syne',sans-serif;font-weight:700;font-size:22px;letter-spacing:4px}
-.cta-btn{background:#F05A1A;color:#fff;padding:28px 72px;font-family:'Syne',sans-serif;font-weight:800;font-size:38px;border-radius:8px;text-align:center;box-shadow:0 0 48px rgba(240,90,26,.45)}
-.cta-follow{color:rgba(255,255,255,.45);font-size:26px;font-family:'Space Grotesk',sans-serif}
-</style></head><body>${content}</body></html>`;
-}
-
-async function renderizarSlides(slides, slidesDir) {
-  const { chromium } = _require('/opt/node22/lib/node_modules/playwright');
-  const browser = await chromium.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
-  const page = await browser.newPage();
-  await page.setViewportSize({ width: 1080, height: 1080 });
-  for (let i = 0; i < slides.length; i++) {
-    const html = gerarHTML(slides[i], i, slides.length);
-    await page.setContent(html, { waitUntil: 'networkidle', timeout: 30000 });
-    const num = String(i + 1).padStart(2, '0');
-    await page.screenshot({ path: path.join(slidesDir, `slide-${num}.jpg`), type: 'jpeg', quality: 90 });
-    process.stdout.write(`    Slide ${num}... OK\n`);
-  }
-  await browser.close();
 }
 
 // Gera os dados dos slides via Claude
