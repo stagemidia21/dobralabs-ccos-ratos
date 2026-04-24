@@ -12,6 +12,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { humanizarJSON } from './humanizer-rules.mjs';
 import { salvarCarrossel, lerHistorico } from './obsidian.mjs';
+import { chromium } from 'playwright';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
@@ -113,6 +114,112 @@ async function sendTelegram(text) {
     });
     await new Promise(r => setTimeout(r, 300));
   }
+}
+
+// ─── RENDERER HTML + PLAYWRIGHT ──────────────────────────────────────────────
+
+const CHROMIUM_PATH = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+
+function slideParaHTML(slide, index, total) {
+  const esc = (s = '') => String(s)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+  const nl  = (s = '') => esc(s).replace(/\\n/g, '<br>');
+  const num = String(index + 1).padStart(2, '0');
+
+  const fonts = `<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet">`;
+
+  const base = `
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { width:1080px; height:1350px; overflow:hidden; background:#0B0B0B; color:#fff; }
+    .slide { width:1080px; height:1350px; display:flex; flex-direction:column;
+             justify-content:center; align-items:flex-start; padding:80px 90px;
+             position:relative; background:#0B0B0B; }
+    .accent { color:#F05A1A; }
+    .tag { font-family:'Syne',sans-serif; font-size:22px; font-weight:700;
+           letter-spacing:3px; text-transform:uppercase; color:#F05A1A;
+           border:1px solid #F05A1A; padding:6px 16px; display:inline-block;
+           margin-bottom:40px; }
+    .title { font-family:'Bebas Neue',sans-serif; font-size:110px; line-height:1.0;
+             color:#fff; letter-spacing:2px; text-shadow:0 0 40px #F05A1A30; }
+    .body  { font-family:'Space Grotesk',sans-serif; font-size:38px; line-height:1.6;
+             color:#ffffffcc; margin-top:36px; max-width:900px; }
+    .fonte { font-family:'Syne',sans-serif; font-size:22px; color:#ffffff60;
+             margin-top:36px; }
+    .brand { position:absolute; bottom:60px; right:90px;
+             font-family:'Bebas Neue',sans-serif; font-size:32px;
+             letter-spacing:2px; color:#ffffff40; }
+    .num   { position:absolute; top:60px; right:90px;
+             font-family:'Space Grotesk',sans-serif; font-size:24px;
+             color:#ffffff40; }
+    .bar   { position:absolute; bottom:0; left:0; height:5px; background:#F05A1A;
+             width:${Math.round((index + 1) / total * 100)}%; }
+    .line  { width:60px; height:4px; background:#F05A1A; margin-bottom:48px;
+             box-shadow:0 0 12px #F05A1A80; }`;
+
+  if (slide.tipo === 'capa') {
+    return `<!DOCTYPE html><html><head><meta charset="utf-8">${fonts}
+<style>${base}
+  .slide { justify-content:flex-end; padding-bottom:130px; }
+  .title { font-size:130px; line-height:0.95; }
+</style></head><body>
+<div class="slide">
+  <div class="line"></div>
+  <h1 class="title">${nl(slide.title)}</h1>
+  ${slide.fonte ? `<p class="fonte">${esc(slide.fonte)}</p>` : ''}
+  <span class="brand">@homero.ads</span>
+</div></body></html>`;
+  }
+
+  if (slide.tipo === 'cta') {
+    return `<!DOCTYPE html><html><head><meta charset="utf-8">${fonts}
+<style>${base}
+  .slide { justify-content:center; align-items:center; text-align:center; }
+  .cta { font-family:'Bebas Neue',sans-serif; font-size:100px; line-height:1.05;
+         color:#F05A1A; text-shadow:0 0 60px #F05A1A60; max-width:900px; }
+  .handle { font-family:'Space Grotesk',sans-serif; font-size:36px;
+             color:#ffffff80; margin-top:40px; letter-spacing:2px; }
+</style></head><body>
+<div class="slide">
+  <p class="cta">${nl(slide.cta)}</p>
+  <p class="handle">@homero.ads</p>
+</div></body></html>`;
+  }
+
+  // tipo === 'texto'
+  return `<!DOCTYPE html><html><head><meta charset="utf-8">${fonts}
+<style>${base}</style></head><body>
+<div class="slide">
+  ${slide.label ? `<span class="tag">${esc(slide.label)}</span>` : ''}
+  <h2 class="title">${nl(slide.title)}</h2>
+  ${slide.body ? `<p class="body">${esc(slide.body)}</p>` : ''}
+  <span class="num">${num}/${total}</span>
+  <span class="brand">@homero.ads</span>
+  <div class="bar"></div>
+</div></body></html>`;
+}
+
+async function renderizarSlidesHTML(slides, slidesDir) {
+  const browser = await chromium.launch({ executablePath: CHROMIUM_PATH });
+  const page = await browser.newPage();
+  await page.setViewportSize({ width: 1080, height: 1350 });
+  const tmpDir = path.join(slidesDir, '_html');
+  fs.mkdirSync(tmpDir, { recursive: true });
+
+  for (let i = 0; i < slides.length; i++) {
+    const num = String(i + 1).padStart(2, '0');
+    const htmlPath = path.join(tmpDir, `slide-${num}.html`);
+    const outFile  = path.join(slidesDir, `slide-${num}.jpg`);
+    process.stdout.write(`    Slide ${num}... `);
+    fs.writeFileSync(htmlPath, slideParaHTML(slides[i], i, slides.length));
+    await page.goto(`file://${htmlPath}`, { waitUntil: 'networkidle' });
+    await page.screenshot({ path: outFile, type: 'jpeg', quality: 90 });
+    console.log('OK');
+  }
+
+  await browser.close();
+  fs.rmSync(tmpDir, { recursive: true, force: true });
 }
 
 // Gera o JSX do carrossel usando CarrosselDinamico + JSON.stringify
@@ -277,56 +384,9 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   dados = humanizarJSON(dados);
   console.log(`  ✓ Humanizado`);
 
-  // 2. Escolhe fundo do banco de fotos
-  const foto = escolherFoto(tema, numPost);
-  registrarUso(foto);
-  const jsx = gerarJSX(compId, foto, dados.slides);
-  const jsxPath = path.join(SRC_DIR, `${compId}.jsx`);
-  fs.writeFileSync(jsxPath, jsx);
-  console.log(`  ✓ JSX criado: ${compId}.jsx (fundo: ${foto})`);
-
-  // 3. Registra no Root.jsx
-  let root = fs.readFileSync(path.join(SRC_DIR, 'Root.jsx'), 'utf8');
-  if (!root.includes(compId)) {
-    root = root.replace(
-      "import { SlideFeed1, SlideFeed4 } from './SlideFeed.jsx';",
-      `import { SlideFeed1, SlideFeed4 } from './SlideFeed.jsx';\nimport { ${compId} } from './${compId}.jsx';`
-    );
-    // Adiciona composition antes do TikTok
-    root = root.replace(
-      "      {/* TikTok / Reels 9:16 */}",
-      `      <Composition id="${compId}" component={${compId}} durationInFrames={SLIDE_DURATION_FRAMES * ${dados.slides.length}} fps={FPS} width={INSTAGRAM.width} height={INSTAGRAM.height} />\n\n      {/* TikTok / Reels 9:16 */}`
-    );
-    fs.writeFileSync(path.join(SRC_DIR, 'Root.jsx'), root);
-    console.log(`  ✓ Registrado no Root.jsx`);
-  }
-
-  // 4. Renderiza os slides como imagem estática (remotion still)
-  const FRAMES_PER_SLIDE = 300; // 10s × 30fps — usado só pra calcular frame do meio
-  const remotionBin = path.join(REMOTION_DIR, 'node_modules/.bin/remotion.cmd');
-  console.log('  Renderizando slides (imagem)...');
-  for (let i = 0; i < dados.slides.length; i++) {
-    const frameDoMeio = i * FRAMES_PER_SLIDE + Math.floor(FRAMES_PER_SLIDE / 2);
-    const num = String(i + 1).padStart(2, '0');
-    const outFile = path.join(slidesDir, `slide-${num}.jpg`);
-    const outFileWin = outFile.replace(/\//g, '\\');
-    const cmd = `"${remotionBin}" still ${compId} "${outFileWin}" --frame=${frameDoMeio} --image-format=jpeg --jpeg-quality=90 --log=error`;
-
-    let tentativa = 0;
-    while (tentativa < 3) {
-      try {
-        process.stdout.write(`    Slide ${num}${tentativa > 0 ? ` (retry ${tentativa})` : ''}... `);
-        if (tentativa > 0) await new Promise(r => setTimeout(r, 3000 * tentativa));
-        execSync(cmd, { cwd: REMOTION_DIR, stdio: 'pipe', shell: true });
-        console.log('OK');
-        break;
-      } catch (err) {
-        tentativa++;
-        if (tentativa >= 3) throw new Error(`Slide ${num} falhou após 3 tentativas: ${err.message.slice(0, 100)}`);
-        console.log(`falhou, retry ${tentativa}...`);
-      }
-    }
-  }
+  // 2. Renderiza os slides como JPEG via HTML+Playwright
+  console.log('  Renderizando slides (HTML)...');
+  await renderizarSlidesHTML(dados.slides, slidesDir);
 
   // 5. Upload + publicar
   if (DRY_RUN) {
