@@ -35,8 +35,10 @@ const CLAUDE_BIN = process.platform === 'win32'
   : '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude';
 
 function callClaude(prompt, timeout = 120000) {
+  // Run from /tmp to avoid loading project CLAUDE.md which causes Claude to
+  // respond about git state instead of the actual prompt.
   return execFileSync(CLAUDE_BIN, ['-p', prompt], {
-    cwd: ROOT, timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
+    cwd: '/tmp', timeout, encoding: 'utf8', maxBuffer: 1024 * 1024 * 5,
   }).trim();
 }
 
