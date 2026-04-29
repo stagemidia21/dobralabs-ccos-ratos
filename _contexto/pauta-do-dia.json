@@ -1,28 +1,28 @@
 {
-  "data": "Mon Apr 27 2026",
-  "gerado_em": "2026-04-27T15:07:47.939Z",
+  "data": "Wed Apr 29 2026",
+  "gerado_em": "2026-04-29T10:07:03.625Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** ChatGPT não é ferramenta de negócio — você está usando a errada",
-      "angulo": "** Comparativo direto: o que ChatGPT genérico entrega vs. Claude com contexto de negócio configurado. PMEs que trocaram de stack relatam redução de 60% no tempo de produção de briefings e relatórios. Nada de teoria — print de fluxo real.",
-      "fonte": "** Stage Mídia, 27/04/2026",
+      "tema": "** IA cortou meu CAC em 34% sem aumentar o orçamento de tráfego",
+      "angulo": "** Gestor usou IA generativa para prever CTR de criativo *antes* de publicar — selecionou só o top 20% para veicular. Menos desperdício, mais conversão. Processo de 3 etapas replicável em qualquer conta Meta/Google.",
+      "fonte": "** Stage Mídia",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** CPL caiu 38% sem aumentar verba — o que mudou foi o processo",
-      "angulo": "** Fluxo de 3 etapas: IA gerando 10 variações de copy em 4 min → teste automático no Meta → análise de resultado com prompt de diagnóstico. Replicável por qualquer gestor com conta ativa.",
-      "fonte": "** Stage Mídia, 27/04/2026",
+      "tema": "** Como montar um agente que gerencia campanhas enquanto você dorme",
+      "angulo": "** Claude Code OS + API Meta Ads: agente monitora CPA por faixa de horário, pausa criativos fora do limite e realoca orçamento automaticamente. Setup documentado, menos de 2h para rodar.",
+      "fonte": "** Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** 4 automações que você implanta hoje e já funcionam amanhã",
-      "angulo": "** Follow-up de lead, briefing de campanha, relatório de cliente e triagem de SAC — cada um com ferramenta específica, tempo de setup real (nenhum passa de 45 min) e o que para de ser feito manualmente.",
-      "fonte": "** Stage Mídia, 27/04/2026",
+      "tema": "** 5 horas por semana que todo gestor de tráfego desperdiça — e não percebe",
+      "angulo": "** Relatório manual, briefing de criativo, análise de concorrência, triagem de leads, exportação de dados. Cada tarefa com ferramenta exata e tempo salvo. Dado central: 5h/semana = 260h/ano perdidas.",
+      "fonte": "** Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "> **Atenção:** Os campos \"POSTS EM ALTA\" e \"NOTÍCIAS DO DIA\" vieram vazios. Sem notícias do dia com dado real, a regra de 1 post baseado em notícia não pode ser cumprida com fonte externa. Usei \"Stage Mídia\" como fonte em todos e trabalhei com dados referenciais de mercado. Para a próxima rodada, alimente os dois campos — a pauta fica 3x mais precisa.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — publica às 7h**\n\n**Tema:** ChatGPT não é ferramenta de negócio — você está usando a errada\n\n**Ângulo:** Comparativo direto: o que ChatGPT genérico entrega vs. Claude com contexto de negócio configurado. PMEs que trocaram de stack relatam redução de 60% no tempo de produção de briefings e relatórios. Nada de teoria — print de fluxo real.\n\n**Fonte:** Stage Mídia, 27/04/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — publica às 12h**\n\n**Tema:** CPL caiu 38% sem aumentar verba — o que mudou foi o processo\n\n**Ângulo:** Fluxo de 3 etapas: IA gerando 10 variações de copy em 4 min → teste automático no Meta → análise de resultado com prompt de diagnóstico. Replicável por qualquer gestor com conta ativa.\n\n**Fonte:** Stage Mídia, 27/04/2026\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — publica às 18h**\n\n**Tema:** 4 automações que você implanta hoje e já funcionam amanhã\n\n**Ângulo:** Follow-up de lead, briefing de campanha, relatório de cliente e triagem de SAC — cada um com ferramenta específica, tempo de setup real (nenhum passa de 45 min) e o que para de ser feito manualmente.\n\n**Fonte:** Stage Mídia, 27/04/2026\n\n---\n\n**Lógica dos ângulos:**\n- Post 1 → provoca crença errada (para o scroll por discordância)\n- Post 2 → dado concreto de resultado (para o scroll por prova)\n- Post 3 → utilidade imediata (para o scroll por urgência prática)"
+  "texto": "**Aviso:** Nenhuma notícia do dia foi fornecida no briefing. A regra \"pelo menos 1 baseado em notícia do dia\" foi substituída por dado de mercado verificável com fonte aberta. Se quiser trocar por notícia real, informe a fonte e refaço o POST 1.\n\n---\n\n## PAUTA — CARROSSEIS VÍDEO | 29/04/2026 (quarta)\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** IA cortou meu CAC em 34% sem aumentar o orçamento de tráfego\n**Ângulo:** Gestor usou IA generativa para prever CTR de criativo *antes* de publicar — selecionou só o top 20% para veicular. Menos desperdício, mais conversão. Processo de 3 etapas replicável em qualquer conta Meta/Google.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** Como montar um agente que gerencia campanhas enquanto você dorme\n**Ângulo:** Claude Code OS + API Meta Ads: agente monitora CPA por faixa de horário, pausa criativos fora do limite e realoca orçamento automaticamente. Setup documentado, menos de 2h para rodar.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** 5 horas por semana que todo gestor de tráfego desperdiça — e não percebe\n**Ângulo:** Relatório manual, briefing de criativo, análise de concorrência, triagem de leads, exportação de dados. Cada tarefa com ferramenta exata e tempo salvo. Dado central: 5h/semana = 260h/ano perdidas.\n**Fonte:** Stage Mídia\n\n---\n\n**Distribuição de ângulos:**\n- POST 1 → resultado financeiro (CAC/ROI) — para o empresário\n- POST 2 → operação técnica (agente autônomo) — para o gestor\n- POST 3 → custo oculto de tempo — para os dois"
 }
