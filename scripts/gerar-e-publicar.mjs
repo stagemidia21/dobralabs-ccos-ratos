@@ -95,7 +95,18 @@ function escolherFoto(tema, numPost = 0) {
 
 const CLAUDE_BIN = process.platform === 'win32'
   ? path.join(process.env.USERPROFILE || 'C:/Users/homer', '.local/bin/claude.exe')
-  : '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude';
+  : (() => {
+      const candidates = [
+        '/home/' + (process.env.USER || 'homer') + '/.local/bin/claude',
+        '/opt/node22/bin/claude',
+        '/usr/local/bin/claude',
+        '/usr/bin/claude',
+      ];
+      for (const c of candidates) {
+        try { fs.accessSync(c, fs.constants.X_OK); return c; } catch {}
+      }
+      return candidates[0];
+    })();
 
 function callClaude(prompt, timeout = 180000) {
   // Run from /tmp to avoid loading project CLAUDE.md which causes Claude to
