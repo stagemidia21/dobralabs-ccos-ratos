@@ -1,28 +1,28 @@
 {
-  "data": "Wed Apr 29 2026",
-  "gerado_em": "2026-04-29T10:07:03.625Z",
+  "data": "Sat May 02 2026",
+  "gerado_em": "2026-05-02T10:04:27.520Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** IA cortou meu CAC em 34% sem aumentar o orçamento de tráfego",
-      "angulo": "** Gestor usou IA generativa para prever CTR de criativo *antes* de publicar — selecionou só o top 20% para veicular. Menos desperdício, mais conversão. Processo de 3 etapas replicável em qualquer conta Meta/Google.",
-      "fonte": "** Stage Mídia",
+      "tema": "** `IA responde lead em 4 segundos. Você demora 6 horas. Adivinha quem fecha?`",
+      "angulo": "** Dado de velocidade de resposta vs. taxa de conversão: empresas que respondem em menos de 5 min convertem até 9x mais (Harvard Business Review). Mostrar fluxo real de automação WhatsApp + IA sem enrolação — o que o empresário precisa montar hoje.",
+      "fonte": "** Harvard Business Review / Stage Mídia",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** Como montar um agente que gerencia campanhas enquanto você dorme",
-      "angulo": "** Claude Code OS + API Meta Ads: agente monitora CPA por faixa de horário, pausa criativos fora do limite e realoca orçamento automaticamente. Setup documentado, menos de 2h para rodar.",
+      "tema": "** `CPL caiu 38% quando parei de criar criativo no braço`",
+      "angulo": "** Comparativo direto: gestor usando IA generativa pra iterar criativos (copy + visual) vs. processo manual. Mostrar o workflow real — prompt → variação → teste A/B → otimização — com número de iterações por semana e impacto no CPL. Anti-guru: sem \"segredo\", só processo.",
       "fonte": "** Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** 5 horas por semana que todo gestor de tráfego desperdiça — e não percebe",
-      "angulo": "** Relatório manual, briefing de criativo, análise de concorrência, triagem de leads, exportação de dados. Cada tarefa com ferramenta exata e tempo salvo. Dado central: 5h/semana = 260h/ano perdidas.",
+      "tema": "** `Claude Code fez em 40 min o que meu dev levou 3 dias pra entregar`",
+      "angulo": "** Caso prático de uso de Claude Code OS para automatizar tarefa de integração (ex: CRM + planilha + notificação). Quebrar o medo do empresário não-técnico: mostrar o prompt exato, o resultado e o custo da operação. Encerramento de sexta com gancho de ação pro fim de semana.",
       "fonte": "** Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "**Aviso:** Nenhuma notícia do dia foi fornecida no briefing. A regra \"pelo menos 1 baseado em notícia do dia\" foi substituída por dado de mercado verificável com fonte aberta. Se quiser trocar por notícia real, informe a fonte e refaço o POST 1.\n\n---\n\n## PAUTA — CARROSSEIS VÍDEO | 29/04/2026 (quarta)\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** IA cortou meu CAC em 34% sem aumentar o orçamento de tráfego\n**Ângulo:** Gestor usou IA generativa para prever CTR de criativo *antes* de publicar — selecionou só o top 20% para veicular. Menos desperdício, mais conversão. Processo de 3 etapas replicável em qualquer conta Meta/Google.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** Como montar um agente que gerencia campanhas enquanto você dorme\n**Ângulo:** Claude Code OS + API Meta Ads: agente monitora CPA por faixa de horário, pausa criativos fora do limite e realoca orçamento automaticamente. Setup documentado, menos de 2h para rodar.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** 5 horas por semana que todo gestor de tráfego desperdiça — e não percebe\n**Ângulo:** Relatório manual, briefing de criativo, análise de concorrência, triagem de leads, exportação de dados. Cada tarefa com ferramenta exata e tempo salvo. Dado central: 5h/semana = 260h/ano perdidas.\n**Fonte:** Stage Mídia\n\n---\n\n**Distribuição de ângulos:**\n- POST 1 → resultado financeiro (CAC/ROI) — para o empresário\n- POST 2 → operação técnica (agente autônomo) — para o gestor\n- POST 3 → custo oculto de tempo — para os dois"
+  "texto": "> **Atenção:** As seções \"POSTS EM ALTA\" e \"NOTÍCIAS DO DIA\" vieram vazias. Sem inputs externos, os 3 posts abaixo usam dados conhecidos do setor até minha base de conhecimento. Fonte marcada como \"Stage Mídia\" onde não há veículo externo. Para substituir por dado do dia real, basta me passar a notícia e refaço o post correspondente.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `IA responde lead em 4 segundos. Você demora 6 horas. Adivinha quem fecha?`\n**Ângulo:** Dado de velocidade de resposta vs. taxa de conversão: empresas que respondem em menos de 5 min convertem até 9x mais (Harvard Business Review). Mostrar fluxo real de automação WhatsApp + IA sem enrolação — o que o empresário precisa montar hoje.\n**Fonte:** Harvard Business Review / Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `CPL caiu 38% quando parei de criar criativo no braço`\n**Ângulo:** Comparativo direto: gestor usando IA generativa pra iterar criativos (copy + visual) vs. processo manual. Mostrar o workflow real — prompt → variação → teste A/B → otimização — com número de iterações por semana e impacto no CPL. Anti-guru: sem \"segredo\", só processo.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Claude Code fez em 40 min o que meu dev levou 3 dias pra entregar`\n**Ângulo:** Caso prático de uso de Claude Code OS para automatizar tarefa de integração (ex: CRM + planilha + notificação). Quebrar o medo do empresário não-técnico: mostrar o prompt exato, o resultado e o custo da operação. Encerramento de sexta com gancho de ação pro fim de semana.\n**Fonte:** Stage Mídia\n\n---\n\n**Próximo passo:** Me manda as notícias do dia ou os posts em alta e ajusto os ângulos com dados frescos."
 }
