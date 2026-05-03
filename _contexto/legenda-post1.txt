@@ -1,0 +1,15 @@
+Eu não sou programador. Nunca fui. Mas hoje o Claude Code é uma das ferramentas que mais uso no meu dia a dia à frente da Stage Mídia.
+
+A galera ainda associa o Claude Code a terminal, código, dev. Faz sentido — é assim que ele nasceu. Mas eu precisei de uma semana usando pra entender que o que ele realmente entrega é capacidade de execução com contexto. E contexto é exatamente o que falta na rotina de quem opera uma agência.
+
+Hoje eu uso o Claude Code pra redigir proposta comercial com estrutura que convence e linguagem adequada pra cada perfil de cliente. Uso pra montar relatório de resultado com narrativa, não só com número. Uso pra criar SOP de onboarding, de atendimento, de produção de conteúdo — documento que minha equipe realmente lê e segue. Uso pra automatizar o briefing: o cliente responde um formulário, o Claude transforma isso num documento pronto pra briefar o time criativo.
+
+Nada disso é código. É operação de negócio.
+
+O que mudou pra mim foi parar de pensar no Claude Code como uma ferramenta de TI e começar a pensar como um sistema operacional do meu negócio. Ele não executa por mim — ele amplifica minha capacidade de execução. A diferença é grande.
+
+Se você é dono de agência, gestor de marketing ou opera qualquer negócio com volume de entrega, vale testar esse ângulo. Não como dev. Como operador.
+
+Nos próximos posts vou mostrar casos práticos de como uso cada um desses fluxos. Salva esse aqui pra não perder.
+
+#ClaudeCode #GestãoDeAgência #FerramentasDeGestão #MarketingDigital #StageMídia
