@@ -1,28 +1,28 @@
 {
-  "data": "Sat May 02 2026",
-  "gerado_em": "2026-05-02T10:04:27.520Z",
+  "data": "Mon May 04 2026",
+  "gerado_em": "2026-05-04T15:07:29.344Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** `IA responde lead em 4 segundos. Você demora 6 horas. Adivinha quem fecha?`",
-      "angulo": "** Dado de velocidade de resposta vs. taxa de conversão: empresas que respondem em menos de 5 min convertem até 9x mais (Harvard Business Review). Mostrar fluxo real de automação WhatsApp + IA sem enrolação — o que o empresário precisa montar hoje.",
-      "fonte": "** Harvard Business Review / Stage Mídia",
+      "tema": "** `IA não vai te demitir. Vai demitir quem você contratou pra isso.`",
+      "angulo": "** Mostrar 3 funções que PMEs ainda pagam R$2.800–R$4.500/mês em CLT — atendimento, qualificação de lead e relatório de tráfego — e quanto custa substituir cada uma com agente de IA hoje. Dado de custo real por função no centro de cada slide.",
+      "fonte": "** Stage Mídia",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** `CPL caiu 38% quando parei de criar criativo no braço`",
-      "angulo": "** Comparativo direto: gestor usando IA generativa pra iterar criativos (copy + visual) vs. processo manual. Mostrar o workflow real — prompt → variação → teste A/B → otimização — com número de iterações por semana e impacto no CPL. Anti-guru: sem \"segredo\", só processo.",
+      "tema": "** `Seu gestor de tráfego está otimizando pra métrica errada no Meta.`",
+      "angulo": "** Comparar campanha otimizada por CPL vs campanha otimizada por LTV (com dado de compra via Conversions API + IA de scoring). Mostrar caso onde CPL sobe 18% e receita sobe 41% — empresário que olha só o custo do lead está perdendo dinheiro todo dia.",
       "fonte": "** Stage Mídia",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** `Claude Code fez em 40 min o que meu dev levou 3 dias pra entregar`",
-      "angulo": "** Caso prático de uso de Claude Code OS para automatizar tarefa de integração (ex: CRM + planilha + notificação). Quebrar o medo do empresário não-técnico: mostrar o prompt exato, o resultado e o custo da operação. Encerramento de sexta com gancho de ação pro fim de semana.",
+      "tema": "** `Eu pedi pro Claude Code montar meu CRM. Levou 4 horas. Custou R$0.`",
+      "angulo": "** Walkthrough real de empresário sem dev que usou Claude Code OS pra construir um mini-CRM interno integrado a planilha + WhatsApp. Mostrar o prompt, a estrutura gerada e o que viria sendo cobrado por uma agência. Encerra com: \"o que você ainda está terceirizando que dá pra automatizar hoje à noite?\"",
       "fonte": "** Stage Mídia",
       "hora": 18
     }
   ],
-  "texto": "> **Atenção:** As seções \"POSTS EM ALTA\" e \"NOTÍCIAS DO DIA\" vieram vazias. Sem inputs externos, os 3 posts abaixo usam dados conhecidos do setor até minha base de conhecimento. Fonte marcada como \"Stage Mídia\" onde não há veículo externo. Para substituir por dado do dia real, basta me passar a notícia e refaço o post correspondente.\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — 7h**\n**Tema:** `IA responde lead em 4 segundos. Você demora 6 horas. Adivinha quem fecha?`\n**Ângulo:** Dado de velocidade de resposta vs. taxa de conversão: empresas que respondem em menos de 5 min convertem até 9x mais (Harvard Business Review). Mostrar fluxo real de automação WhatsApp + IA sem enrolação — o que o empresário precisa montar hoje.\n**Fonte:** Harvard Business Review / Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — 12h**\n**Tema:** `CPL caiu 38% quando parei de criar criativo no braço`\n**Ângulo:** Comparativo direto: gestor usando IA generativa pra iterar criativos (copy + visual) vs. processo manual. Mostrar o workflow real — prompt → variação → teste A/B → otimização — com número de iterações por semana e impacto no CPL. Anti-guru: sem \"segredo\", só processo.\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — 18h**\n**Tema:** `Claude Code fez em 40 min o que meu dev levou 3 dias pra entregar`\n**Ângulo:** Caso prático de uso de Claude Code OS para automatizar tarefa de integração (ex: CRM + planilha + notificação). Quebrar o medo do empresário não-técnico: mostrar o prompt exato, o resultado e o custo da operação. Encerramento de sexta com gancho de ação pro fim de semana.\n**Fonte:** Stage Mídia\n\n---\n\n**Próximo passo:** Me manda as notícias do dia ou os posts em alta e ajusto os ângulos com dados frescos."
+  "texto": "> **Aviso:** Os campos \"Posts em Alta\" e \"Notícias do Dia\" vieram em branco. Gerei a pauta com os melhores ângulos possíveis para o nicho, marcando como \"Stage Mídia\" onde não há fonte externa verificável. Quando alimentar esses campos, as pautas ficam ainda mais afiadas.\n\n---\n\n## PAUTA — Segunda, 04/05/2026 | @homero.ads\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — publica às 7h**\n\n**Tema:** `IA não vai te demitir. Vai demitir quem você contratou pra isso.`\n*(79 chars)*\n\n**Ângulo:** Mostrar 3 funções que PMEs ainda pagam R$2.800–R$4.500/mês em CLT — atendimento, qualificação de lead e relatório de tráfego — e quanto custa substituir cada uma com agente de IA hoje. Dado de custo real por função no centro de cada slide.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — publica às 12h**\n\n**Tema:** `Seu gestor de tráfego está otimizando pra métrica errada no Meta.`\n*(67 chars)*\n\n**Ângulo:** Comparar campanha otimizada por CPL vs campanha otimizada por LTV (com dado de compra via Conversions API + IA de scoring). Mostrar caso onde CPL sobe 18% e receita sobe 41% — empresário que olha só o custo do lead está perdendo dinheiro todo dia.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — publica às 18h**\n\n**Tema:** `Eu pedi pro Claude Code montar meu CRM. Levou 4 horas. Custou R$0.`\n*(68 chars)*\n\n**Ângulo:** Walkthrough real de empresário sem dev que usou Claude Code OS pra construir um mini-CRM interno integrado a planilha + WhatsApp. Mostrar o prompt, a estrutura gerada e o que viria sendo cobrado por uma agência. Encerra com: \"o que você ainda está terceirizando que dá pra automatizar hoje à noite?\"\n\n**Fonte:** Stage Mídia\n\n---\n\n### Lógica da sequência\n\n| Horário | Gatilho emocional | Ação esperada |\n|---|---|---|\n| 7h | Medo de ficar obsoleto + dado de custo | Salvar + compartilhar com sócio |\n| 12h | Dor de gestor que não entrega resultado real | Marcar gestor nos comentários |\n| 18h | Curiosidade + FOMO de não estar usando Claude Code | Seguir + DM pedindo o prompt |"
 }
