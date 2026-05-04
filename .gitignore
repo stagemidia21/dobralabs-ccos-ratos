@@ -38,3 +38,4 @@ tarefas.md
 # Sistema
 .DS_Store
 node_modules/
+_contexto/publish.lock

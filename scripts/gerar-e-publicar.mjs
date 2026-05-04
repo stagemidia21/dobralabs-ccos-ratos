@@ -390,7 +390,7 @@ async function processarPost(numPost, tema, angulo, fonte = '') {
   if (DRY_RUN) {
     const slides = fs.readdirSync(slidesDir).filter(f => f.endsWith('.jpg')).sort();
     console.log(`  🧪 DRY RUN — ${slides.length} slides em ${slidesDir}`);
-    console.log(`  Legenda: ${dados.legenda.slice(0, 120)}...`);
+    console.log(`  Legenda completa:\n${dados.legenda}`);
     console.log(`  ✅ Post ${numPost} (dry run) — nada publicado.`);
     return 'dry-run';
   }
