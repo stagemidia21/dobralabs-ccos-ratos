@@ -1,0 +1,19 @@
+Seu gestor de tráfego está comemorando CPL baixo. Enquanto isso, sua receita não cresce.
+
+Esse é o problema mais silencioso que vejo nas contas de clientes que chegam até mim: a campanha está sendo otimizada pela métrica errada desde o início.
+
+CPL é uma métrica de vaidade quando você não sabe o que acontece com esse lead depois. Já trabalhei num caso onde duas campanhas rodavam em paralelo — uma otimizando por CPL, outra otimizando por valor de compra, alimentada por dados reais de CRM via Conversions API e um modelo de scoring que classifica o perfil de lead com maior LTV histórico.
+
+O resultado foi o seguinte: a campanha otimizada por LTV trouxe CPL 18% mais caro. Na planilha do gestor, ela estava perdendo. Na conta bancária do empresário, ela gerou 41% a mais de receita no mesmo período.
+
+Por quê? Porque o Meta parou de buscar quem clica barato e começou a buscar quem compra mais caro. São públicos completamente diferentes.
+
+O gestor que olha só para o custo do lead está, na prática, treinando o algoritmo pra trazer o perfil errado — mais barato de converter no topo, mas quase impossível de monetizar no fundo.
+
+A Conversions API existe justamente pra isso: fechar o loop entre o que acontece no CRM e o que o algoritmo aprende. Quando você integra dado de compra real, ticket médio e recorrência no sinal de otimização, o Meta começa a trabalhar a seu favor de verdade.
+
+Se você ainda está medindo performance de tráfego só pelo CPL, precisa rever essa régua agora.
+
+Me chama no direct com "LTV" e te mostro como estruturar isso na sua operação.
+
+#trafegopago #metaads #conversionsapi #gestaodetrafego #marketingdigital
