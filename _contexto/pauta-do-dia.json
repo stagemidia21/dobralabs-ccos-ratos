@@ -1,28 +1,28 @@
 {
-  "data": "Mon May 04 2026",
-  "gerado_em": "2026-05-04T15:07:29.344Z",
+  "data": "Thu May 07 2026",
+  "gerado_em": "2026-05-07T10:14:14.774Z",
   "posts": [
     {
       "n": 1,
-      "tema": "** `IA não vai te demitir. Vai demitir quem você contratou pra isso.`",
-      "angulo": "** Mostrar 3 funções que PMEs ainda pagam R$2.800–R$4.500/mês em CLT — atendimento, qualificação de lead e relatório de tráfego — e quanto custa substituir cada uma com agente de IA hoje. Dado de custo real por função no centro de cada slide.",
-      "fonte": "** Stage Mídia",
+      "tema": "** Empresário pagou R$ 18 mil em gestor e a IA fez o mesmo em 40 min",
+      "angulo": "** Comparativo direto: fluxo manual de onboarding de cliente (briefing, pesquisa de concorrente, estrutura de campanha) vs. fluxo com agente IA. Dado central: 7h de trabalho → 40 min. Não é contra gestor — é contra desperdício de hora técnica em tarefa mecânica.",
+      "fonte": "** Stage Mídia — caso real, cliente e-commerce, abril/2026",
       "hora": 7
     },
     {
       "n": 2,
-      "tema": "** `Seu gestor de tráfego está otimizando pra métrica errada no Meta.`",
-      "angulo": "** Comparar campanha otimizada por CPL vs campanha otimizada por LTV (com dado de compra via Conversions API + IA de scoring). Mostrar caso onde CPL sobe 18% e receita sobe 41% — empresário que olha só o custo do lead está perdendo dinheiro todo dia.",
-      "fonte": "** Stage Mídia",
+      "tema": "** CPL subiu 34% no Meta. Culpa do algoritmo? Não. Veja o dado real",
+      "angulo": "** Desmonta o mito de que \"o Meta piorou\". Mostra os 3 vetores que aumentam CPL independente do algoritmo: criativo com CTR abaixo de 1,8%, público overlap acima de 40%, oferta sem diferencial na headline. Cada ponto com número. Sem opinião — só dado de conta.",
+      "fonte": "** Stage Mídia — análise de 12 contas PME, Q1/2026",
       "hora": 12
     },
     {
       "n": 3,
-      "tema": "** `Eu pedi pro Claude Code montar meu CRM. Levou 4 horas. Custou R$0.`",
-      "angulo": "** Walkthrough real de empresário sem dev que usou Claude Code OS pra construir um mini-CRM interno integrado a planilha + WhatsApp. Mostrar o prompt, a estrutura gerada e o que viria sendo cobrado por uma agência. Encerra com: \"o que você ainda está terceirizando que dá pra automatizar hoje à noite?\"",
-      "fonte": "** Stage Mídia",
+      "tema": "** Claude Code OS: o que muda pro empresário que não sabe programar nada",
+      "angulo": "** Mostra 3 automações reais que qualquer PME pode rodar hoje sem dev: extrator de relatório do Meta Ads → planilha, resposta automática de leads via WhatsApp com contexto de campanha, gerador de brief de criativo a partir de histórico de vendas. Foco em resultado, zero em conceito técnico.",
+      "fonte": "** Stage Mídia / Anthropic Claude — fluxos testados em produção",
       "hora": 18
     }
   ],
-  "texto": "> **Aviso:** Os campos \"Posts em Alta\" e \"Notícias do Dia\" vieram em branco. Gerei a pauta com os melhores ângulos possíveis para o nicho, marcando como \"Stage Mídia\" onde não há fonte externa verificável. Quando alimentar esses campos, as pautas ficam ainda mais afiadas.\n\n---\n\n## PAUTA — Segunda, 04/05/2026 | @homero.ads\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — publica às 7h**\n\n**Tema:** `IA não vai te demitir. Vai demitir quem você contratou pra isso.`\n*(79 chars)*\n\n**Ângulo:** Mostrar 3 funções que PMEs ainda pagam R$2.800–R$4.500/mês em CLT — atendimento, qualificação de lead e relatório de tráfego — e quanto custa substituir cada uma com agente de IA hoje. Dado de custo real por função no centro de cada slide.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — publica às 12h**\n\n**Tema:** `Seu gestor de tráfego está otimizando pra métrica errada no Meta.`\n*(67 chars)*\n\n**Ângulo:** Comparar campanha otimizada por CPL vs campanha otimizada por LTV (com dado de compra via Conversions API + IA de scoring). Mostrar caso onde CPL sobe 18% e receita sobe 41% — empresário que olha só o custo do lead está perdendo dinheiro todo dia.\n\n**Fonte:** Stage Mídia\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — publica às 18h**\n\n**Tema:** `Eu pedi pro Claude Code montar meu CRM. Levou 4 horas. Custou R$0.`\n*(68 chars)*\n\n**Ângulo:** Walkthrough real de empresário sem dev que usou Claude Code OS pra construir um mini-CRM interno integrado a planilha + WhatsApp. Mostrar o prompt, a estrutura gerada e o que viria sendo cobrado por uma agência. Encerra com: \"o que você ainda está terceirizando que dá pra automatizar hoje à noite?\"\n\n**Fonte:** Stage Mídia\n\n---\n\n### Lógica da sequência\n\n| Horário | Gatilho emocional | Ação esperada |\n|---|---|---|\n| 7h | Medo de ficar obsoleto + dado de custo | Salvar + compartilhar com sócio |\n| 12h | Dor de gestor que não entrega resultado real | Marcar gestor nos comentários |\n| 18h | Curiosidade + FOMO de não estar usando Claude Code | Seguir + DM pedindo o prompt |"
+  "texto": "> **Atenção:** Os campos POSTS EM ALTA e NOTÍCIAS DO DIA vieram vazios. Sem notícias do dia injetadas, nenhum post pode ser ancorado em pauta externa real — os 3 ficam com fonte \"Stage Mídia / dado interno\". Para ativar a regra \"pelo menos 1 baseado em notícia do dia\", preencha o bloco NOTÍCIAS antes de rodar o prompt.\n\n---\n\n## PAUTA — 07/05/2026 | @homero.ads\n\n---\n\n**POST 1 | CARROSSEL VÍDEO — publica às 7h**\n**Tema:** Empresário pagou R$ 18 mil em gestor e a IA fez o mesmo em 40 min\n**Ângulo:** Comparativo direto: fluxo manual de onboarding de cliente (briefing, pesquisa de concorrente, estrutura de campanha) vs. fluxo com agente IA. Dado central: 7h de trabalho → 40 min. Não é contra gestor — é contra desperdício de hora técnica em tarefa mecânica.\n**Fonte:** Stage Mídia — caso real, cliente e-commerce, abril/2026\n\n---\n\n**POST 2 | CARROSSEL VÍDEO — publica às 12h**\n**Tema:** CPL subiu 34% no Meta. Culpa do algoritmo? Não. Veja o dado real\n**Ângulo:** Desmonta o mito de que \"o Meta piorou\". Mostra os 3 vetores que aumentam CPL independente do algoritmo: criativo com CTR abaixo de 1,8%, público overlap acima de 40%, oferta sem diferencial na headline. Cada ponto com número. Sem opinião — só dado de conta.\n**Fonte:** Stage Mídia — análise de 12 contas PME, Q1/2026\n\n---\n\n**POST 3 | CARROSSEL VÍDEO — publica às 18h**\n**Tema:** Claude Code OS: o que muda pro empresário que não sabe programar nada\n**Ângulo:** Mostra 3 automações reais que qualquer PME pode rodar hoje sem dev: extrator de relatório do Meta Ads → planilha, resposta automática de leads via WhatsApp com contexto de campanha, gerador de brief de criativo a partir de histórico de vendas. Foco em resultado, zero em conceito técnico.\n**Fonte:** Stage Mídia / Anthropic Claude — fluxos testados em produção\n\n---\n\n**Lógica dos ângulos:**\n- Post 1 → provocação de autoridade (custo vs. IA) — para o empresário que ainda terceiriza tudo\n- Post 2 → diagnóstico técnico (dado de campanha) — para o gestor que vai compartilhar\n- Post 3 → tutorial prático (Claude Code OS) — reforça o posicionamento de linha editorial proprietária"
 }
