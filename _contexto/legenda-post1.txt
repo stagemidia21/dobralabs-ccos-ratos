@@ -1,15 +1,13 @@
-Um cliente me mandou o contrato de gestão dele com um cara que cobrava R$ 18 mil por mês. Peguei o escopo e fui ver quanto tempo daquele trabalho era técnico de verdade — e quanto era mecânico.
+Um cliente de e-commerce me mandou os acessos numa segunda de manhã. Até terça à tarde, o gestor dele ainda estava montando o briefing, pesquisando concorrentes e estruturando a primeira campanha. Sete horas de trabalho técnico — ou o que chamam de trabalho técnico.
 
-O processo de onboarding desse gestor levava em média 7 horas por cliente novo: briefing estruturado, pesquisa de concorrentes, análise de posicionamento, levantamento de palavras-chave, estrutura de campanha, nomenclatura de conjuntos, rascunho de criativos. Tudo feito na mão, um passo de cada vez.
+Rodei o mesmo fluxo com um agente de IA que a gente construiu aqui na Stage Mídia. Quarenta minutos. Briefing preenchido, análise de concorrentes com prints e dados, estrutura de campanha pronta pra revisar.
 
-Em abril deste ano, rodei esse mesmo fluxo com um agente de IA aqui na Stage Mídia, num cliente de e-commerce. Resultado: 40 minutos. O output foi equivalente — mesma profundidade de pesquisa, mesma lógica de estrutura de campanha, mesmo padrão de nomenclatura.
+O empresário paga R$ 18 mil por ano pro gestor. Não tô dizendo que gestor não serve. Tô dizendo que gestor que passa sete horas em tarefa mecânica é caro demais pra fazer o que uma máquina faz em quarenta minutos.
 
-Não estou dizendo que gestor não tem valor. Estou dizendo que R$ 18 mil não deveriam estar pagando por tarefa mecânica que qualquer LLM bem configurado executa em menos de uma hora. O gestor deveria estar usando esse tempo em decisão estratégica, leitura de dado, ajuste de oferta — coisa que IA ainda não faz sozinha com a mesma qualidade.
+O problema não é o profissional. É o processo. Onboarding manual é um gargalo que o mercado normalizou porque ninguém parou pra montar a automação certa. Quando você libera o gestor dessa etapa, ele consegue fazer o que de fato justifica o salário dele: análise, estratégia, decisão criativa.
 
-O problema não é o gestor. É que o mercado nunca foi obrigado a separar o que é trabalho técnico do que é trabalho mecânico. Agora é.
+A gente mapeou esse fluxo inteiro — desde o recebimento dos acessos até a entrega da estrutura de campanha — e transformou em agente. Abril de 2026, cliente real, resultado documentado.
 
-Quem não fizer essa separação agora vai ter dificuldade séria de justificar honorário nos próximos 12 meses.
+Se você tem uma agência ou gerencia tráfego e ainda faz onboarding na mão, me manda um direct com a palavra FLUXO e te mostro exatamente como a gente mountou isso.
 
-Me manda um direct com "ONBOARDING" e te mostro o fluxo exato que rodei com esse cliente.
-
-#gestãodetráfego #marketingdigital #inteligenciaartificial #agentesia #stagemídia
+#tráfegopago #agênciadigital #inteligênciaartificial #gestãodeagência #marketingdigital
