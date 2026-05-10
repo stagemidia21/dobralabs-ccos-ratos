@@ -117,13 +117,29 @@ function callClaude(prompt, timeout = 180000) {
 }
 
 
+function curlJson(url, opts = {}) {
+  const { method = 'GET', headers = {}, body, filePath } = opts;
+  const args = ['-s', '-X', method];
+  for (const [k, v] of Object.entries(headers)) args.push('-H', `${k}: ${v}`);
+  if (body) args.push('--data-raw', body);
+  if (filePath) args.push('--data-binary', `@${filePath}`);
+  args.push(url);
+  const out = execSync(`curl ${args.map(a => `'${String(a).replace(/'/g, "'\\''")}'`).join(' ')}`, {
+    encoding: 'utf8', maxBuffer: 10 * 1024 * 1024,
+  });
+  return out;
+}
+
 async function sendTelegram(text) {
   if (!BOT_TOKEN || !CHAT_ID) return;
   for (const chunk of (text.match(/[\s\S]{1,4000}/g) || [text])) {
-    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: CHAT_ID, text: chunk }),
-    });
+    try {
+      curlJson(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: chunk }),
+      });
+    } catch {}
     await new Promise(r => setTimeout(r, 300));
   }
 }
@@ -307,17 +323,19 @@ Títulos em CAPS, usar \\n pra quebrar linha, máximo 4 linhas por título, body
 }
 
 async function uploadSlide(filePath, filename) {
-  const r = await fetch(`${BASE_URL}/v1/media/create-upload-url`, {
+  const raw = curlJson(`${BASE_URL}/v1/media/create-upload-url`, {
     method: 'POST', headers: authHeaders,
     body: JSON.stringify({ file_name: filename, content_type: 'image/jpeg' }),
   });
-  if (!r.ok) throw new Error(`Upload URL falhou: ${await r.text()}`);
-  const { upload_url, media_url } = await r.json();
-  const putR = await fetch(upload_url, {
-    method: 'PUT', headers: { 'Content-Type': 'image/jpeg' },
-    body: fs.readFileSync(filePath),
-  });
-  if (!putR.ok) throw new Error(`PUT falhou: ${putR.status}`);
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { throw new Error(`Upload URL falhou: ${raw}`); }
+  if (parsed.error || parsed.message) throw new Error(`Upload URL falhou: ${raw}`);
+  const { upload_url, media_url } = parsed;
+  const putOut = execSync(
+    `curl -s -o /dev/null -w "%{http_code}" -X PUT -H 'Content-Type: image/jpeg' --data-binary '@${filePath}' '${upload_url}'`,
+    { encoding: 'utf8' }
+  );
+  if (!putOut.startsWith('2')) throw new Error(`PUT falhou: ${putOut}`);
   return media_url;
 }
 
@@ -333,7 +351,7 @@ const CONTAS_PFM = {
 };
 
 async function publicarTodas(mediaUrls, legenda) {
-  const r = await fetch(`${BASE_URL}/v1/social-posts`, {
+  const raw = curlJson(`${BASE_URL}/v1/social-posts`, {
     method: 'POST',
     headers: authHeaders,
     body: JSON.stringify({
@@ -342,19 +360,22 @@ async function publicarTodas(mediaUrls, legenda) {
       social_accounts: Object.values(CONTAS_PFM),
     }),
   });
-  if (!r.ok) throw new Error(`PostForMe falhou: ${await r.text()}`);
-  return await r.json();
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { throw new Error(`PostForMe falhou: ${raw}`); }
+  if (parsed.error || (parsed.message && !parsed.id)) throw new Error(`PostForMe falhou: ${raw}`);
+  return parsed;
 }
 
 async function aguardarResultados(postId, timeoutMs = 120000) {
   const inicio = Date.now();
   while (Date.now() - inicio < timeoutMs) {
     await new Promise(r => setTimeout(r, 5000));
-    const r = await fetch(`${BASE_URL}/v1/social-posts/${postId}/results`, { headers: authHeaders });
-    if (!r.ok) break;
-    const d = await r.json();
-    const results = d.data || d;
-    if (Array.isArray(results) && results.length > 0) return results;
+    try {
+      const raw = curlJson(`${BASE_URL}/v1/social-posts/${postId}/results`, { headers: authHeaders });
+      const d = JSON.parse(raw);
+      const results = d.data || d;
+      if (Array.isArray(results) && results.length > 0) return results;
+    } catch { break; }
   }
   return [];
 }
